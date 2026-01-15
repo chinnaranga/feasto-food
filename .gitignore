@@ -1,19 +1,20 @@
-# Exclude Frontend and Root Environment
+# Frontend (Excluded)
 frontend/
-node_modules/
-backend_temp/
-package.json
-package-lock.json
-.DS_Store
+frontend/**/*
+
+# Backend Secrets
 .env
+service-account-key.json
+node_modules/
+
+# Utils
+backend_temp/
+project-root/
+backend/
+.DS_Store
 .vscode/
 
-# Artifacts (Local only)
+# Artifacts
 task.md
 walkthrough.md
 project_summary.md
-
-# Backend Secrets
-backend/.env
-backend/service-account-key.json
-backend/node_modules/

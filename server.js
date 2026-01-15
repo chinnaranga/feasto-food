@@ -332,7 +332,11 @@ app.use("/api/cart", cartRoutes);
 app.use("/api/protected", protectedRoutes);
 app.use("/api/stripe", stripeRoutes);
 app.use("/api/razorpay", razorpayRoutes);
+app.use("/api/razorpay", razorpayRoutes);
 app.use("/api/ai", aiRoutes);
+
+import reviewRoutes from "./routes/reviews.js";
+app.use("/api/reviews", reviewRoutes);
 
 import restaurantRoutes from "./routes/restaurant.js";
 app.use("/api/restaurant", restaurantRoutes);

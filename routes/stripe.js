@@ -87,7 +87,7 @@ router.post("/create-checkout-session", async (req, res) => {
                 source: "feasto_app",
                 userId: metadata.userId || "guest"
             },
-            success_url: `${FRONTEND_URL} /payment/success ? session_id = { CHECKOUT_SESSION_ID }`,
+            success_url: `${FRONTEND_URL}/payment/success?session_id={CHECKOUT_SESSION_ID}`,
             cancel_url: `${FRONTEND_URL}/payments?canceled=true`,
         });
 

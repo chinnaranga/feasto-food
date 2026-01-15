@@ -95,6 +95,15 @@ app.use(
   })
 );
 
+// Force JSON for all errors
+app.use((err, req, res, next) => {
+  console.error("🔥 Unhandled Server Error:", err);
+  if (res.headersSent) {
+    return next(err);
+  }
+  res.status(500).json({ error: "Internal Server Error", details: err.message });
+});
+
 /* =======================
    ROUTES
    ======================= */

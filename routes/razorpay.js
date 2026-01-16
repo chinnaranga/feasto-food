@@ -2,6 +2,7 @@ import express from "express";
 import Razorpay from "razorpay";
 import crypto from "crypto";
 import { createOrder, updateOrderStatus } from "../controllers/orderController.js";
+import { verifyToken } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
@@ -19,15 +20,6 @@ const razorpay = razorpayKeyId && razorpayKeySecret
 if (!razorpay) {
     console.warn("⚠️ Razorpay not configured - add RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET to .env");
 }
-
-/**
- * POST /api/razorpay/create-order
- * Creates a Razorpay order for secure payment processing
- * 
- * @body {number} amount - Amount in INR (will be converted to paise)
- * @body {string} currency - Currency code (default: INR)
- * @body {string} receipt - Order receipt ID
-import { verifyToken } from "../middleware/authMiddleware.js";
 
 /**
  * POST /api/razorpay/create-order
@@ -93,13 +85,13 @@ router.post("/create-order", verifyToken, async (req, res) => {
             createdAt: new Date(),
         });
 
-        console.log("✅ Razorpay Order Created & Saved:", order.id);
+        console.log("✅ Razorpay Order Created & Saved:", razorpayOrder.id);
 
         res.json({
-            id: order.id,
-            amount: order.amount,
-            currency: order.currency,
-            receipt: order.receipt,
+            id: razorpayOrder.id,
+            amount: razorpayOrder.amount,
+            currency: razorpayOrder.currency,
+            receipt: razorpayOrder.receipt,
         });
     } catch (err) {
         console.error("Razorpay Order Creation Error:", err);

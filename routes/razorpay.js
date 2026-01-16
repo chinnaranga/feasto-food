@@ -3,13 +3,9 @@ import Razorpay from "razorpay";
 import crypto from "crypto";
 import { createOrder, updateOrderStatus } from "../controllers/orderController.js";
 import { verifyToken } from "../middleware/authMiddleware.js";
-import { firestore } from "../server.js";
 
 const router = express.Router();
 
-if (!firestore) {
-    console.error("❌ Firestore not initialized in Razorpay route");
-}
 
 // Initialize Razorpay with credentials from environment
 const razorpayKeyId = process.env.RAZORPAY_KEY_ID;
@@ -67,21 +63,17 @@ router.post("/create-order", verifyToken, async (req, res) => {
 
         // ✅ FIX 2: Safe Firestore Write (Don't crash payment if DB fails)
         try {
-            if (firestore) {
-                await createOrder({
-                    id: razorpayOrder.id,
-                    razorpayOrderId: razorpayOrder.id,
-                    amount: razorpayOrder.amount / 100,
-                    currency: razorpayOrder.currency,
-                    status: "created",
-                    items: orderItems,
-                    userId: req.user.uid, // ✅ FIX 1: Guaranteed by verifyToken
-                    createdAt: new Date(),
-                });
-                console.log("✅ Razorpay Order Saved to Firestore:", razorpayOrder.id);
-            } else {
-                console.warn("⚠️ Firestore not ready, skipping DB save for order:", razorpayOrder.id);
-            }
+            await createOrder({
+                id: razorpayOrder.id,
+                razorpayOrderId: razorpayOrder.id,
+                amount: razorpayOrder.amount / 100,
+                currency: razorpayOrder.currency,
+                status: "created",
+                items: orderItems,
+                userId: req.user.uid, // ✅ FIX 1: Guaranteed by verifyToken
+                createdAt: new Date(),
+            });
+            console.log("✅ Razorpay Order Saved to Firestore:", razorpayOrder.id);
         } catch (dbErr) {
             console.error("⚠️ Firestore save failed:", dbErr.message);
             // Do NOT fail the request, return the payment order ID so user can pay
@@ -128,9 +120,7 @@ router.post("/verify-payment", async (req, res) => {
             console.log("✅ Payment Verified:", razorpay_payment_id);
             // Update Firestore status
             try {
-                if (firestore) {
-                    await updateOrderStatus(razorpay_order_id, "paid");
-                }
+                await updateOrderStatus(razorpay_order_id, "paid");
             } catch (dbErr) {
                 console.error("Failed to update status in DB:", dbErr);
             }

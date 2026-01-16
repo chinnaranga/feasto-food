@@ -29,7 +29,7 @@ if (!razorpay) {
  * @body {string} receipt - Receipt ID
  * @body {object} notes - Additional metadata
  */
-router.post("/create-order", verifyToken, async (req, res) => {
+router.post("/create-order", verifyTokenOptional, async (req, res) => {
     try {
         if (!razorpay) {
             return res.status(503).json({

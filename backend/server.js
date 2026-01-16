@@ -1,11 +1,11 @@
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
-import admin from "firebase-admin";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
-import mongoose from "mongoose";
 
+// Import centralized Firebase Admin
+import { db as firestore, auth } from "./firebaseAdmin.js";
 import connectDB from "./db.js";
 
 // Routes
@@ -25,80 +25,9 @@ console.log("🚀 Starting Server...");
 
 const app = express();
 
-// ✅ REQUIRED for Railway / proxies
 app.set("trust proxy", 1);
 
-/* =======================
-   FIREBASE INITIALIZATION
-   ======================= */
-/* =======================
-   FIREBASE INITIALIZATION
-   ======================= */
-if (!admin.apps.length) {
-  try {
-    let serviceAccount;
-
-    if (process.env.FIREBASE_SERVICE_ACCOUNT_JSON) {
-      console.log("🔹 Parsing FIREBASE_SERVICE_ACCOUNT_JSON...");
-      let rawJson = process.env.FIREBASE_SERVICE_ACCOUNT_JSON.trim();
-
-      // HEURISTIC: Remove outer quotes if present (common in Railway/Env vars)
-      if (rawJson.startsWith('"') && rawJson.endsWith('"')) {
-        rawJson = rawJson.slice(1, -1);
-      }
-      if (rawJson.startsWith("'") && rawJson.endsWith("'")) {
-        rawJson = rawJson.slice(1, -1);
-      }
-
-      // HEURISTIC: Unescape newlines explicitly if they are literal `\n` characters
-      // This fixes the issue where JSON validation fails because of escaped control characters
-      rawJson = rawJson.replace(/\\n/g, '\\n');
-
-      try {
-        serviceAccount = JSON.parse(rawJson);
-      } catch (jsonErr) {
-        console.error("❌ JSON Parse Failed. Attempting aggressive cleanup...");
-        // Fallback: If standard parse fails, try to aggressively fix newlines for the private key
-        // This is risky but often necessary if the env var is heavily mangled
-        const fixedJson = rawJson.replace(/\\n/g, '\n');
-        try {
-          serviceAccount = JSON.parse(fixedJson);
-        } catch (finalErr) {
-          throw new Error(`Critical JSON Parse Error: ${finalErr.message}`);
-        }
-      }
-    } else {
-      throw new Error("FIREBASE_SERVICE_ACCOUNT_JSON missing");
-    }
-
-    // FINAL SAFETY CHECK: Ensure private_key has real newlines
-    if (serviceAccount.private_key) {
-      serviceAccount.private_key = serviceAccount.private_key.replace(/\\n/g, '\n');
-    }
-
-    admin.initializeApp({
-      credential: admin.credential.cert(serviceAccount),
-    });
-
-    console.log("🚀 Firebase Admin Initialized (ENV)");
-  } catch (error) {
-    console.error("❌ Firebase Init Error:", error.message);
-    process.exit(1);
-  }
-}
-
-// ✅ SAFE EXPORTS
-let firestore;
-let auth;
-
-if (admin.apps.length) {
-  firestore = admin.firestore();
-  auth = admin.auth();
-  console.log("✅ Firestore & Auth Ready");
-} else {
-  console.error("❌ Firebase NOT initialized — Firestore disabled");
-}
-
+// Export db and auth for legacy usage if any (though imports should change)
 export { firestore, auth };
 
 /* =======================
@@ -118,7 +47,6 @@ app.use(cors({
   credentials: true
 }));
 
-// Rate Limit
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 200

@@ -37,7 +37,7 @@ router.post("/create-order", async (req, res) => {
             });
         }
 
-        const { amount, currency = "INR", receipt, notes = {} } = req.body;
+        const { amount, currency = "INR", receipt, notes = {}, items } = req.body;
 
         if (!amount || amount <= 0) {
             return res.status(400).json({ error: "Invalid amount" });
@@ -55,17 +55,32 @@ router.post("/create-order", async (req, res) => {
             },
         };
 
-        const order = await razorpay.orders.create(options);
+        const razorpayOrder = await razorpay.orders.create(options);
+
+        // Resolve items: Body > Notes JSON > Empty Array
+        let orderItems = [];
+        if (items && Array.isArray(items)) {
+            orderItems = items;
+        } else if (notes.items) {
+            try {
+                // If it's already an object/array, use it. If string, parse it.
+                orderItems = typeof notes.items === 'string' ? JSON.parse(notes.items) : notes.items;
+            } catch (e) {
+                console.warn("Failed to parse notes.items:", notes.items);
+                // Fallback: Create a single item object from the string
+                orderItems = [{ name: String(notes.items), price: amount / 100, quantity: 1 }];
+            }
+        }
 
         // Save to Firestore
         // We use the same ID if possible, or link them
         await createOrder({
-            id: order.id, // Use Razorpay ID as doc ID or field? Let's use it as ID for simplicity in lookup
-            razorpayOrderId: order.id,
-            amount: order.amount / 100,
-            currency: order.currency,
+            id: razorpayOrder.id, // Use Razorpay ID as doc ID or field? Let's use it as ID for simplicity in lookup
+            razorpayOrderId: razorpayOrder.id,
+            amount: razorpayOrder.amount / 100,
+            currency: razorpayOrder.currency,
             status: "created", // Initial status
-            items: notes.items ? (typeof notes.items === 'string' ? JSON.parse(notes.items) : notes.items) : [],
+            items: orderItems,
             userId: notes.userId || "guest",
             createdAt: new Date(),
         });

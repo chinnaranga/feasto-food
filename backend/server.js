@@ -22,6 +22,7 @@ import adminRoutes from "./routes/admin.js";
 import stripeRoutes from "./routes/stripe.js";
 
 console.log("🚀 Starting Server...");
+console.log("🔥 Firestore Project:", firestore?._settings?.projectId || "Unknown");
 
 const app = express();
 

@@ -2,14 +2,13 @@ import express from "express";
 import Razorpay from "razorpay";
 import crypto from "crypto";
 import { createOrder, updateOrderStatus } from "../controllers/orderController.js";
-import { verifyToken, verifyTokenOptional } from "../middleware/authMiddleware.js";
+import { verifyToken } from "../middleware/authMiddleware.js";
 import { firestore } from "../server.js";
 
 const router = express.Router();
 
 if (!firestore) {
     console.error("❌ Firestore not initialized in Razorpay route");
-    // We don't throw error here to allow module load, but we should handle it in request
 }
 
 // Initialize Razorpay with credentials from environment
@@ -35,16 +34,10 @@ if (!razorpay) {
  * @body {string} receipt - Receipt ID
  * @body {object} notes - Additional metadata
  */
-router.post("/create-order", verifyTokenOptional, async (req, res) => {
+router.post("/create-order", verifyToken, async (req, res) => {
     try {
-        if (!firestore) {
-            console.error("❌ Firestore not ready in create-order");
-            return res.status(503).json({ error: "Backend service unavailable (Database)" });
-        }
         if (!razorpay) {
-            return res.status(503).json({
-                error: "Razorpay not configured. Add RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET to backend .env"
-            });
+            return res.status(503).json({ error: "Razorpay not configured. Add RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET to backend .env" });
         }
 
         const { amount, currency = "INR", receipt, notes = {}, items } = req.body;
@@ -53,49 +46,46 @@ router.post("/create-order", verifyTokenOptional, async (req, res) => {
             return res.status(400).json({ error: "Invalid amount" });
         }
 
-        // Create Razorpay order
-        const options = {
-            amount: amount, // Already in paise from frontend
+        const razorpayOrder = await razorpay.orders.create({
+            amount,
             currency,
             receipt: receipt || `rcpt_${Date.now()}`,
             notes: {
-                ...notes,
                 source: "feasto_app",
-                created_at: new Date().toISOString(),
+                // Safe notes only
             },
-        };
-
-        const razorpayOrder = await razorpay.orders.create(options);
-
-        // Resolve items: Body > Notes JSON > Empty Array
-        let orderItems = [];
-        if (items && Array.isArray(items)) {
-            orderItems = items;
-        } else if (notes.items) {
-            try {
-                // If it's already an object/array, use it. If string, parse it.
-                orderItems = typeof notes.items === 'string' ? JSON.parse(notes.items) : notes.items;
-            } catch (e) {
-                console.warn("Failed to parse notes.items:", notes.items);
-                // Fallback: Create a single item object from the string
-                orderItems = [{ name: String(notes.items), price: amount / 100, quantity: 1 }];
-            }
-        }
-
-        // Save to Firestore
-        // We use the same ID if possible, or link them
-        await createOrder({
-            id: razorpayOrder.id, // Use Razorpay ID as doc ID or field? Let's use it as ID for simplicity in lookup
-            razorpayOrderId: razorpayOrder.id,
-            amount: razorpayOrder.amount / 100,
-            currency: razorpayOrder.currency,
-            status: "created", // Initial status
-            items: orderItems,
-            userId: notes.userId || "guest",
-            createdAt: new Date(),
         });
 
-        console.log("✅ Razorpay Order Created & Saved:", razorpayOrder.id);
+        // ✅ FIX 3: Strict Item Normalization
+        const orderItems = Array.isArray(items)
+            ? items
+            : [{
+                name: typeof notes.items === "string" ? notes.items : "Food Item",
+                price: amount / 100,
+                quantity: 1
+            }];
+
+        // ✅ FIX 2: Safe Firestore Write (Don't crash payment if DB fails)
+        try {
+            if (firestore) {
+                await createOrder({
+                    id: razorpayOrder.id,
+                    razorpayOrderId: razorpayOrder.id,
+                    amount: razorpayOrder.amount / 100,
+                    currency: razorpayOrder.currency,
+                    status: "created",
+                    items: orderItems,
+                    userId: req.user.uid, // ✅ FIX 1: Guaranteed by verifyToken
+                    createdAt: new Date(),
+                });
+                console.log("✅ Razorpay Order Saved to Firestore:", razorpayOrder.id);
+            } else {
+                console.warn("⚠️ Firestore not ready, skipping DB save for order:", razorpayOrder.id);
+            }
+        } catch (dbErr) {
+            console.error("⚠️ Firestore save failed:", dbErr.message);
+            // Do NOT fail the request, return the payment order ID so user can pay
+        }
 
         res.json({
             id: razorpayOrder.id,
@@ -103,6 +93,7 @@ router.post("/create-order", verifyTokenOptional, async (req, res) => {
             currency: razorpayOrder.currency,
             receipt: razorpayOrder.receipt,
         });
+
     } catch (err) {
         console.error("Razorpay Order Creation Error:", err);
         res.status(500).json({ error: err.message || "Failed to create order" });
@@ -112,10 +103,6 @@ router.post("/create-order", verifyTokenOptional, async (req, res) => {
 /**
  * POST /api/razorpay/verify-payment
  * Verifies Razorpay payment signature for security
- * 
- * @body {string} razorpay_order_id
- * @body {string} razorpay_payment_id
- * @body {string} razorpay_signature
  */
 router.post("/verify-payment", async (req, res) => {
     try {
@@ -129,23 +116,24 @@ router.post("/verify-payment", async (req, res) => {
             return res.status(400).json({ error: "Missing required fields" });
         }
 
-        // Create signature verification string
         const body = razorpay_order_id + "|" + razorpay_payment_id;
-
-        // Generate expected signature
         const expectedSignature = crypto
             .createHmac("sha256", razorpayKeySecret)
             .update(body)
             .digest("hex");
 
-        // Compare signatures
         const isValid = expectedSignature === razorpay_signature;
 
         if (isValid) {
             console.log("✅ Payment Verified:", razorpay_payment_id);
-
             // Update Firestore status
-            await updateOrderStatus(razorpay_order_id, "paid");
+            try {
+                if (firestore) {
+                    await updateOrderStatus(razorpay_order_id, "paid");
+                }
+            } catch (dbErr) {
+                console.error("Failed to update status in DB:", dbErr);
+            }
 
             res.json({
                 verified: true,
@@ -174,9 +162,7 @@ router.get("/order/:orderId", async (req, res) => {
         if (!razorpay) {
             return res.status(503).json({ error: "Razorpay not configured" });
         }
-
         const order = await razorpay.orders.fetch(req.params.orderId);
-
         res.json({
             id: order.id,
             amount: order.amount / 100,

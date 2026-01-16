@@ -31,17 +31,47 @@ app.set("trust proxy", 1);
 /* =======================
    FIREBASE INITIALIZATION
    ======================= */
+/* =======================
+   FIREBASE INITIALIZATION
+   ======================= */
 if (!admin.apps.length) {
   try {
-    if (!process.env.FIREBASE_SERVICE_ACCOUNT_JSON) {
+    let serviceAccount;
+
+    if (process.env.FIREBASE_SERVICE_ACCOUNT_JSON) {
+      console.log("🔹 Parsing FIREBASE_SERVICE_ACCOUNT_JSON...");
+      let rawJson = process.env.FIREBASE_SERVICE_ACCOUNT_JSON.trim();
+
+      // HEURISTIC: Remove outer quotes if present (common in Railway/Env vars)
+      if (rawJson.startsWith('"') && rawJson.endsWith('"')) {
+        rawJson = rawJson.slice(1, -1);
+      }
+      if (rawJson.startsWith("'") && rawJson.endsWith("'")) {
+        rawJson = rawJson.slice(1, -1);
+      }
+
+      // HEURISTIC: Unescape newlines explicitly if they are literal `\n` characters
+      // This fixes the issue where JSON validation fails because of escaped control characters
+      rawJson = rawJson.replace(/\\n/g, '\\n');
+
+      try {
+        serviceAccount = JSON.parse(rawJson);
+      } catch (jsonErr) {
+        console.error("❌ JSON Parse Failed. Attempting aggressive cleanup...");
+        // Fallback: If standard parse fails, try to aggressively fix newlines for the private key
+        // This is risky but often necessary if the env var is heavily mangled
+        const fixedJson = rawJson.replace(/\\n/g, '\n');
+        try {
+          serviceAccount = JSON.parse(fixedJson);
+        } catch (finalErr) {
+          throw new Error(`Critical JSON Parse Error: ${finalErr.message}`);
+        }
+      }
+    } else {
       throw new Error("FIREBASE_SERVICE_ACCOUNT_JSON missing");
     }
 
-    const serviceAccount = JSON.parse(
-      process.env.FIREBASE_SERVICE_ACCOUNT_JSON
-    );
-
-    // ✅ FIX: Auto-correct private_key formatting (common Railway/Env issue)
+    // FINAL SAFETY CHECK: Ensure private_key has real newlines
     if (serviceAccount.private_key) {
       serviceAccount.private_key = serviceAccount.private_key.replace(/\\n/g, '\n');
     }
@@ -53,7 +83,7 @@ if (!admin.apps.length) {
     console.log("🚀 Firebase Admin Initialized (ENV)");
   } catch (error) {
     console.error("❌ Firebase Init Error:", error.message);
-    process.exit(1); // REQUIRED
+    process.exit(1);
   }
 }
 

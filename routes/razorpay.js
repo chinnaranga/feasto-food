@@ -2,7 +2,7 @@ import express from "express";
 import Razorpay from "razorpay";
 import crypto from "crypto";
 import { createOrder, updateOrderStatus } from "../controllers/orderController.js";
-import { verifyToken } from "../middleware/authMiddleware.js";
+import { verifyToken, verifyTokenOptional } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 

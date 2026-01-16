@@ -3,8 +3,14 @@ import Razorpay from "razorpay";
 import crypto from "crypto";
 import { createOrder, updateOrderStatus } from "../controllers/orderController.js";
 import { verifyToken, verifyTokenOptional } from "../middleware/authMiddleware.js";
+import { firestore } from "../server.js";
 
 const router = express.Router();
+
+if (!firestore) {
+    console.error("❌ Firestore not initialized in Razorpay route");
+    // We don't throw error here to allow module load, but we should handle it in request
+}
 
 // Initialize Razorpay with credentials from environment
 const razorpayKeyId = process.env.RAZORPAY_KEY_ID;

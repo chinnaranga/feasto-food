@@ -2,7 +2,6 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import admin from "firebase-admin";
-import fs from "fs";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 import mongoose from "mongoose";
@@ -33,33 +32,38 @@ app.set("trust proxy", 1);
    ======================= */
 if (!admin.apps.length) {
   try {
-    let serviceAccount;
-
-    if (process.env.FIREBASE_SERVICE_ACCOUNT_JSON) {
-      serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_JSON);
-      console.log("✅ Firebase Config Loaded from ENV");
-    } else if (fs.existsSync("./service-account-key.json")) {
-      serviceAccount = JSON.parse(fs.readFileSync("./service-account-key.json", "utf8"));
-      console.log("✅ Firebase Config Loaded from File");
-    } else {
-      console.error("❌ NO FIREBASE CONFIG FOUND");
+    if (!process.env.FIREBASE_SERVICE_ACCOUNT_JSON) {
+      throw new Error("FIREBASE_SERVICE_ACCOUNT_JSON missing");
     }
 
-    if (serviceAccount) {
-      admin.initializeApp({
-        credential: admin.credential.cert(serviceAccount)
-      });
-      console.log("🚀 Firebase Admin Initialized");
-    }
+    const serviceAccount = JSON.parse(
+      process.env.FIREBASE_SERVICE_ACCOUNT_JSON
+    );
+
+    admin.initializeApp({
+      credential: admin.credential.cert(serviceAccount),
+    });
+
+    console.log("🚀 Firebase Admin Initialized (ENV)");
   } catch (error) {
     console.error("❌ Firebase Init Error:", error.message);
-    // In production, exiting is safer if auth is critical
-    if (process.env.NODE_ENV === 'production') process.exit(1);
+    process.exit(1); // REQUIRED
   }
 }
 
-export const firestore = admin.firestore();
-export const auth = admin.auth();
+// ✅ SAFE EXPORTS
+let firestore;
+let auth;
+
+if (admin.apps.length) {
+  firestore = admin.firestore();
+  auth = admin.auth();
+  console.log("✅ Firestore & Auth Ready");
+} else {
+  console.error("❌ Firebase NOT initialized — Firestore disabled");
+}
+
+export { firestore, auth };
 
 /* =======================
    MIDDLEWARE
@@ -74,7 +78,7 @@ app.use((req, res, next) => {
 });
 
 app.use(cors({
-  origin: true, // Allow all for now, or use process.env.CLIENT_URL
+  origin: process.env.CLIENT_URL,
   credentials: true
 }));
 

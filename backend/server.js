@@ -19,6 +19,7 @@ import ordersRoutes from "./routes/orders.js";
 import riderWalletRoutes from "./routes/riderWallet.js";
 import riderStatusRoutes from "./routes/riderStatus.js";
 import adminRoutes from "./routes/admin.js";
+import stripeRoutes from "./routes/stripe.js";
 
 console.log("🚀 Starting Server...");
 
@@ -103,6 +104,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/protected", protectedRoutes);
 app.use("/api/razorpay", razorpayRoutes);
+app.use("/api/stripe", stripeRoutes);
 app.use("/api/ai", aiRoutes);
 app.use("/api/restaurant", restaurantRoutes);
 app.use("/api/orders", ordersRoutes);

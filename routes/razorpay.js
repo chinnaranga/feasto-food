@@ -37,6 +37,10 @@ if (!razorpay) {
  */
 router.post("/create-order", verifyTokenOptional, async (req, res) => {
     try {
+        if (!firestore) {
+            console.error("❌ Firestore not ready in create-order");
+            return res.status(503).json({ error: "Backend service unavailable (Database)" });
+        }
         if (!razorpay) {
             return res.status(503).json({
                 error: "Razorpay not configured. Add RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET to backend .env"

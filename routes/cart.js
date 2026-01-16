@@ -1,11 +1,11 @@
 import express from "express";
-import { authenticateToken } from "../middleware/authMiddleware.js";
+import { verifyToken } from "../middleware/authMiddleware.js";
 import { getCart, addToCart } from "../controllers/cartController.js";
 
 const router = express.Router();
 
 // 🔐 Protect all cart routes
-router.use(authenticateToken);
+router.use(verifyToken);
 
 // GET USER CART
 router.get("/", getCart);

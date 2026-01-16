@@ -65,7 +65,7 @@ router.post("/create-order", async (req, res) => {
             amount: order.amount / 100,
             currency: order.currency,
             status: "created", // Initial status
-            items: notes.items ? JSON.parse(notes.items) : [], // Assuming items are passed in notes, otherwise we need body
+            items: notes.items ? (typeof notes.items === 'string' ? JSON.parse(notes.items) : notes.items) : [],
             userId: notes.userId || "guest",
             createdAt: new Date(),
         });

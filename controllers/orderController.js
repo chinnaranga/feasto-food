@@ -10,7 +10,11 @@ import admin from "firebase-admin";
 export async function createOrder(orderData) {
     try {
         const db = admin.firestore();
-        const orderRef = db.collection("orders").doc();
+        // Use provided ID or auto-generate
+        const orderRef = orderData.id
+            ? db.collection("orders").doc(orderData.id)
+            : db.collection("orders").doc();
+
         const timestamp = admin.firestore.FieldValue.serverTimestamp();
 
         await orderRef.set({

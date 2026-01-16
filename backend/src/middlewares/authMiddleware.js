@@ -1,4 +1,4 @@
-import { auth } from "../firebaseAdmin.js";
+import { auth } from "../config/firebase.js";
 
 export const protect = async (req, res, next) => {
   const authHeader = req.headers["authorization"];

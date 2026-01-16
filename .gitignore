@@ -7,12 +7,19 @@ frontend/**/*
 service-account-key.json
 node_modules/
 
-# Utils
+# Backend Utils
 backend_temp/
 project-root/
-backend/
+# backend/  <-- UNCOMMENTED TO ALLOW TRACKING
 .DS_Store
 .vscode/
+
+# Backend Secrets (Must stay ignored)
+backend/.env
+backend/service-account-key.json
+backend/node_modules/
+backend/package-lock.json # Keep tracked usually? User might want to track lockfile. Keeping lockfile tracked is standard.
+
 
 # Artifacts
 task.md

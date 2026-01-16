@@ -27,9 +27,17 @@ if (!razorpay) {
  * @body {number} amount - Amount in INR (will be converted to paise)
  * @body {string} currency - Currency code (default: INR)
  * @body {string} receipt - Order receipt ID
+import { verifyToken } from "../middleware/authMiddleware.js";
+
+/**
+ * POST /api/razorpay/create-order
+ * Creates a Razorpay order securely
+ * @body {number} amount - Amount in paise
+ * @body {string} currency - Currency code
+ * @body {string} receipt - Receipt ID
  * @body {object} notes - Additional metadata
  */
-router.post("/create-order", async (req, res) => {
+router.post("/create-order", verifyToken, async (req, res) => {
     try {
         if (!razorpay) {
             return res.status(503).json({

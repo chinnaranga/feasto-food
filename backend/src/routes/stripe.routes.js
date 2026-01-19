@@ -1,10 +1,18 @@
 import express from "express";
 import Stripe from "stripe";
+import { verifyStripeWebhook } from "../middlewares/webhooks.js";
 
 const router = express.Router();
 
 // Initialize Stripe with secret key from environment
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+
+// Webhook endpoint (for future Stripe webhook events)
+// router.post("/webhook", express.raw({ type: 'application/json' }), verifyStripeWebhook, async (req, res) => {
+//   const event = req.stripeEvent;
+//   // Handle webhook event
+//   res.json({ received: true });
+// });
 
 // @route   POST /api/stripe/create-checkout-session
 // @desc    Create a new Stripe Checkout Session

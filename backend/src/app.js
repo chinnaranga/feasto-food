@@ -31,7 +31,25 @@ app.use((req, res, next) => {
 });
 
 app.use(cors({
-    origin: process.env.CLIENT_URL,
+    origin: (origin, callback) => {
+        const allowedOrigins = [
+            process.env.CLIENT_URL,
+            "https://feasto.food",
+            "http://localhost:5173",
+            "http://localhost:3000",
+            "https://food-platform-b022f.web.app",
+            "https://feasto-backend-production.up.railway.app"
+        ];
+        // Allow requests with no origin (like mobile apps or curl requests)
+        if (!origin) return callback(null, true);
+
+        if (allowedOrigins.indexOf(origin) !== -1 || origin.endsWith(".web.app")) {
+            callback(null, true);
+        } else {
+            console.warn("Blocked by CORS:", origin);
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     credentials: true
 }));
 

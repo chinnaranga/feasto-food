@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
-import { db as firestore } from "./config/firebase.js";
+import { db } from "./config/firebase.js";
 
 // Routes
 import authRoutes from "./routes/auth.routes.js";
@@ -26,7 +26,7 @@ app.use(express.json());
 
 // Global DB injection
 app.use((req, res, next) => {
-    req.db = firestore;
+    req.db = db;
     next();
 });
 

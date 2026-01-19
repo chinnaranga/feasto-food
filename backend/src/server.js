@@ -1,12 +1,11 @@
 import "dotenv/config";
 import app from "./app.js";
-import "./config/firebase.js";
 import connectDB from "./config/database.js";
-import { firestore, auth } from "./config/firebase.js"; // Optional: if you need to export them or log them
+import { db, auth } from "./config/firebase.js";
 
 // Safe assertions
 console.log("🚀 Starting Server...");
-console.log("🔥 Firestore Project:", firestore?._settings?.projectId || "Unknown");
+console.log("🔥 Firestore Project:", db?._settings?.projectId || "Unknown");
 
 const PORT = process.env.PORT || 8080;
 

@@ -1,10 +1,11 @@
 import express from "express";
-import { protect, admin } from "../middlewares/authMiddleware.js";
-import { getAllOrders, getSystemStats } from "../controllers/admin.controller.js";
+import { requireAdmin } from "../middlewares/requireAdmin.js";
+import { getAllOrders, getSystemStats, getAllRiders } from "../controllers/admin.controller.js";
 
 const router = express.Router();
 
-router.get("/orders", protect, admin, getAllOrders);
-router.get("/stats", protect, admin, getSystemStats);
+router.get("/orders", requireAdmin, getAllOrders);
+router.get("/stats", requireAdmin, getSystemStats);
+router.get("/riders", requireAdmin, getAllRiders);
 
 export default router;

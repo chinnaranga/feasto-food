@@ -64,7 +64,7 @@ app.use("/api/", limiter);
 app.get("/", (req, res) => {
     res.status(200).json({
         success: true,
-        message: "Feasto Backend API is running 🚀",
+        message: "AeroBite Backend API is running 🚀",
         version: "1.0.0",
         endpoints: {
             health: "/health",

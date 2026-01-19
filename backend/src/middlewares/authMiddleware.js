@@ -20,7 +20,7 @@ export const protect = async (req, res, next) => {
 };
 
 export const admin = async (req, res, next) => {
-  if (req.user && (req.user.email === "admin@feasto.com" || req.user.email?.includes("admin"))) {
+  if (req.user && (req.user.email === "admin@aerobite.com" || req.user.email?.includes("admin"))) {
     next();
   } else {
     // For more robustness, we could fetch firestore user doc here, 

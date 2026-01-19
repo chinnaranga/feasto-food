@@ -67,3 +67,25 @@ export const getSystemStats = async (req, res) => {
         res.status(500).json({ error: "Server Error" });
     }
 };
+
+// @desc    Get all riders
+// @route   GET /api/admin/riders
+// @access  Private/Admin
+export const getAllRiders = async (req, res) => {
+    try {
+        // Fetch users with role 'rider' or from 'riders' collection if separated
+        // Assuming 'riders' collection stores status/location/wallet
+        const ridersRef = db.collection('riders');
+        const snapshot = await ridersRef.get();
+
+        const riders = [];
+        snapshot.forEach(doc => {
+            riders.push({ id: doc.id, ...doc.data() });
+        });
+
+        res.json(riders);
+    } catch (error) {
+        console.error("Admin Get Riders Error:", error);
+        res.status(500).json({ error: "Server Error" });
+    }
+};

@@ -39,6 +39,7 @@ if (!admin.apps.length) {
 }
 
 const db = admin.firestore();
+const firestore = db; // Alias for compatibility
 const auth = admin.auth();
 
-export { admin, db, auth };
+export { admin, db, firestore, auth };

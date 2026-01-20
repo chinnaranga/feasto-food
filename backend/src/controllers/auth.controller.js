@@ -1,5 +1,6 @@
 import User from '../models/User.js';
 import bcrypt from 'bcryptjs'; // Ensure correct import
+import jwt from 'jsonwebtoken';
 import { auth as firebaseAuth } from '../config/firebase.js';
 import { signAccessToken, signRefreshToken } from "../utils/jwt.js";
 

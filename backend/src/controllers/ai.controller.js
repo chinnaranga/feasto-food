@@ -39,7 +39,7 @@ export const chatWithAI = async (req, res) => {
     `;
 
         // 3. Generate Response
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        const model = genAI.getGenerativeModel({ model: "gemini-pro" });
         const result = await model.generateContent(systemPrompt);
         const response = await result.response;
         const text = response.text();

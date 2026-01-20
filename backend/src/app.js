@@ -15,7 +15,6 @@ import ordersRoutes from "./routes/orders.routes.js";
 import riderWalletRoutes from "./routes/riderWallet.routes.js";
 import riderStatusRoutes from "./routes/riderStatus.routes.js";
 import adminRoutes from "./routes/admin.routes.js";
-import stripeRoutes from "./routes/stripe.routes.js";
 import recommendationsRoutes from "./routes/recommendations.routes.js";
 import paymentRoutes from "./routes/payment.routes.js";
 

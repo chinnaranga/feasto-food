@@ -3,6 +3,7 @@ import { db } from "../config/firebase.js";
 
 const ai = new GoogleGenAI({
     apiKey: process.env.GEMINI_API_KEY,
+    apiVersion: "v1",
 });
 
 export const chatWithAI = async (req, res) => {

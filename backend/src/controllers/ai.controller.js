@@ -1,27 +1,25 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
-import { db } from "../config/firebase.js"; // Assuming db is exported from here or similar config
+import { GoogleGenAI } from "@google/genai";
+import { db } from "../config/firebase.js";
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const ai = new GoogleGenAI({
+    apiKey: process.env.GEMINI_API_KEY,
+});
 
 export const chatWithAI = async (req, res) => {
     try {
-        const { message, history } = req.body;
-        const userId = req.user?.uid;
+        const { message } = req.body;
 
-        if (!process.env.GEMINI_API_KEY) {
-            return res.status(500).json({ error: "AI service not configured" });
+        if (!message) {
+            return res.status(400).json({ error: "Message is required" });
         }
 
-        // 1. Fetch Menu Context (Cached or Fresh)
-        // For simplicity, fetching generic categories or popular items. 
-        // In production, you might want to cache this or use a vector store.
-        const foodSnapshot = await db.collection("food").limit(20).get(); // Limit context size
+        // 1. Fetch Menu Context
+        const foodSnapshot = await db.collection("food").limit(20).get();
         const menuItems = foodSnapshot.docs.map(doc => {
             const data = doc.data();
             return `${data.name} (₹${data.price}) - ${data.description} [${data.category}]`;
         }).join("\n");
 
-        // 2. System Prompt
         const systemPrompt = `
       You are 'Feasto Bot', the helpful AI assistant for the Feasto food delivery platform.
       
@@ -38,16 +36,26 @@ export const chatWithAI = async (req, res) => {
       Answer as Feasto Bot. If suggesting food, mention the price.
     `;
 
-        // 3. Generate Response
-        const model = genAI.getGenerativeModel({ model: "models/gemini-1.0-pro" });
-        const result = await model.generateContent(systemPrompt);
-        const response = await result.response;
-        const text = response.text();
+        // 2. Generate Response using v1 API
+        const response = await ai.models.generateContent({
+            model: "gemini-1.5-flash",
+            contents: [
+                {
+                    role: "user",
+                    parts: [{ text: systemPrompt }],
+                },
+            ],
+        });
 
-        res.json({ reply: text });
-
+        return res.json({
+            success: true,
+            reply: response.text,
+        });
     } catch (error) {
         console.error("AI Chat Error:", error);
-        res.status(500).json({ error: "Failed to generate response" });
+        return res.status(500).json({
+            success: false,
+            error: "AI service unavailable",
+        });
     }
 };

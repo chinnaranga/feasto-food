@@ -1,4 +1,4 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenerativeAI } from "@google/genai";
 import { db } from "../config/firebase.js";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
@@ -34,22 +34,28 @@ export const chatWithAI = async (req, res) => {
       Answer as Feasto Bot. If suggesting food, mention the price.
     `;
 
-        // 2. Generate Response using stable SDK
+        // 2. ONLY VALID MODEL (per User Instruction)
         const model = genAI.getGenerativeModel({
-            model: "gemini-pro",
+            model: "gemini-1.5-flash-latest",
         });
 
         const result = await model.generateContent(systemPrompt);
 
-        return res.status(200).json({
+        const text =
+            result?.response?.candidates?.[0]?.content?.parts?.[0]?.text ||
+            result?.response?.text() ||
+            "Sorry, I couldn't think of a reply 😅";
+
+        return res.json({
             success: true,
-            reply: result.response.text(),
+            reply: text,
         });
-    } catch (err) {
-        console.error("AI Chat Error:", err);
+
+    } catch (error) {
+        console.error("AI Chat Error:", error);
         return res.status(500).json({
             success: false,
-            error: "AI service failed",
+            reply: "Oops! My brain froze 🥶. Try again?",
         });
     }
 };

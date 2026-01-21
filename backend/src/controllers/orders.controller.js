@@ -68,3 +68,32 @@ export const getMyOrders = async (req, res) => {
         res.status(500).json({ error: "Server Error" });
     }
 };
+
+// @desc    Get order by ID
+// @route   GET /api/orders/:id
+// @access  Private
+export const getOrderById = async (req, res) => {
+    try {
+        const orderId = req.params.id;
+        const orderRef = db.collection("orders").doc(orderId);
+        const orderSnap = await orderRef.get();
+
+        if (!orderSnap.exists) {
+            return res.status(404).json({ message: "Order not found" });
+        }
+
+        const orderData = { id: orderSnap.id, ...orderSnap.data() };
+
+        // Authorization check: Ensure order belongs to user 
+        // Note: req.user.role might not be populated in all middlewares, check authMiddleware.js if unsure.
+        // For safety, strict check on userId.
+        if (orderData.userId !== req.user.uid && req.user.role !== 'admin') {
+            return res.status(403).json({ message: "Not authorized to view this order" });
+        }
+
+        res.json(orderData);
+    } catch (error) {
+        console.error("Get Order Error:", error);
+        res.status(500).json({ message: "Failed to fetch order" });
+    }
+};

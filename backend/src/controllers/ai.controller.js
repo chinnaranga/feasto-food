@@ -1,4 +1,4 @@
-import { GoogleGenerativeAI } from "@google/genai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import { db } from "../config/firebase.js";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
@@ -34,17 +34,12 @@ export const chatWithAI = async (req, res) => {
       Answer as Feasto Bot. If suggesting food, mention the price.
     `;
 
-        // 2. ONLY VALID MODEL (per User Instruction)
-        const model = genAI.getGenerativeModel({
-            model: "gemini-1.5-flash-latest",
-        });
+        // 2. Generate Response
+        // Using gemini-1.5-flash as requested in the recommended fix
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
         const result = await model.generateContent(systemPrompt);
-
-        const text =
-            result?.response?.candidates?.[0]?.content?.parts?.[0]?.text ||
-            result?.response?.text() ||
-            "Sorry, I couldn't think of a reply 😅";
+        const text = result.response.text();
 
         return res.json({
             success: true,

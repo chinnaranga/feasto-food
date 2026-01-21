@@ -61,6 +61,9 @@ export const getReorderItems = async (req, res) => {
             items: reorderItems
         });
     } catch (error) {
+        if (error.code === 9) { // FAILED_PRECONDITION
+            console.error('Firestore Index Required. Please run: firebase deploy --only firestore:indexes');
+        }
         console.error('Error fetching reorder items:', error);
         res.status(500).json({ error: 'Failed to fetch reorder items' });
     }

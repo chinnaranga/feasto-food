@@ -1,19 +1,26 @@
-import jwt from "jsonwebtoken";
+import { admin } from "../config/firebase.js";
 
-export const requireAdmin = (req, res, next) => {
-    const authHeader = req.headers.authorization;
-    if (!authHeader) return res.sendStatus(401);
+export const requireAdmin = async (req, res, next) => {
+    try {
+        const authHeader = req.headers.authorization;
+        if (!authHeader || !authHeader.startsWith("Bearer ")) {
+            return res.status(401).json({ error: "Missing token" });
+        }
 
-    const token = authHeader.split(" ")[1];
+        const token = authHeader.split(" ")[1];
 
-    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-        if (err) return res.sendStatus(403);
+        // Verify Firebase ID Token
+        const decoded = await admin.auth().verifyIdToken(token);
 
-        if (decoded.role !== "admin") {
+        // Check for Admin Custom Claim
+        if (!decoded.admin) {
             return res.status(403).json({ error: "Forbidden - Admin access required" });
         }
 
         req.user = decoded;
         next();
-    });
+    } catch (err) {
+        console.error("Admin Auth Error:", err);
+        return res.status(403).json({ error: "Invalid or expired token" });
+    }
 };

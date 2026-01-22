@@ -68,6 +68,37 @@ export const getSystemStats = async (req, res) => {
     }
 };
 
+// @desc    Update order status
+// @route   PATCH /api/admin/orders/:id/status
+// @access  Private/Admin
+export const updateOrderStatus = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { status } = req.body;
+
+        if (!status) {
+            return res.status(400).json({ error: "Resulting status required" });
+        }
+
+        const orderRef = db.collection('orders').doc(id);
+        const orderSnap = await orderRef.get();
+
+        if (!orderSnap.exists) {
+            return res.status(404).json({ error: "Order not found" });
+        }
+
+        await orderRef.update({
+            status,
+            updatedAt: new Date().toISOString()
+        });
+
+        res.json({ id, status, message: "Order status updated" });
+    } catch (error) {
+        console.error("Admin Update Order Error:", error);
+        res.status(500).json({ error: "Server Error" });
+    }
+};
+
 // @desc    Get all riders
 // @route   GET /api/admin/riders
 // @access  Private/Admin

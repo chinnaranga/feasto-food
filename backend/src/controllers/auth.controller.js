@@ -10,18 +10,30 @@ import { signAccessToken, signRefreshToken } from "../utils/jwt.js";
  */
 export const loginWithOTP = async (req, res) => {
   try {
-    const { firebaseToken } = req.body;
+    // 1. Extract Token from Header (Preferred) or Body
+    let firebaseToken = req.body.firebaseToken;
+    const authHeader = req.headers.authorization;
 
-    if (!firebaseToken) {
-      return res.status(400).json({ error: "Firebase token required" });
+    if (authHeader && authHeader.startsWith("Bearer ")) {
+      firebaseToken = authHeader.split(" ")[1];
     }
 
+    if (!firebaseToken) {
+      return res.status(401).json({ error: "No token provided" }); // 401 for Auth missing
+    }
+
+    // 2. Verify with Firebase Admin
     const decoded = await firebaseAuth.verifyIdToken(firebaseToken);
     const uid = decoded.uid;
 
+    // 3. Check for Admin Claim logic
+    let role = "user";
+    if (decoded.admin === true) {
+      role = "admin";
+    }
+
     // Fetch user from DB (Mongo / Firestore) or use decoded info
-    // For now, minimal user object. In real app, fetch from DB.
-    const user = { uid, role: "user" };
+    const user = { uid, role };
 
     const access = signAccessToken(user);
     const refresh = signRefreshToken(user);
@@ -35,7 +47,7 @@ export const loginWithOTP = async (req, res) => {
     res.json({ accessToken: access });
   } catch (error) {
     console.error("Login OTP Error:", error);
-    res.status(401).json({ error: "Invalid Token" });
+    res.status(401).json({ error: "Invalid or expired token" });
   }
 };
 

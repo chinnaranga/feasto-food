@@ -34,11 +34,12 @@ if (!admin.apps.length) {
         console.log("✅ Firebase Admin initialized with Service Account");
     } catch (error) {
         console.error("❌ Firebase Admin Init Invalid:", error.message);
-        // process.exit(1); // Optional: Fail hard if init fails
+        console.warn("⚠️ App will run with limited functionality (no Firebase services)");
     }
 }
 
-const db = admin.firestore();
-const auth = admin.auth();
+// Only initialize Firestore and Auth if Firebase was successfully initialized
+const db = admin.apps.length ? admin.firestore() : null;
+const auth = admin.apps.length ? admin.auth() : null;
 
 export { admin, db, auth };

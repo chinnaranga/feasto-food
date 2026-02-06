@@ -23,16 +23,9 @@ const app = express();
 
 // Middleware
 app.set("trust proxy", 1);
-app.use(helmet());
-app.use(express.json());
 
-// Global DB injection
-app.use((req, res, next) => {
-    req.db = db;
-    next();
-});
-
-app.use(cors({
+// CORS configuration - MUST be before helmet and other middleware
+const corsOptions = {
     origin: (origin, callback) => {
         const allowedOrigins = [
             process.env.CLIENT_URL,
@@ -52,8 +45,25 @@ app.use(cors({
             callback(new Error('Not allowed by CORS'));
         }
     },
-    credentials: true
-}));
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
+};
+
+app.use(cors(corsOptions));
+
+// Handle preflight requests explicitly
+app.options('*', cors(corsOptions));
+
+// Now apply helmet and other middleware
+app.use(helmet());
+app.use(express.json());
+
+// Global DB injection
+app.use((req, res, next) => {
+    req.db = db;
+    next();
+});
 
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000,

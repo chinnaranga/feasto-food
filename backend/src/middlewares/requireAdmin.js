@@ -1,26 +1,33 @@
-import { admin } from "../config/firebase.js";
+
 
 export const requireAdmin = async (req, res, next) => {
     try {
         const authHeader = req.headers.authorization;
-        if (!authHeader || !authHeader.startsWith("Bearer ")) {
-            return res.status(401).json({ error: "Missing token" });
+
+        if (!authHeader?.startsWith("Bearer ")) {
+            return res.status(401).json({ message: "No token" });
         }
 
         const token = authHeader.split(" ")[1];
-
-        // Verify Firebase ID Token
         const decoded = await admin.auth().verifyIdToken(token);
 
-        // Check for Admin Custom Claim
-        if (!decoded.admin) {
-            return res.status(403).json({ error: "Forbidden - Admin access required" });
+        // 🔐 HARD ADMIN CHECK
+        // Replace with actual Firebase UIDs from Console -> Authentication
+        const ADMIN_UIDS = [
+            "7sKi3g5X1wZqXyZ8oP4qR5sT9uV2", // Example placeholder
+            "ADMIN_UID_FROM_CONSOLE"
+        ];
+
+        // Allow if email is admin@aerobite.com (Fallback for dev)
+        if (decoded.email === "admin@aerobite.com" || decoded.admin === true || ADMIN_UIDS.includes(decoded.uid)) {
+            req.admin = decoded;
+            next();
+        } else {
+            return res.status(403).json({ message: "Not authorized as admin" });
         }
 
-        req.user = decoded;
-        next();
     } catch (err) {
-        console.error("Admin Auth Error:", err);
-        return res.status(403).json({ error: "Invalid or expired token" });
+        console.error("ADMIN AUTH ERROR", err);
+        return res.status(401).json({ message: "Invalid token" });
     }
 };

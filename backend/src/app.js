@@ -33,7 +33,8 @@ const corsOptions = {
             "http://localhost:5173",
             "http://localhost:3000",
             "https://food-platform-b022f.web.app",
-            "https://feasto-backend-production.up.railway.app"
+            "https://feasto-backend-production.up.railway.app",
+            "https://feasto-backend-production-c08e.up.railway.app"
         ];
         // Allow requests with no origin (like mobile apps or curl requests)
         if (!origin) return callback(null, true);

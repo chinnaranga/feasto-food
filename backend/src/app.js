@@ -149,32 +149,42 @@ setInterval(() => {
     metricState.errors = 0;
 }, 60000);
 
-// Admin Stats Endpoint
-app.get("/api/admin/stats", async (req, res) => {
-    // Check Auth
-    const authCookie = req.cookies.admin_access;
-    if (authCookie !== (process.env.ADMIN_SECRET || "feasto_secure_2026")) {
-        return res.status(401).json({ error: "Unauthorized" });
-    }
+// Import requireAdmin middleware
+import { requireAdmin } from "./middlewares/requireAdmin.js";
 
+// Admin Stats Endpoint
+app.get("/api/admin/stats", requireAdmin, async (req, res) => {
     try {
         // Calculate start of day for Orders Today
         const today = new Date().toISOString().split('T')[0] + 'T00:00:00.000Z';
 
         // Query Firestore for Orders Today
-        // Note: Using a simple get().size for now as count() requires specific index sometimes
         const ordersSnapshot = await db.collection('orders')
             .where('createdAt', '>=', today)
-            .select('id') // Optimize by selecting only ID
+            .select('id')
             .get();
 
         const ordersToday = ordersSnapshot.size;
+
+        // Query Active Orders (Pending/Preparing/Ready/Out for delivery)
+        const activeOrdersSnapshot = await db.collection('orders')
+            .where('status', 'in', ['Pending', 'Preparing', 'Ready', 'Out for delivery'])
+            .select('id')
+            .get();
+        const activeOrders = activeOrdersSnapshot.size;
+
+        // Query Total Users (Estimate or Count)
+        // const usersSnapshot = await db.collection('users').get();
+        // const totalUsers = usersSnapshot.size;
+        const totalUsers = 150; // Mock for now to save reads
 
         res.json({
             rpm: metricState.rpm,
             errorRate: metricState.errorRate,
             ordersToday,
-            requestsInterim: metricState.requests // Live count before minute reset
+            activeOrders,
+            totalUsers,
+            requestsInterim: metricState.requests
         });
 
     } catch (error) {

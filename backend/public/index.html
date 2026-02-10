@@ -4,444 +4,139 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AeroBite API | System Status</title>
+    <title>AeroBite API | Production Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style type="text/tailwindcss">
+        @layer components {
+            .status-card {
+                @apply bg-slate-900 border border-slate-800 rounded-2xl p-6 text-left shadow-lg hover:border-slate-700 transition duration-300;
+            }
+            .label {
+                @apply text-xs uppercase tracking-widest text-slate-400 mb-2 font-medium;
+            }
+            .value {
+                @apply text-2xl font-semibold tracking-tight text-slate-100;
+            }
+            .action-btn {
+                @apply px-6 py-3 rounded-xl bg-slate-800 text-slate-200 hover:bg-slate-700 transition font-medium text-sm flex items-center gap-2;
+            }
+            .action-btn.primary {
+                @apply bg-orange-500 text-white hover:bg-orange-600 shadow-md shadow-orange-500/20;
+            }
+        }
+    </style>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Mono:wght@400;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
         rel="stylesheet">
     <style>
-        :root {
-            --bg-dark: #050507;
-            --card-bg: rgba(20, 20, 25, 0.6);
-            --accent-primary: #f97316;
-            /* Orange */
-            --accent-secondary: #ef4444;
-            /* Red */
-            --text-main: #ffffff;
-            --text-muted: #9ca3af;
-            --success: #22c55e;
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --font-main: 'Outfit', sans-serif;
-            --font-mono: 'Space Mono', monospace;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
         body {
-            background-color: var(--bg-dark);
-            color: var(--text-main);
-            font-family: var(--font-main);
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            position: relative;
+            font-family: 'Inter', sans-serif;
         }
 
-        /* Ambient Background Background */
-        .ambient-light {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            z-index: -1;
-        }
-
-        .orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.4;
-            animation: float 20s infinite ease-in-out;
-        }
-
-        .orb-1 {
-            width: 400px;
-            height: 400px;
-            background: var(--accent-primary);
-            top: -10%;
-            left: -10%;
-            animation-delay: 0s;
-        }
-
-        .orb-2 {
-            width: 300px;
-            height: 300px;
-            background: var(--accent-secondary);
-            bottom: 10%;
-            right: -5%;
-            animation-delay: -5s;
-        }
-
-        .orb-3 {
-            width: 200px;
-            height: 200px;
-            background: #6366f1;
-            /* Indigo check */
-            top: 40%;
-            left: 40%;
-            opacity: 0.2;
-            animation-delay: -10s;
-        }
-
-        @keyframes float {
-
-            0%,
-            100% {
-                transform: translate(0, 0) scale(1);
-            }
-
-            33% {
-                transform: translate(30px, -50px) scale(1.1);
-            }
-
-            66% {
-                transform: translate(-20px, 20px) scale(0.9);
-            }
-        }
-
-        /* Grid Pattern Overlay */
-        .grid-overlay {
-            position: absolute;
-            inset: 0;
-            background-image: linear-gradient(var(--glass-border) 1px, transparent 1px),
-                linear-gradient(90deg, var(--glass-border) 1px, transparent 1px);
-            background-size: 50px 50px;
-            opacity: 0.05;
-            z-index: -1;
-            mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
-            -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
-        }
-
-        /* Dashboard Container */
-        .dashboard {
-            background: var(--card-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: 32px;
-            padding: 48px;
-            width: 90%;
-            max-width: 900px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(40px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Header */
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 40px;
-            border-bottom: 1px solid var(--glass-border);
-            padding-bottom: 24px;
-        }
-
-        .brand h1 {
-            font-size: 2.5rem;
-            font-weight: 800;
-            letter-spacing: -0.05em;
-            background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 8px;
-        }
-
-        .brand p {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-        }
-
-        .status-indicator {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            background: rgba(34, 197, 94, 0.1);
-            padding: 8px 16px;
-            border-radius: 100px;
-            border: 1px solid rgba(34, 197, 94, 0.2);
-        }
-
-        .pulse-dot {
-            width: 8px;
-            height: 8px;
-            background: var(--success);
-            border-radius: 50%;
-            box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% {
-                transform: scale(0.95);
-                box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
-            }
-
-            70% {
-                transform: scale(1);
-                box-shadow: 0 0 0 6px rgba(34, 197, 94, 0);
-            }
-
-            100% {
-                transform: scale(0.95);
-                box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
-            }
-        }
-
-        .status-text {
-            color: var(--success);
-            font-weight: 600;
-            font-size: 0.85rem;
-            letter-spacing: 0.05em;
-        }
-
-        /* Metrics Grid */
-        .metrics {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 24px;
-            margin-bottom: 40px;
-        }
-
-        .card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 24px;
-            transition: transform 0.3s ease, background 0.3s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            background: rgba(255, 255, 255, 0.05);
-            border-color: rgba(255, 255, 255, 0.15);
-        }
-
-        .card-label {
-            color: var(--text-muted);
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .card-value {
-            font-family: var(--font-mono);
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--text-main);
-        }
-
-        .card-sub {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            margin-top: 8px;
-        }
-
-        /* Actions */
-        .actions {
-            display: flex;
-            gap: 16px;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            padding: 14px 28px;
-            border-radius: 12px;
-            font-weight: 600;
-            font-size: 0.95rem;
-            text-decoration: none;
-            transition: all 0.2s ease;
-            flex: 1;
-            text-align: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--accent-primary) 0%, #ea580c 100%);
-            color: white;
-            box-shadow: 0 10px 20px -5px rgba(249, 115, 22, 0.4);
-            border: none;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 15px 30px -5px rgba(249, 115, 22, 0.5);
-        }
-
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.05);
-            color: white;
-            border: 1px solid var(--glass-border);
-        }
-
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.2);
-        }
-
-        /* Footer */
-        footer {
-            margin-top: 40px;
-            text-align: center;
-            font-size: 0.8rem;
-            color: rgba(255, 255, 255, 0.3);
-        }
-
-        /* SVG Icons */
-        .icon {
-            width: 16px;
-            height: 16px;
-            opacity: 0.7;
-        }
-
-        @media (max-width: 600px) {
-            header {
-                flex-direction: column;
-                gap: 20px;
-                text-align: center;
-                align-items: center;
-            }
-
-            .dashboard {
-                padding: 24px;
-                width: 95%;
-            }
-
-            .metrics {
-                grid-template-columns: 1fr;
-            }
-
-            h1 {
-                font-size: 2rem;
-            }
+        .font-mono {
+            font-family: 'JetBrains Mono', monospace;
         }
     </style>
 </head>
 
-<body>
+<body
+    class="min-h-screen bg-gradient-to-br from-slate-950 via-zinc-900 to-slate-900 text-slate-100 antialiased selection:bg-orange-500/30">
 
-    <div class="ambient-light">
-        <div class="orb orb-1"></div>
-        <div class="orb orb-2"></div>
-        <div class="orb orb-3"></div>
-    </div>
-    <div class="grid-overlay"></div>
-
-    <main class="dashboard">
-        <header>
-            <div class="brand">
-                <h1>AeroBite API</h1>
-                <p>High-Performance Backend Cluster</p>
-            </div>
-            <div class="status-indicator">
-                <div class="pulse-dot"></div>
-                <span class="status-text">SYSTEM OPERATIONAL</span>
-            </div>
-        </header>
-
-        <div class="metrics">
-            <!-- Server Time -->
-            <div class="card">
-                <div class="card-label">
-                    <svg class="icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    Server Time
-                </div>
-                <div class="card-value" id="server-time">--:--:--</div>
-                <div class="card-sub">UTC+05:30 (IST)</div>
-            </div>
-
-            <!-- Uptime -->
-            <div class="card">
-                <div class="card-label">
-                    <svg class="icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M13 10V3L4 14h7v7l9-11h-7z" />
-                    </svg>
-                    Uptime
-                </div>
-                <div class="card-value" id="uptime">0s</div>
-                <div class="card-sub">Since last deploy</div>
-            </div>
-
-            <!-- Environment -->
-            <div class="card">
-                <div class="card-label">
-                    <svg class="icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                    </svg>
-                    Environment
-                </div>
-                <div class="card-value">Production</div>
-                <div class="card-sub">Region: ap-south-1</div>
-            </div>
-
-            <!-- DB Status -->
-            <div class="card">
-                <div class="card-label">
-                    <svg class="icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
-                    </svg>
-                    Database
-                </div>
-                <div class="card-value" style="color: var(--success);">Connected</div>
-                <div class="card-sub">Google Firestore</div>
-            </div>
+    <!-- NAVBAR -->
+    <nav class="flex items-center justify-between px-6 py-6 max-w-7xl mx-auto w-full">
+        <div class="text-xl font-bold tracking-tight flex items-center gap-2">
+            <span class="text-2xl">🍔</span> AeroBite API
         </div>
-
-        <div class="actions">
-            <a href="/api/health" target="_blank" class="btn btn-secondary">
-                <svg class="icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-                View JSON Raw
-            </a>
-            <a href="#" class="btn btn-primary">
-                <svg class="icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                </svg>
-                Read Documentation
+        <div class="flex items-center gap-6">
+            <a href="/api/docs"
+                class="text-slate-400 hover:text-white text-sm font-medium transition-colors">Documentation</a>
+            <a href="/admin"
+                class="px-4 py-2 rounded-lg bg-orange-500 text-white text-sm font-medium hover:bg-orange-600 transition shadow-lg shadow-orange-500/20">
+                Admin Login
             </a>
         </div>
+    </nav>
 
-        <footer>
-            &copy; 2026 AeroBite Systems Inc. All systems nominal.
-        </footer>
+    <!-- HERO -->
+    <main class="flex flex-col items-center text-center mt-20 px-6 w-full max-w-7xl mx-auto">
+        <div
+            class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-500 text-xs font-medium border border-emerald-500/20 mb-6 animate-pulse">
+            <div class="w-2 h-2 rounded-full bg-emerald-500"></div>
+            SYSTEM OPERATIONAL
+        </div>
+
+        <h1 class="text-5xl md:text-6xl font-bold mb-6 tracking-tight text-white max-w-3xl leading-tight">
+            Production API Platform
+        </h1>
+        <p class="text-slate-400 text-lg max-w-2xl mb-12 leading-relaxed">
+            Scalable backend powering the AeroBite food delivery ecosystem.<br class="hidden md:block" />
+            Secure, monitored, and built for high-performance transactions.
+        </p>
+
+        <!-- STATUS GRID -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16 w-full max-w-5xl">
+
+            <div class="status-card group">
+                <p class="label">API STATUS</p>
+                <div class="flex items-center gap-2">
+                    <p class="value text-emerald-400">Online</p>
+                    <span class="relative flex h-3 w-3">
+                        <span
+                            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+                    </span>
+                </div>
+            </div>
+
+            <div class="status-card">
+                <p class="label">SERVER TIME (IST)</p>
+                <p class="value font-mono text-xl" id="server-time">--:--:--</p>
+            </div>
+
+            <div class="status-card">
+                <p class="label">UPTIME</p>
+                <p class="value font-mono text-xl" id="uptime">0s</p>
+            </div>
+
+            <div class="status-card">
+                <p class="label">VERSION</p>
+                <p class="value font-mono text-xl">v1.2.0</p>
+            </div>
+
+        </div>
+
+        <!-- ACTIONS -->
+        <div class="flex flex-wrap gap-4 justify-center">
+            <a href="/api/health" class="action-btn">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                    </path>
+                </svg>
+                Health JSON
+            </a>
+            <a href="#" class="action-btn primary">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253">
+                    </path>
+                </svg>
+                Read Docs
+            </a>
+            <a href="/admin" class="action-btn hover:bg-slate-800">
+                Dashboard &rarr;
+            </a>
+        </div>
     </main>
+
+    <!-- FOOTER -->
+    <footer class="mt-auto py-8 text-center border-t border-white/5 w-full bg-slate-950/50 backdrop-blur-sm">
+        <p class="text-slate-500 text-sm">
+            &copy; 2026 AeroBite Systems · Backend Infrastructure · <span class="text-slate-400">Stable</span>
+        </p>
+    </footer>
 
     <script src="/dashboard.js"></script>
 </body>

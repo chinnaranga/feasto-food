@@ -12,8 +12,10 @@ const restaurantSchema = new mongoose.Schema({
   price: String,
   deliveryFee: Number,
   verified: Boolean,
-  isNewRestaurant: Boolean, // ✅ Renamed from 'isNew' to avoid conflict
+  isNewRestaurant: Boolean,
   isEcoFriendly: Boolean,
+  ownerId: { type: String, required: true, index: true }, // Firebase UID of owner
+  ownerEmail: String,
 });
 
 const Restaurant = mongoose.model('Restaurant', restaurantSchema);

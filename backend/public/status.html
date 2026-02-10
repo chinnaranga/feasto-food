@@ -5,1061 +5,247 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AeroBite API — System Health Status</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link
         href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
         rel="stylesheet">
     <style>
-        *,
-        *::before,
-        *::after {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --primary: #ff6b35;
-            --primary-glow: rgba(255, 107, 53, 0.4);
-            --accent-cyan: #00d9ff;
-            --accent-purple: #a78bfa;
-            --accent-pink: #f472b6;
-            --accent-green: #4ade80;
-            --text-primary: #ffffff;
-            --text-secondary: rgba(255, 255, 255, 0.6);
-            --glass-bg: rgba(255, 255, 255, 0.04);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --glass-hover: rgba(255, 255, 255, 0.1);
-            --dark-bg: #050510;
-        }
-
         body {
             font-family: 'Outfit', sans-serif;
-            background: var(--dark-bg);
-            min-height: 100vh;
-            color: var(--text-primary);
-            overflow-x: hidden;
-            cursor: default;
+            background-color: #0f0f12;
+            color: white;
         }
 
-        /* ═══════════════════════════════════════════
-           BACKGROUND LAYERS
-        ═══════════════════════════════════════════ */
-
-        /* Aurora Borealis */
-        .aurora {
-            position: fixed;
-            inset: 0;
-            z-index: 0;
-            pointer-events: none;
-            overflow: hidden;
-        }
-
-        .aurora-wave {
-            position: absolute;
-            width: 200%;
-            height: 60%;
-            border-radius: 50%;
-            filter: blur(100px);
-            opacity: 0.15;
-            mix-blend-mode: screen;
-        }
-
-        .aurora-wave:nth-child(1) {
-            background: linear-gradient(90deg, transparent, #00d9ff, #a78bfa, transparent);
-            top: -30%;
-            left: -50%;
-            animation: aurora1 18s ease-in-out infinite alternate;
-        }
-
-        .aurora-wave:nth-child(2) {
-            background: linear-gradient(90deg, transparent, #ff6b35, #f472b6, transparent);
-            top: -10%;
-            left: -30%;
-            animation: aurora2 22s ease-in-out infinite alternate-reverse;
-        }
-
-        .aurora-wave:nth-child(3) {
-            background: linear-gradient(90deg, transparent, #4ade80, #00d9ff, transparent);
-            top: 10%;
-            left: -20%;
-            animation: aurora3 15s ease-in-out infinite alternate;
-        }
-
-        @keyframes aurora1 {
-            0% {
-                transform: translateX(-20%) rotate(-5deg);
-            }
-
-            100% {
-                transform: translateX(20%) rotate(5deg);
-            }
-        }
-
-        @keyframes aurora2 {
-            0% {
-                transform: translateX(10%) rotate(3deg);
-            }
-
-            100% {
-                transform: translateX(-30%) rotate(-3deg);
-            }
-        }
-
-        @keyframes aurora3 {
-            0% {
-                transform: translateX(-10%) rotate(2deg);
-            }
-
-            100% {
-                transform: translateX(15%) rotate(-4deg);
-            }
-        }
-
-        /* Hexagonal Grid */
-        .hex-grid {
-            position: fixed;
-            inset: 0;
-            z-index: 1;
-            pointer-events: none;
-            opacity: 0.04;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='100'%3E%3Cpath d='M28 66L0 50L0 16L28 0L56 16L56 50L28 66L28 100' fill='none' stroke='%23ffffff' stroke-width='0.5'/%3E%3Cpath d='M28 0L28 34L0 50L0 84L28 100L56 84L56 50L28 34' fill='none' stroke='%23ffffff' stroke-width='0.5'/%3E%3C/svg%3E");
-            background-size: 56px 100px;
-        }
-
-        /* Particles Canvas */
-        #particles-canvas {
-            position: fixed;
-            inset: 0;
-            z-index: 2;
-            pointer-events: none;
-        }
-
-        /* Data Rain Canvas */
-        #data-rain {
-            position: fixed;
-            inset: 0;
-            z-index: 1;
-            pointer-events: none;
-            opacity: 0.06;
-        }
-
-        /* Holographic Scan Line */
-        .scan-line {
-            position: fixed;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            z-index: 3;
-            pointer-events: none;
-            background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
-            box-shadow: 0 0 20px var(--accent-cyan), 0 0 60px var(--accent-cyan);
-            opacity: 0;
-            animation: scanLine 8s linear infinite;
-        }
-
-        @keyframes scanLine {
-            0% {
-                top: -2px;
-                opacity: 0;
-            }
-
-            5% {
-                opacity: 0.6;
-            }
-
-            95% {
-                opacity: 0.6;
-            }
-
-            100% {
-                top: 100%;
-                opacity: 0;
-            }
-        }
-
-        /* ═══════════════════════════════════════════
-           CONTAINER
-        ═══════════════════════════════════════════ */
-        .container {
-            position: relative;
-            z-index: 10;
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 48px 40px 60px;
-        }
-
-        /* ═══════════════════════════════════════════
-           HEADER
-        ═══════════════════════════════════════════ */
-        .header {
-            margin-bottom: 56px;
-            animation: fadeInDown 0.8s ease-out;
-        }
-
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-30px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .header-top {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 32px;
-        }
-
-        .logo-section {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .logo {
-            width: 48px;
-            height: 48px;
-            border-radius: 14px;
-            background: linear-gradient(135deg, var(--primary), #ff8c42);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            box-shadow: 0 0 30px var(--primary-glow);
-            animation: logoPulse 3s ease-in-out infinite;
-        }
-
-        @keyframes logoPulse {
-
-            0%,
-            100% {
-                box-shadow: 0 0 20px var(--primary-glow);
-            }
-
-            50% {
-                box-shadow: 0 0 40px var(--primary-glow), 0 0 80px rgba(255, 107, 53, 0.15);
-            }
-        }
-
-        .logo-text {
-            font-size: 26px;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-        }
-
-        .badge {
-            background: rgba(74, 222, 128, 0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(74, 222, 128, 0.25);
-            padding: 6px 18px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 600;
-            color: var(--accent-green);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            animation: badgeGlow 3s ease-in-out infinite;
-        }
-
-        @keyframes badgeGlow {
-
-            0%,
-            100% {
-                box-shadow: 0 0 10px rgba(74, 222, 128, 0.1);
-            }
-
-            50% {
-                box-shadow: 0 0 20px rgba(74, 222, 128, 0.3);
-            }
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 28px;
-        }
-
-        .nav-link {
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.3s;
-            position: relative;
-        }
-
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: linear-gradient(90deg, var(--primary), var(--accent-cyan));
-            transition: width 0.3s;
-            border-radius: 1px;
-        }
-
-        .nav-link:hover {
-            color: var(--text-primary);
-        }
-
-        .nav-link:hover::after {
-            width: 100%;
-        }
-
-        h1 {
-            font-size: 52px;
-            font-weight: 800;
-            margin-bottom: 8px;
-            letter-spacing: -1.5px;
-            background: linear-gradient(135deg, #fff 0%, rgba(255, 255, 255, 0.5) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .subtitle {
-            font-size: 17px;
-            color: var(--text-secondary);
-            font-weight: 400;
-            font-family: 'JetBrains Mono', monospace;
-            min-height: 1.5em;
-        }
-
-        .subtitle .cursor {
-            animation: blink 1s step-end infinite;
-        }
-
-        @keyframes blink {
-
-            0%,
-            100% {
-                opacity: 1;
-            }
-
-            50% {
-                opacity: 0;
-            }
-        }
-
-        .timestamp-bar {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-top: 16px;
-            color: var(--text-secondary);
-            font-size: 13px;
+        .font-mono {
             font-family: 'JetBrains Mono', monospace;
         }
 
-        /* ═══════════════════════════════════════════
-           GLASS CARDS — 3D Tilt + Neon Border
-        ═══════════════════════════════════════════ */
-        .metrics-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 24px;
-            margin-bottom: 40px;
-            perspective: 1200px;
+        .liquid-glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
         }
 
-        .glass-card {
-            background: var(--glass-bg);
+        .liquid-glass:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 8px 32px 0 rgba(249, 115, 22, 0.1);
+        }
+
+        .liquid-glass-high {
+            background: rgba(255, 255, 255, 0.08);
             backdrop-filter: blur(24px);
             -webkit-backdrop-filter: blur(24px);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 28px 28px 24px;
-            position: relative;
-            overflow: hidden;
-            transition: transform 0.15s ease-out, box-shadow 0.3s ease, border-color 0.3s ease;
-            transform-style: preserve-3d;
-            will-change: transform;
-            animation: cardReveal 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+            border: 1px solid rgba(255, 255, 255, 0.15);
         }
 
-        .glass-card:nth-child(1) {
-            animation-delay: 0.05s;
-        }
-
-        .glass-card:nth-child(2) {
-            animation-delay: 0.12s;
-        }
-
-        .glass-card:nth-child(3) {
-            animation-delay: 0.19s;
-        }
-
-        .glass-card:nth-child(4) {
-            animation-delay: 0.26s;
-        }
-
-        .glass-card:nth-child(5) {
-            animation-delay: 0.33s;
-        }
-
-        .glass-card:nth-child(6) {
-            animation-delay: 0.40s;
-        }
-
-        @keyframes cardReveal {
-            from {
-                opacity: 0;
-                transform: translateY(60px) scale(0.92) rotateX(10deg);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1) rotateX(0);
-            }
-        }
-
-        /* Neon border glow */
-        .glass-card::before {
-            content: '';
-            position: absolute;
-            inset: -1px;
-            border-radius: 21px;
-            padding: 1px;
-            background: linear-gradient(135deg, transparent 40%, var(--card-accent, var(--primary)) 50%, transparent 60%);
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            opacity: 0;
-            transition: opacity 0.4s;
-        }
-
-        .glass-card:hover::before {
-            opacity: 1;
-        }
-
-        /* Scan line inside card */
-        .glass-card::after {
-            content: '';
-            position: absolute;
-            left: 0;
-            width: 100%;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
-            animation: cardScan 6s linear infinite;
-            opacity: 0;
-        }
-
-        .glass-card:hover::after {
-            opacity: 1;
-        }
-
-        @keyframes cardScan {
-            0% {
-                top: 0;
-            }
-
-            100% {
-                top: 100%;
-            }
-        }
-
-        .glass-card:hover {
-            border-color: rgba(255, 255, 255, 0.15);
-            box-shadow: 0 20px 80px rgba(0, 0, 0, 0.4), 0 0 40px var(--card-glow, rgba(255, 107, 53, 0.08));
-        }
-
-        .card-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
-
-        .card-title {
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: var(--text-secondary);
-            font-weight: 600;
-        }
-
-        .card-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        .glass-card:hover .card-icon {
-            transform: scale(1.15) rotate(8deg);
-        }
-
-        .icon-uptime {
-            background: rgba(74, 222, 128, 0.12);
-            color: var(--accent-green);
-        }
-
-        .icon-heap {
-            background: rgba(255, 107, 53, 0.12);
-            color: var(--primary);
-        }
-
-        .icon-rss {
-            background: rgba(0, 217, 255, 0.12);
-            color: var(--accent-cyan);
-        }
-
-        .icon-db {
-            background: rgba(167, 139, 250, 0.12);
-            color: var(--accent-purple);
-        }
-
-        .icon-error {
-            background: rgba(239, 68, 68, 0.12);
-            color: #ef4444;
-        }
-
-        .icon-orders {
-            background: rgba(168, 85, 247, 0.12);
-            color: #a855f7;
-        }
-
-        /* Metric Value — Holographic + Glitch */
-        .metric-value {
-            font-size: 44px;
-            font-weight: 800;
-            letter-spacing: -1px;
-            margin-bottom: 6px;
-            background: linear-gradient(135deg, #fff, rgba(255, 255, 255, 0.7));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            position: relative;
-            display: inline-block;
-            font-family: 'JetBrains Mono', 'Outfit', sans-serif;
-        }
-
-        /* Chromatic aberration on hover */
-        .glass-card:hover .metric-value {
-            text-shadow: -1px 0 rgba(255, 0, 0, 0.3), 1px 0 rgba(0, 255, 255, 0.3);
-            -webkit-text-fill-color: unset;
-            background: none;
-            color: #fff;
-        }
-
-        /* Glitch effect */
-        .metric-value.glitch {
-            animation: glitch 0.3s linear;
-        }
-
-        @keyframes glitch {
-            0% {
-                transform: translate(0);
-            }
-
-            20% {
-                transform: translate(-2px, 1px);
-                filter: hue-rotate(90deg);
-            }
-
-            40% {
-                transform: translate(2px, -1px);
-            }
-
-            60% {
-                transform: translate(-1px, -1px);
-                filter: hue-rotate(0deg);
-            }
-
-            80% {
-                transform: translate(1px, 2px);
-            }
-
-            100% {
-                transform: translate(0);
-            }
-        }
-
-        .metric-label {
-            font-size: 13px;
-            color: var(--text-secondary);
-            font-weight: 400;
-        }
-
-        /* Progress bars */
-        .progress-container {
-            margin-top: 14px;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.06);
-            border-radius: 2px;
-            overflow: hidden;
-        }
-
-        .progress-bar {
-            height: 100%;
-            border-radius: 2px;
-            transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .progress-heap {
-            background: linear-gradient(90deg, var(--primary), #ffb347);
-            width: 0%;
-            box-shadow: 0 0 12px rgba(255, 107, 53, 0.5);
-        }
-
-        .progress-rss {
-            background: linear-gradient(90deg, var(--accent-cyan), #60efff);
-            width: 0%;
-            box-shadow: 0 0 12px rgba(0, 217, 255, 0.5);
-        }
-
-        .progress-info {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 6px;
-            font-size: 11px;
-            color: var(--text-secondary);
-            font-family: 'JetBrains Mono', monospace;
-        }
-
-        /* Status indicator with pulsing rings */
-        .status-indicator {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            margin-top: 10px;
-        }
-
-        .status-ring {
-            position: relative;
-            width: 28px;
-            height: 28px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .status-ring .dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: var(--accent-green);
-            box-shadow: 0 0 12px var(--accent-green);
-            position: relative;
-            z-index: 2;
-        }
-
-        .status-ring .ring {
-            position: absolute;
+        .aurora-bg {
+            position: fixed;
             inset: 0;
-            border-radius: 50%;
-            border: 1.5px solid var(--accent-green);
-            opacity: 0;
-            animation: ringPulse 2.5s ease-out infinite;
+            z-index: -1;
+            background:
+                radial-gradient(circle at 0% 0%, rgba(249, 115, 22, 0.15), transparent 50%),
+                radial-gradient(circle at 100% 100%, rgba(239, 68, 68, 0.15), transparent 50%);
         }
 
-        .status-ring .ring:nth-child(2) {
-            animation-delay: 0.8s;
+        .liquid-btn {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
         }
 
-        .status-ring .ring:nth-child(3) {
-            animation-delay: 1.6s;
-        }
-
-        @keyframes ringPulse {
-            0% {
-                transform: scale(0.4);
-                opacity: 0.7;
-            }
-
-            100% {
-                transform: scale(1.8);
-                opacity: 0;
-            }
-        }
-
-        .status-offline .dot {
-            background: #ef4444;
-            box-shadow: 0 0 12px #ef4444;
-        }
-
-        .status-offline .ring {
-            border-color: #ef4444;
-        }
-
-        .status-text {
-            font-size: 15px;
-            font-weight: 600;
-            color: var(--accent-green);
-        }
-
-        .status-offline .status-text {
-            color: #ef4444;
-        }
-
-        .status-subtext {
-            font-size: 12px;
-            color: var(--text-secondary);
-            margin-top: 2px;
-        }
-
-        /* ═══════════════════════════════════════════
-           BUTTONS — Ripple Effect
-        ═══════════════════════════════════════════ */
-        .action-buttons {
-            display: flex;
-            gap: 16px;
-            flex-wrap: wrap;
-            animation: cardReveal 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.5s backwards;
-        }
-
-        .btn {
-            position: relative;
-            overflow: hidden;
-            padding: 14px 28px;
-            border-radius: 14px;
-            font-size: 14px;
-            font-weight: 600;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            transition: all 0.3s;
-            border: none;
-            cursor: pointer;
-            font-family: 'Outfit', sans-serif;
-        }
-
-        .btn .ripple {
-            position: absolute;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            transform: scale(0);
-            animation: rippleAnim 0.6s linear;
-            pointer-events: none;
-        }
-
-        @keyframes rippleAnim {
-            to {
-                transform: scale(4);
-                opacity: 0;
-            }
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary), #ff8c42);
-            color: white;
-            box-shadow: 0 0 30px rgba(255, 107, 53, 0.25);
-        }
-
-        .btn-primary:hover {
+        .liquid-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
             transform: translateY(-2px);
-            box-shadow: 0 0 50px rgba(255, 107, 53, 0.35);
-        }
-
-        .btn-secondary {
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            color: var(--text-primary);
-        }
-
-        .btn-secondary:hover {
-            background: var(--glass-hover);
-            border-color: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
-        }
-
-        /* ═══════════════════════════════════════════
-           FOOTER
-        ═══════════════════════════════════════════ */
-        .footer {
-            margin-top: 72px;
-            padding-top: 32px;
-            border-top: 1px solid rgba(255, 255, 255, 0.06);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 12px;
-            color: var(--text-secondary);
-            animation: cardReveal 0.7s ease 0.6s backwards;
-        }
-
-        .footer-info {
-            display: flex;
-            gap: 20px;
-            font-family: 'JetBrains Mono', monospace;
-        }
-
-        .footer-item {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .status-badge {
-            padding: 3px 12px;
-            background: rgba(74, 222, 128, 0.1);
-            border: 1px solid rgba(74, 222, 128, 0.2);
-            border-radius: 10px;
-            color: var(--accent-green);
-            font-weight: 500;
-            font-size: 11px;
-        }
-
-        /* ═══════════════════════════════════════════
-           BREATHING BORDER
-        ═══════════════════════════════════════════ */
-        .glass-card {
-            --breathing: 0;
-        }
-
-        .glass-card.card-uptime {
-            --card-accent: var(--accent-green);
-            --card-glow: rgba(74, 222, 128, 0.1);
-        }
-
-        .glass-card.card-heap {
-            --card-accent: var(--primary);
-            --card-glow: rgba(255, 107, 53, 0.1);
-        }
-
-        .glass-card.card-rss {
-            --card-accent: var(--accent-cyan);
-            --card-glow: rgba(0, 217, 255, 0.1);
-        }
-
-        .glass-card.card-db {
-            --card-accent: var(--accent-purple);
-            --card-glow: rgba(167, 139, 250, 0.1);
-        }
-
-        .glass-card.card-error {
-            --card-accent: #ef4444;
-            --card-glow: rgba(239, 68, 68, 0.1);
-        }
-
-        .glass-card.card-orders {
-            --card-accent: #a855f7;
-            --card-glow: rgba(168, 85, 247, 0.1);
-        }
-
-        .glass-card.card-active {
-            --card-accent: #f59e0b;
-            --card-glow: rgba(245, 158, 11, 0.1);
-        }
-
-        .icon-active {
-            background: rgba(245, 158, 11, 0.12);
-            color: #f59e0b;
-        }
-
-        /* ═══════════════════════════════════════════
-           RESPONSIVE
-        ═══════════════════════════════════════════ */
-        @media (max-width: 768px) {
-            .container {
-                padding: 32px 16px;
-            }
-
-            h1 {
-                font-size: 36px;
-            }
-
-            .metrics-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .header-top {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 16px;
-            }
-
-            .nav-links {
-                gap: 16px;
-            }
-
-            .footer {
-                flex-direction: column;
-                gap: 16px;
-                text-align: center;
-            }
-
-            .footer-info {
-                flex-direction: column;
-                gap: 8px;
-            }
-
-            .metric-value {
-                font-size: 36px;
-            }
+            border-color: rgba(249, 115, 22, 0.5);
+            box-shadow: 0 0 15px rgba(249, 115, 22, 0.3);
         }
     </style>
 </head>
 
-<body>
+<body class="min-h-screen relative overflow-x-hidden p-6 md:p-12">
 
-    <!-- BG Layers -->
-    <div class="aurora">
-        <div class="aurora-wave"></div>
-        <div class="aurora-wave"></div>
-        <div class="aurora-wave"></div>
-    </div>
-    <div class="hex-grid"></div>
-    <canvas id="particles-canvas"></canvas>
-    <canvas id="data-rain"></canvas>
-    <div class="scan-line"></div>
+    <div class="aurora-bg"></div>
 
-    <div class="container">
-
+    <div class="max-w-7xl mx-auto">
         <!-- HEADER -->
-        <header class="header">
-            <div class="header-top">
-                <div class="logo-section">
-                    <div class="logo">🔥</div>
-                    <div class="logo-text">AeroBite API</div>
-                    <div class="badge" id="global-status">● OPERATIONAL</div>
+        <header class="mb-12">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-6 mb-8">
+                <div class="flex items-center gap-4">
+                    <div
+                        class="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-2xl shadow-lg shadow-orange-500/30">
+                        🔥
+                    </div>
+                    <div>
+                        <div class="text-2xl font-bold tracking-tight">AeroBite API</div>
+                        <div class="inline-flex items-center px-3 py-1 rounded-full bg-green-500/10 border border-green-500/20 text-xs font-semibold text-green-400 mt-1"
+                            id="global-status">
+                            ● OPERATIONAL
+                        </div>
+                    </div>
                 </div>
-                <nav class="nav-links">
-                    <a href="https://feasto.food" target="_blank" class="nav-link">Website</a>
-                    <a href="/api/docs" class="nav-link">Docs</a>
-                    <a href="/admin" class="nav-link">Admin</a>
+                <nav class="flex items-center gap-6">
+                    <a href="https://feasto.food" target="_blank"
+                        class="text-gray-400 hover:text-white transition-colors text-sm font-medium">Website</a>
+                    <a href="/api/docs"
+                        class="text-gray-400 hover:text-white transition-colors text-sm font-medium">Docs</a>
+                    <a href="/admin"
+                        class="text-gray-400 hover:text-white transition-colors text-sm font-medium">Admin</a>
                 </nav>
             </div>
-            <h1>System Health Status</h1>
-            <p class="subtitle" id="subtitle-text"></p>
-            <div class="timestamp-bar">
-                <span>⏱</span>
-                <span id="server-timestamp">Connecting...</span>
+
+            <div class="text-center md:text-left">
+                <h1
+                    class="text-4xl md:text-5xl font-extrabold mb-3 text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">
+                    System Health Status
+                </h1>
+                <p class="text-gray-400 font-mono text-sm" id="subtitle-text">Monitor real-time metrics and performance.
+                </p>
+                <div
+                    class="flex items-center justify-center md:justify-start gap-2 mt-4 text-xs font-mono text-gray-500">
+                    <span>⏱</span>
+                    <span id="server-timestamp">Connecting...</span>
+                </div>
             </div>
         </header>
 
         <!-- METRIC CARDS -->
-        <div class="metrics-grid" id="cards-grid">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12" id="cards-grid">
 
             <!-- Uptime -->
-            <div class="glass-card card-uptime" data-tilt>
-                <div class="card-header">
-                    <div class="card-title">Uptime</div>
-                    <div class="card-icon icon-uptime">✓</div>
+            <div class="liquid-glass rounded-3xl p-6 transition-all duration-300 group">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-xs font-bold uppercase tracking-widest text-gray-500">Uptime</span>
+                    <div
+                        class="w-10 h-10 rounded-xl bg-green-500/10 flex items-center justify-center text-green-400 group-hover:scale-110 transition-transform">
+                        ✓</div>
                 </div>
-                <div class="metric-value" id="uptime-val">--</div>
-                <div class="metric-label">Continuous operation</div>
+                <div class="text-4xl font-bold font-mono text-white mb-2" id="uptime-val">--</div>
+                <div class="text-xs text-gray-400">Continuous operation</div>
             </div>
 
             <!-- Heap Memory -->
-            <div class="glass-card card-heap" data-tilt>
-                <div class="card-header">
-                    <div class="card-title">Heap Memory</div>
-                    <div class="card-icon icon-heap">⚡</div>
+            <div class="liquid-glass rounded-3xl p-6 transition-all duration-300 group">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-xs font-bold uppercase tracking-widest text-gray-500">Heap Memory</span>
+                    <div
+                        class="w-10 h-10 rounded-xl bg-orange-500/10 flex items-center justify-center text-orange-400 group-hover:scale-110 transition-transform">
+                        ⚡</div>
                 </div>
-                <div class="metric-value" id="heap-val">-- MB</div>
-                <div class="metric-label">Active memory usage</div>
-                <div class="progress-container">
-                    <div class="progress-bar progress-heap" id="heap-bar"></div>
+                <div class="text-4xl font-bold font-mono text-white mb-2" id="heap-val">-- MB</div>
+                <div class="h-1 w-full bg-white/5 rounded-full overflow-hidden mb-2">
+                    <div class="h-full bg-gradient-to-r from-orange-500 to-red-500 transition-all duration-1000"
+                        id="heap-bar" style="width: 0%"></div>
                 </div>
-                <div class="progress-info">
+                <div class="flex justify-between text-xs font-mono text-gray-500">
                     <span id="heap-used">--</span>
                     <span>of 512 MB</span>
                 </div>
             </div>
 
             <!-- RSS Memory -->
-            <div class="glass-card card-rss" data-tilt>
-                <div class="card-header">
-                    <div class="card-title">RSS Memory</div>
-                    <div class="card-icon icon-rss">📊</div>
+            <div class="liquid-glass rounded-3xl p-6 transition-all duration-300 group">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-xs font-bold uppercase tracking-widest text-gray-500">RSS Memory</span>
+                    <div
+                        class="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400 group-hover:scale-110 transition-transform">
+                        📊</div>
                 </div>
-                <div class="metric-value" id="rss-val">-- MB</div>
-                <div class="metric-label">Resident Set Size</div>
-                <div class="progress-container">
-                    <div class="progress-bar progress-rss" id="rss-bar"></div>
+                <div class="text-4xl font-bold font-mono text-white mb-2" id="rss-val">-- MB</div>
+                <div class="h-1 w-full bg-white/5 rounded-full overflow-hidden mb-2">
+                    <div class="h-full bg-gradient-to-r from-blue-400 to-cyan-400 transition-all duration-1000"
+                        id="rss-bar" style="width: 0%"></div>
                 </div>
-                <div class="progress-info">
-                    <span>Allocated</span>
-                </div>
+                <div class="text-xs text-gray-400">Resident Set Size</div>
             </div>
 
             <!-- Database -->
-            <div class="glass-card card-db" data-tilt>
-                <div class="card-header">
-                    <div class="card-title">Database</div>
-                    <div class="card-icon icon-db">🗄️</div>
+            <div class="liquid-glass rounded-3xl p-6 transition-all duration-300 group">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-xs font-bold uppercase tracking-widest text-gray-500">Database</span>
+                    <div
+                        class="w-10 h-10 rounded-xl bg-purple-500/10 flex items-center justify-center text-purple-400 group-hover:scale-110 transition-transform">
+                        🗄️</div>
                 </div>
-                <div class="status-indicator" id="db-indicator-container">
-                    <div class="status-ring">
-                        <div class="ring"></div>
-                        <div class="ring"></div>
-                        <div class="ring"></div>
-                        <div class="dot" id="db-indicator"></div>
+                <div class="flex items-center gap-3">
+                    <div class="relative flex h-3 w-3">
+                        <span
+                            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-3 w-3 bg-purple-500" id="db-indicator"></span>
                     </div>
                     <div>
-                        <div class="status-text" id="db-status">Checking...</div>
-                        <div class="status-subtext">Firestore Service</div>
+                        <div class="text-xl font-bold text-white" id="db-status">Checking...</div>
+                        <div class="text-xs text-gray-400">Firestore Service</div>
                     </div>
                 </div>
             </div>
 
             <!-- Error Rate -->
-            <div class="glass-card card-error" data-tilt id="error-card">
-                <div class="card-header">
-                    <div class="card-title">Error Rate</div>
-                    <div class="card-icon icon-error">⚠️</div>
+            <div class="liquid-glass rounded-3xl p-6 transition-all duration-300 group" id="error-card">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-xs font-bold uppercase tracking-widest text-gray-500">Error Rate</span>
+                    <div
+                        class="w-10 h-10 rounded-xl bg-red-500/10 flex items-center justify-center text-red-500 group-hover:scale-110 transition-transform">
+                        ⚠️</div>
                 </div>
-                <div class="metric-value" id="error-rate-val">--%</div>
-                <div class="metric-label">Last 60 seconds</div>
+                <div class="text-4xl font-bold font-mono text-white mb-2" id="error-rate-val">--%</div>
+                <div class="text-xs text-gray-400">Last 60 seconds</div>
             </div>
 
             <!-- Active Orders -->
-            <div class="glass-card card-active" data-tilt>
-                <div class="card-header">
-                    <div class="card-title">Live Orders</div>
-                    <div class="card-icon icon-active">🍳</div>
+            <div class="liquid-glass rounded-3xl p-6 transition-all duration-300 group">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-xs font-bold uppercase tracking-widest text-gray-500">Live Orders</span>
+                    <div
+                        class="w-10 h-10 rounded-xl bg-yellow-500/10 flex items-center justify-center text-yellow-500 group-hover:scale-110 transition-transform">
+                        🍳</div>
                 </div>
-                <div class="metric-value" id="active-orders-val">--</div>
-                <div class="metric-label">Currently Processing</div>
+                <div class="text-4xl font-bold font-mono text-white mb-2" id="active-orders-val">--</div>
+                <div class="text-xs text-gray-400">Currently Processing</div>
             </div>
 
             <!-- Orders Today -->
-            <div class="glass-card card-orders" data-tilt>
-                <div class="card-header">
-                    <div class="card-title">Sales Today</div>
-                    <div class="card-icon icon-orders">💰</div>
+            <div class="liquid-glass rounded-3xl p-6 transition-all duration-300 group">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-xs font-bold uppercase tracking-widest text-gray-500">Sales Today</span>
+                    <div
+                        class="w-10 h-10 rounded-xl bg-green-500/10 flex items-center justify-center text-green-500 group-hover:scale-110 transition-transform">
+                        💰</div>
                 </div>
-                <div class="metric-value" id="orders-today-val">--</div>
-                <div class="metric-label">Orders Completed</div>
+                <div class="text-4xl font-bold font-mono text-white mb-2" id="orders-today-val">--</div>
+                <div class="text-xs text-gray-400">Orders Completed</div>
             </div>
 
         </div>
 
         <!-- ACTION BUTTONS -->
-        <div class="action-buttons">
-            <a href="/api/docs" class="btn btn-primary" data-ripple>
+        <div class="flex flex-wrap gap-4 mb-12">
+            <a href="/api/docs"
+                class="liquid-btn px-6 py-3 rounded-xl text-white font-semibold flex items-center gap-2">
                 <span>📖</span> View API Docs
             </a>
-            <a href="/admin" class="btn btn-secondary" data-ripple>
+            <a href="/admin" class="liquid-btn px-6 py-3 rounded-xl text-white font-semibold flex items-center gap-2">
                 <span>⚙️</span> Admin Dashboard
             </a>
-            <button class="btn btn-secondary" data-ripple onclick="fetchHealth()">
+            <button class="liquid-btn px-6 py-3 rounded-xl text-white font-semibold flex items-center gap-2"
+                onclick="fetchHealth()">
                 <span>🔄</span> Refresh Status
             </button>
         </div>
 
         <!-- FOOTER -->
-        <footer class="footer">
+        <footer
+            class="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-gray-500 font-mono gap-4">
             <div>© 2026 AeroBite Systems Inc.</div>
-            <div class="footer-info">
-                <div class="footer-item">v1.2.0</div>
-                <div class="footer-item">ap-south-1</div>
-                <div class="footer-item">
-                    <span class="status-badge" id="footer-status">All Systems Nominal</span>
+            <div class="flex items-center gap-6">
+                <div>v1.2.0</div>
+                <div>ap-south-1</div>
+                <div class="px-3 py-1 rounded-full bg-green-500/10 border border-green-500/20 text-green-400 font-semibold"
+                    id="footer-status">
+                    All Systems Nominal
                 </div>
             </div>
         </footer>

@@ -1,4 +1,4 @@
-import { db } from "../config/firebase.js";
+import Order from "../models/Order.js";
 
 // @desc    Get all orders (paginated)
 // @route   GET /api/admin/orders
@@ -6,17 +6,15 @@ import { db } from "../config/firebase.js";
 export const getAllOrders = async (req, res) => {
     try {
         const { limit = 50, status } = req.query;
-        let ordersRef = db.collection('orders').orderBy('createdAt', 'desc').limit(Number(limit));
+        let query = {};
 
         if (status) {
-            ordersRef = db.collection('orders').where('status', '==', status).orderBy('createdAt', 'desc').limit(Number(limit));
+            query.status = status;
         }
 
-        const snapshot = await ordersRef.get();
-        const orders = [];
-        snapshot.forEach(doc => {
-            orders.push({ id: doc.id, ...doc.data() });
-        });
+        const orders = await Order.find(query)
+            .sort({ createdAt: -1 })
+            .limit(Number(limit));
 
         res.json(orders);
     } catch (error) {
@@ -31,33 +29,30 @@ export const getAllOrders = async (req, res) => {
 export const getSystemStats = async (req, res) => {
     try {
         // Calculate aggregations
-        // Note: For high volume, use distributed counters. For now, reading is fine.
+        const totalOrders = await Order.countDocuments();
 
-        // 1. Total Orders & Revenue
-        const ordersSnapshot = await db.collection('orders').get(); // potentially heavy
-        let totalOrders = ordersSnapshot.size;
-        let totalRevenue = 0;
-        let activeOrders = 0;
+        const revenueAgg = await Order.aggregate([
+            { $match: { status: 'Paid' } },
+            { $group: { _id: null, total: { $sum: "$total" } } }
+        ]);
+        const totalRevenue = revenueAgg.length > 0 ? revenueAgg[0].total : 0;
 
-        ordersSnapshot.forEach(doc => {
-            const data = doc.data();
-            if (data.status === 'Paid') {
-                totalRevenue += (data.total || 0);
-            }
-            if (['Pending', 'Preparing', 'Ready', 'Out for delivery', 'PENDING', 'PREPARING', 'READY', 'OUT_FOR_DELIVERY'].includes(data.status)) {
-                activeOrders++;
-            }
+        const activeOrders = await Order.countDocuments({
+            status: { $in: ['Pending', 'Preparing', 'Ready', 'Out for delivery', 'PENDING', 'PREPARING', 'READY', 'OUT_FOR_DELIVERY'] }
         });
 
-        // 2. Total Users
-        // const usersSnapshot = await db.collection('users').count().get();
-        // const totalUsers = usersSnapshot.data().count; 
-        // using count() aggregation is cheaper if firebase-admin supports it (it does in newer versions)
+        // Orders Today
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const ordersToday = await Order.countDocuments({
+            createdAt: { $gte: today }
+        });
 
         const stats = {
             totalOrders,
             totalRevenue,
             activeOrders,
+            ordersToday,
             systemHealth: "Optimal"
         };
 
@@ -80,17 +75,15 @@ export const updateOrderStatus = async (req, res) => {
             return res.status(400).json({ error: "Resulting status required" });
         }
 
-        const orderRef = db.collection('orders').doc(id);
-        const orderSnap = await orderRef.get();
+        const order = await Order.findByIdAndUpdate(
+            id,
+            { status },
+            { new: true }
+        );
 
-        if (!orderSnap.exists) {
+        if (!order) {
             return res.status(404).json({ error: "Order not found" });
         }
-
-        await orderRef.update({
-            status,
-            updatedAt: new Date().toISOString()
-        });
 
         res.json({ id, status, message: "Order status updated" });
     } catch (error) {

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -7,62 +7,76 @@
     <title>AeroBite API | Admin Gateway</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
         rel="stylesheet">
     <style>
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Outfit', sans-serif;
+            background-color: #0f0f12;
+            color: white;
         }
 
         .font-mono {
             font-family: 'JetBrains Mono', monospace;
         }
 
-        .scan-line {
-            width: 100%;
-            height: 100px;
-            z-index: 10;
-            background: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(255, 123, 0, 0.1) 50%, rgba(0, 0, 0, 0) 100%);
-            opacity: 0.1;
-            position: absolute;
-            bottom: 100%;
-            animation: scanline 10s linear infinite;
-            pointer-events: none;
+        .liquid-card {
+            background: rgba(24, 24, 27, 0.8);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
         }
 
-        @keyframes scanline {
-            0% {
-                bottom: 100%;
-            }
+        .aurora-bg {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background:
+                radial-gradient(circle at 50% 0%, rgba(249, 115, 22, 0.15), transparent 50%),
+                radial-gradient(circle at 50% 100%, rgba(220, 38, 38, 0.15), transparent 50%);
+        }
 
-            80% {
-                bottom: 100%;
+        .scan-line {
+            position: fixed;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            z-index: 5;
+            background: linear-gradient(90deg, transparent, rgba(249, 115, 22, 0.5), transparent);
+            animation: scanLine 6s linear infinite;
+            opacity: 0.3;
+        }
+
+        @keyframes scanLine {
+            0% {
+                top: -2px;
             }
 
             100% {
-                bottom: -100px;
+                top: 100%;
             }
         }
     </style>
 </head>
 
-<body
-    class="min-h-screen bg-slate-950 text-slate-200 antialiased selection:bg-orange-500/30 flex flex-col relative overflow-hidden">
+<body class="min-h-screen flex flex-col relative overflow-hidden">
 
+    <div class="aurora-bg"></div>
     <div class="scan-line"></div>
 
     <!-- Background Grid -->
     <div
-        class="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]">
+        class="fixed inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none">
     </div>
 
     <!-- Navbar -->
-    <nav class="border-b border-white/5 bg-slate-950/50 backdrop-blur-md sticky top-0 z-50">
+    <nav class="border-b border-white/5 bg-[#0f0f12]/80 backdrop-blur-md sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
             <div class="flex items-center gap-4">
                 <a href="/"
                     class="flex items-center gap-2 font-bold text-lg tracking-tight text-white hover:opacity-80 transition">
-                    <span>🍔</span> AeroBite API
+                    <span>🔥</span> AeroBite API
                 </a>
                 <span
                     class="px-2.5 py-0.5 rounded-full bg-red-500/10 border border-red-500/20 text-xs font-medium text-red-500 tracking-wide">SECURE
@@ -78,44 +92,44 @@
 
     <main class="flex-grow flex items-center justify-center relative p-6">
 
-        <div
-            class="w-full max-w-md bg-slate-900/80 border border-white/10 rounded-2xl p-8 backdrop-blur-xl shadow-2xl relative overflow-hidden group">
+        <div class="w-full max-w-md liquid-card rounded-3xl p-8 relative overflow-hidden group">
 
             <!-- Glow effect -->
             <div
-                class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[2px] bg-gradient-to-r from-transparent via-orange-500 to-transparent opacity-50">
+                class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[1px] bg-gradient-to-r from-transparent via-orange-500 to-transparent opacity-50">
             </div>
 
-            <div class="text-center mb-8">
+            <div class="text-center mb-10">
                 <div
-                    class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-slate-800 mb-6 border border-white/5 shadow-inner">
-                    <svg class="w-8 h-8 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-orange-500 to-red-600 mb-6 shadow-lg shadow-orange-500/20">
+                    <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z">
                         </path>
                     </svg>
                 </div>
-                <h1 class="text-2xl font-bold text-white mb-2">Restricted Access</h1>
+                <h1 class="text-3xl font-bold text-white mb-2">Restricted Access</h1>
                 <p class="text-slate-400 text-sm">This gateway is monitored. Authorized personnel only.</p>
             </div>
 
             <div class="space-y-4">
-                <div class="p-4 bg-slate-950 rounded-lg border border-white/5 flex items-start gap-3">
-                    <svg class="w-5 h-5 text-yellow-500 shrink-0 mt-0.5" fill="none" stroke="currentColor"
-                        viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z">
-                        </path>
-                    </svg>
-                    <div class="text-xs text-slate-400">
-                        <strong class="text-slate-300 block mb-1">Security Notice</strong>
+                <div class="p-4 bg-white/5 rounded-2xl border border-white/5 flex items-start gap-4">
+                    <div class="mt-1">
+                        <svg class="w-5 h-5 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z">
+                            </path>
+                        </svg>
+                    </div>
+                    <div class="text-xs text-slate-400 leading-relaxed">
+                        <strong class="text-slate-300 block mb-1 text-sm">Security Notice</strong>
                         Access to the administrative dashboard requires valid credentials. All login attempts are logged
                         with IP address and timestamp.
                     </div>
                 </div>
 
                 <a href="/admin/launch"
-                    class="w-full flex items-center justify-center gap-2 py-3 px-4 bg-orange-600 hover:bg-orange-500 text-white rounded-xl font-medium transition shadow-lg shadow-orange-500/20 group-hover:shadow-orange-500/40">
+                    class="w-full flex items-center justify-center gap-2 py-4 px-6 bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white rounded-xl font-bold transition shadow-lg shadow-orange-500/20 transform hover:-translate-y-1">
                     <span>Authenticate & Launch</span>
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -124,7 +138,7 @@
                 </a>
 
                 <a href="/"
-                    class="w-full flex items-center justify-center gap-2 py-3 px-4 bg-transparent hover:bg-white/5 text-slate-400 hover:text-white rounded-xl font-medium transition text-sm">
+                    class="w-full flex items-center justify-center gap-2 py-4 px-6 bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white rounded-xl font-medium transition text-sm">
                     Cancel
                 </a>
             </div>
@@ -138,7 +152,7 @@
         </div>
     </main>
 
-    <footer class="py-6 text-center text-slate-600 text-xs text-center w-full relative z-10">
+    <footer class="py-6 text-center text-slate-600 text-xs w-full relative z-10">
         &copy; 2026 AeroBite Security Systems
     </footer>
 

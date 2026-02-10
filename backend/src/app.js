@@ -4,6 +4,7 @@ import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 import { db } from "./config/firebase.js";
 import cookieParser from "cookie-parser";
+import Order from "./models/Order.js";
 
 // Routes
 import authRoutes from "./routes/auth.routes.js";
@@ -163,64 +164,27 @@ app.get("/api/public-stats", async (req, res) => {
     // }
 
     try {
-        const today = new Date().toISOString().split('T')[0] + 'T00:00:00.000Z';
+        // Orders Today
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
 
         // Parallelize queries
-        const [ordersSnapshot, activeOrdersSnapshot] = await Promise.all([
-            db.collection('orders').where('createdAt', '>=', today).count().get(),
-            db.collection('orders').where('status', 'in', ['Pending', 'Preparing', 'Ready', 'Out for delivery', 'PENDING', 'PREPARING', 'READY', 'OUT_FOR_DELIVERY']).count().get()
+        const [ordersToday, activeOrders] = await Promise.all([
+            Order.countDocuments({ createdAt: { $gte: today } }),
+            Order.countDocuments({
+                status: { $in: ['Pending', 'Preparing', 'Ready', 'Out for delivery', 'PENDING', 'PREPARING', 'READY', 'OUT_FOR_DELIVERY'] }
+            })
         ]);
 
         res.json({
             rpm: metricState.rpm,
             errorRate: metricState.errorRate,
-            ordersToday: ordersSnapshot.data().count,
-            activeOrders: activeOrdersSnapshot.data().count
+            ordersToday,
+            activeOrders
         });
     } catch (error) {
         console.error("Public Stats Error:", error);
         res.status(500).json({ error: "Stats failure" });
-    }
-});
-
-// Admin Stats Endpoint
-app.get("/api/admin/stats", requireAdmin, async (req, res) => {
-    try {
-        // Calculate start of day for Orders Today
-        const today = new Date().toISOString().split('T')[0] + 'T00:00:00.000Z';
-
-        // Query Firestore for Orders Today
-        const ordersSnapshot = await db.collection('orders')
-            .where('createdAt', '>=', today)
-            .select('id')
-            .get();
-
-        const ordersToday = ordersSnapshot.size;
-
-        // Query Active Orders (Pending/Preparing/Ready/Out for delivery)
-        const activeOrdersSnapshot = await db.collection('orders')
-            .where('status', 'in', ['Pending', 'Preparing', 'Ready', 'Out for delivery'])
-            .select('id')
-            .get();
-        const activeOrders = activeOrdersSnapshot.size;
-
-        // Query Total Users (Estimate or Count)
-        // const usersSnapshot = await db.collection('users').get();
-        // const totalUsers = usersSnapshot.size;
-        const totalUsers = 150; // Mock for now to save reads
-
-        res.json({
-            rpm: metricState.rpm,
-            errorRate: metricState.errorRate,
-            ordersToday,
-            activeOrders,
-            totalUsers,
-            requestsInterim: metricState.requests
-        });
-
-    } catch (error) {
-        console.error("Stats Error:", error);
-        res.status(500).json({ error: "Failed to fetch stats" });
     }
 });
 
@@ -244,7 +208,7 @@ app.get("/api/health", (req, res) => {
         timestamp: Date.now(),
         message: 'OK',
         memory: process.memoryUsage(),
-        dbConnection: "Connected (Firestore)" // Simplified check
+        dbConnection: "Connected (MongoDB)"
     };
     try {
         res.send(healthcheck);

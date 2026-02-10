@@ -96,5 +96,40 @@ async function fetchHealth() {
 }
 
 // Init
+
+// Analytics Polling
+async function fetchAnalytics() {
+    try {
+        const res = await fetch('/api/admin/stats');
+        // Silent fail if unauthorized (e.g. cookie expired)
+        if (res.status === 401) return;
+
+        const data = await res.json();
+
+        if (data) {
+            // Update UI
+            if (document.getElementById("rpm-val")) document.getElementById("rpm-val").innerText = data.rpm || 0;
+            if (document.getElementById("error-rate-val")) {
+                document.getElementById("error-rate-val").innerText = (data.errorRate || 0) + "%";
+                // Color coding for Error Rate
+                const errorEl = document.getElementById("error-rate-val").parentElement;
+                if (parseFloat(data.errorRate) > 10) {
+                    errorEl.classList.add('border-red-500/50');
+                    document.getElementById("error-rate-val").classList.add('text-red-500');
+                } else {
+                    errorEl.classList.remove('border-red-500/50');
+                    document.getElementById("error-rate-val").classList.remove('text-red-500');
+                }
+            }
+            if (document.getElementById("orders-today-val")) document.getElementById("orders-today-val").innerText = data.ordersToday || 0;
+        }
+    } catch (e) {
+        console.error("Analytics Error", e);
+    }
+}
+
+// Init
+fetchAnalytics();
 fetchHealth();
 setInterval(fetchHealth, 5000);
+setInterval(fetchAnalytics, 15000); // 15s poll for stats

@@ -78,6 +78,13 @@ app.use(cookieParser());
 // Global DB injection
 app.use((req, res, next) => {
     req.db = db;
+    // Metrics Counting
+    metricState.requests++;
+    res.on('finish', () => {
+        if (res.statusCode >= 500) {
+            metricState.errors++;
+        }
+    });
     next();
 });
 
@@ -121,6 +128,58 @@ app.post("/api/verify-access", (req, res) => {
         res.status(200).send({ success: true });
     } else {
         res.status(401).send({ error: "Invalid password" });
+    }
+});
+
+// Analytics State
+let metricState = {
+    requests: 0,
+    errors: 0,
+    rpm: 0,
+    errorRate: 0
+};
+
+// Reset metrics every minute
+setInterval(() => {
+    metricState.rpm = metricState.requests;
+    metricState.errorRate = metricState.requests > 0
+        ? ((metricState.errors / metricState.requests) * 100).toFixed(2)
+        : 0;
+    metricState.requests = 0;
+    metricState.errors = 0;
+}, 60000);
+
+// Admin Stats Endpoint
+app.get("/api/admin/stats", async (req, res) => {
+    // Check Auth
+    const authCookie = req.cookies.admin_access;
+    if (authCookie !== (process.env.ADMIN_SECRET || "feasto_secure_2026")) {
+        return res.status(401).json({ error: "Unauthorized" });
+    }
+
+    try {
+        // Calculate start of day for Orders Today
+        const today = new Date().toISOString().split('T')[0] + 'T00:00:00.000Z';
+
+        // Query Firestore for Orders Today
+        // Note: Using a simple get().size for now as count() requires specific index sometimes
+        const ordersSnapshot = await db.collection('orders')
+            .where('createdAt', '>=', today)
+            .select('id') // Optimize by selecting only ID
+            .get();
+
+        const ordersToday = ordersSnapshot.size;
+
+        res.json({
+            rpm: metricState.rpm,
+            errorRate: metricState.errorRate,
+            ordersToday,
+            requestsInterim: metricState.requests // Live count before minute reset
+        });
+
+    } catch (error) {
+        console.error("Stats Error:", error);
+        res.status(500).json({ error: "Failed to fetch stats" });
     }
 });
 

@@ -1,6 +1,6 @@
-# Frontend (Excluded)
-frontend/
-frontend/**/*
+# Frontend (Tracked)
+# frontend/
+# frontend/**/*
 
 # Backend Secrets
 .env

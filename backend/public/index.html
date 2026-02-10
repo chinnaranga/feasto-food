@@ -87,8 +87,15 @@
 
             <div
                 class="bg-slate-900 border border-slate-800 rounded-2xl p-6 text-left shadow-lg hover:border-slate-700 transition duration-300">
-                <p class="text-xs uppercase tracking-widest text-slate-400 mb-2 font-medium">VERSION</p>
-                <p class="text-2xl font-semibold tracking-tight text-slate-100 font-mono text-xl">v1.2.0</p>
+                <p class="text-xs uppercase tracking-widest text-slate-400 mb-2 font-medium">MEMORY USAGE</p>
+                <div class="flex items-end gap-2">
+                    <p class="text-2xl font-semibold tracking-tight text-slate-100 font-mono text-xl" id="memory-value">
+                        0 MB</p>
+                    <div class="h-1.5 w-16 bg-slate-800 rounded-full mb-2 overflow-hidden">
+                        <div id="memory-bar" class="h-full bg-emerald-500 rounded-full transition-all duration-500"
+                            style="width: 0%"></div>
+                    </div>
+                </div>
             </div>
 
         </div>

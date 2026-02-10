@@ -151,8 +151,13 @@ app.get("/api/docs", (req, res) => {
     res.sendFile(path.join(__dirname, "../public/docs.html"));
 });
 
-// Redirect /admin to Frontend Admin Dashboard
+// Serve Admin Gateway
 app.get("/admin", (req, res) => {
+    res.sendFile(path.join(__dirname, "../public/admin.html"));
+});
+
+// Handle Admin Launch Redirect
+app.get("/admin/launch", (req, res) => {
     const frontendUrl = process.env.CLIENT_URL || "https://feasto.food";
     res.redirect(`${frontendUrl}/admin`);
 });

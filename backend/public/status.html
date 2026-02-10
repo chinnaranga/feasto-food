@@ -1,115 +1,129 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AeroBite API | System Health</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <title>AeroBite API - System Health Status</title>
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
         rel="stylesheet">
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        mono: ['JetBrains Mono', 'monospace'],
-                    },
-                    colors: {
-                        glass: {
-                            100: 'rgba(255, 255, 255, 0.05)',
-                            200: 'rgba(255, 255, 255, 0.1)',
-                            300: 'rgba(255, 255, 255, 0.15)',
-                            border: 'rgba(255, 255, 255, 0.1)',
-                        },
-                        brand: {
-                            500: '#F97316', // AeroBite Orange
-                            600: '#EA580C',
-                        }
-                    },
-                    animation: {
-                        'float': 'float 6s ease-in-out infinite',
-                        'pulse-glow': 'pulse-glow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                    },
-                    keyframes: {
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0)' },
-                            '50%': { transform: 'translateY(-10px)' },
-                        },
-                        'pulse-glow': {
-                            '0%, 100%': { opacity: 0.4, transform: 'scale(1)' },
-                            '50%': { opacity: 0.1, transform: 'scale(1.1)' },
-                        }
-                    }
-                }
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #ff6b35;
+            --accent-cyan: #00d9ff;
+            --accent-purple: #a78bfa;
+            --accent-pink: #f472b6;
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --glass-bg: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.18);
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 25%, #0f3460 50%, #1a1a2e 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            color: var(--text-primary);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated background elements */
+        .bg-decoration {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.3;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .blob1 {
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, #ff6b35, transparent);
+            top: -200px;
+            left: -100px;
+            animation-delay: 0s;
+        }
+
+        .blob2 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, #00d9ff, transparent);
+            bottom: -150px;
+            right: -100px;
+            animation-delay: -7s;
+        }
+
+        .blob3 {
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, #a78bfa, transparent);
+            top: 50%;
+            left: 50%;
+            animation-delay: -14s;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            33% {
+                transform: translate(100px, -100px) scale(1.1);
+            }
+
+            66% {
+                transform: translate(-100px, 100px) scale(0.9);
             }
         }
-    </script>
-    <style>
-        body {
-            background-color: #020617;
-            /* Slate 950 */
+
+        /* Grid pattern overlay */
+        .grid-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             background-image:
-                radial-gradient(at 0% 0%, hsla(253, 16%, 7%, 1) 0, transparent 50%),
-                radial-gradient(at 50% 0%, hsla(225, 39%, 30%, 1) 0, transparent 50%),
-                radial-gradient(at 100% 0%, hsla(339, 49%, 30%, 1) 0, transparent 50%);
-            background-attachment: fixed;
-            color: #e2e8f0;
+                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 1;
         }
 
-        /* Glassmorphism Utilities */
-        .glass-card {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        .container {
+            position: relative;
+            z-index: 2;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 60px 40px;
+            animation: fadeIn 0.8s ease-out;
         }
 
-        .glass-card:hover {
-            background: rgba(255, 255, 255, 0.06);
-            border-color: rgba(255, 255, 255, 0.1);
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.05);
-        }
-
-        .glass-button {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
-        }
-
-        .glass-button:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.2);
-            transform: translateY(-1px);
-        }
-
-        /* Animations */
-        .fade-in-up {
-            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-            opacity: 0;
-            transform: translateY(20px);
-        }
-
-        .delay-100 {
-            animation-delay: 100ms;
-        }
-
-        .delay-200 {
-            animation-delay: 200ms;
-        }
-
-        .delay-300 {
-            animation-delay: 300ms;
-        }
-
-        @keyframes fadeInUp {
+        @keyframes fadeIn {
             from {
                 opacity: 0;
                 transform: translateY(20px);
@@ -120,225 +134,614 @@
                 transform: translateY(0);
             }
         }
+
+        /* Header */
+        .header {
+            margin-bottom: 60px;
+            animation: slideDown 0.6s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logo {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--primary), #ff8c42);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 8px 32px rgba(255, 107, 53, 0.3);
+        }
+
+        .logo-text {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .badge {
+            background: rgba(34, 197, 94, 0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            color: #4ade80;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        h1 {
+            font-size: 56px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            letter-spacing: -1px;
+            background: linear-gradient(135deg, #ffffff, rgba(255, 255, 255, 0.6));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        .timestamp {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-top: 16px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Glass Cards Grid */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 32px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            animation: slideUp 0.6s ease-out backwards;
+        }
+
+        .glass-card:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .glass-card:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .glass-card:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .glass-card:nth-child(4) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .glass-card:hover::before {
+            opacity: 1;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+
+        .card-title {
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            transition: transform 0.4s ease;
+        }
+
+        .glass-card:hover .card-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .icon-uptime {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(34, 197, 94, 0.1));
+            color: #4ade80;
+        }
+
+        .icon-heap {
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.2), rgba(255, 107, 53, 0.1));
+            color: var(--primary);
+        }
+
+        .icon-rss {
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.2), rgba(0, 217, 255, 0.1));
+            color: var(--accent-cyan);
+        }
+
+        .icon-db {
+            background: linear-gradient(135deg, rgba(167, 139, 250, 0.2), rgba(167, 139, 250, 0.1));
+            color: var(--accent-purple);
+        }
+
+        .icon-rpm {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(239, 68, 68, 0.1));
+            color: #ef4444;
+        }
+
+        .metric-value {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: -1px;
+            background: linear-gradient(135deg, #ffffff, rgba(255, 255, 255, 0.8));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .metric-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        /* Progress bars */
+        .progress-container {
+            margin-top: 16px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar {
+            height: 100%;
+            border-radius: 2px;
+            position: relative;
+            transition: width 1s ease-out;
+        }
+
+        .progress-heap {
+            background: linear-gradient(90deg, var(--primary), #ff8c42);
+            width: 33%;
+            box-shadow: 0 0 20px rgba(255, 107, 53, 0.5);
+        }
+
+        .progress-rss {
+            background: linear-gradient(90deg, var(--accent-cyan), #60efff);
+            width: 85%;
+            box-shadow: 0 0 20px rgba(0, 217, 255, 0.5);
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 8px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Status indicator */
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .status-offline .status-dot {
+            background: #ef4444;
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.8);
+        }
+
+        .status-offline .status-text {
+            color: #ef4444;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #4ade80;
+            box-shadow: 0 0 20px rgba(74, 222, 128, 0.8);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.7;
+                transform: scale(1.2);
+            }
+        }
+
+        .status-text {
+            font-size: 16px;
+            font-weight: 600;
+            color: #4ade80;
+        }
+
+        .status-subtext {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        /* Action buttons */
+        .action-buttons {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            animation: slideUp 0.6s ease-out 0.5s backwards;
+        }
+
+        .btn {
+            padding: 16px 32px;
+            border-radius: 16px;
+            font-size: 15px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), #ff8c42);
+            color: white;
+            box-shadow: 0 8px 32px rgba(255, 107, 53, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(255, 107, 53, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .btn-icon {
+            font-size: 18px;
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 80px;
+            padding-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            color: var(--text-secondary);
+            animation: slideUp 0.6s ease-out 0.6s backwards;
+        }
+
+        .footer-info {
+            display: flex;
+            gap: 24px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .footer-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-badge {
+            padding: 4px 12px;
+            background: rgba(74, 222, 128, 0.15);
+            border: 1px solid rgba(74, 222, 128, 0.3);
+            border-radius: 12px;
+            color: #4ade80;
+            font-weight: 500;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 40px 20px;
+            }
+
+            h1 {
+                font-size: 40px;
+            }
+
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header-top {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 20px;
+            }
+
+            .footer {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+
+            .footer-info {
+                flex-direction: column;
+                gap: 12px;
+            }
+        }
     </style>
 </head>
 
-<body
-    class="min-h-screen flex flex-col antialiased selection:bg-orange-500/30 overflow-x-hidden bg-gradient-to-br from-[#05070d] via-[#0b1020] to-black text-white relative">
-
-    <!-- Ambient Background Glow -->
-    <div class="fixed inset-0 z-0 pointer-events-none overflow-hidden">
-        <div
-            class="absolute top-24 left-1/3 w-[28rem] h-[28rem] bg-orange-500/10 blur-[120px] rounded-full animate-pulse-glow">
-        </div>
-        <div class="absolute bottom-24 right-1/4 w-[24rem] h-[24rem] bg-blue-500/10 blur-[120px] rounded-full animate-pulse-glow"
-            style="animation-delay: 2s;"></div>
+<body>
+    <div class="bg-decoration">
+        <div class="blob blob1"></div>
+        <div class="blob blob2"></div>
+        <div class="blob blob3"></div>
     </div>
+    <div class="grid-overlay"></div>
 
-    <div class="relative z-10 flex flex-col min-h-screen">
-
-        <!-- Navbar -->
-        <nav class="bg-white/5 backdrop-blur-xl border-b border-white/10 shadow-lg sticky top-0 z-50">
-            <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-                <div class="flex items-center gap-4">
-                    <div class="flex items-center gap-2 font-bold text-lg tracking-tight text-white/90">
-                        <span class="text-xl">🍔</span> AeroBite API
-                    </div>
-                    <span
-                        class="px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-xs font-medium text-slate-400">Production</span>
+    <div class="container">
+        <header class="header">
+            <div class="header-top">
+                <div class="logo-section">
+                    <div class="logo">🔥</div>
+                    <div class="logo-text">AeroBite API</div>
+                    <div class="badge" id="global-status">● OPERATIONAL</div>
                 </div>
-
-                <div class="flex items-center gap-6">
-                    <div
-                        class="hidden md:flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-xs font-medium ring-1 ring-emerald-500/30 drop-shadow-[0_0_10px_rgba(16,185,129,0.6)]">
-                        <span class="relative flex h-2 w-2">
-                            <span
-                                class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                            <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                        </span>
-                        <span class="tracking-wide" id="global-status">OPERATIONAL</span>
-                    </div>
-                    <div class="h-4 w-px bg-white/10 hidden md:block"></div>
-                    <a href="https://feasto.food" target="_blank"
-                        class="text-sm text-slate-400 hover:text-white transition-colors">Website</a>
-                    <a href="/api/docs" class="text-sm text-slate-400 hover:text-white transition-colors">Docs</a>
-                    <a href="/admin" class="text-sm text-slate-400 hover:text-white transition-colors">Admin</a>
-                </div>
+                <nav class="nav-links">
+                    <a href="https://feasto.food" target="_blank" class="nav-link">Website</a>
+                    <a href="/api/docs" class="nav-link">Docs</a>
+                    <a href="/admin" class="nav-link">Admin</a>
+                </nav>
             </div>
-        </nav>
 
-        <!-- Main Content -->
-        <main class="flex-grow w-full max-w-7xl mx-auto px-6 py-12 flex flex-col gap-10">
+            <h1>System Health Status</h1>
+            <p class="subtitle">Live operational metrics from the production backend cluster.</p>
+            <div class="timestamp">
+                <span>⏱</span>
+                <span id="server-timestamp">Connecting...</span>
+            </div>
+        </header>
 
-            <!-- Header -->
-            <header class="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 fade-in-up">
-                <div>
-                    <h1 class="text-4xl md:text-5xl font-bold text-white mb-2 tracking-tight">System Health</h1>
-                    <p class="text-slate-400 text-lg">Live backend metrics from production cluster.</p>
+        <div class="metrics-grid">
+            <div class="glass-card">
+                <div class="card-header">
+                    <div class="card-title">Uptime</div>
+                    <div class="card-icon icon-uptime">✓</div>
                 </div>
-                <div
-                    class="flex items-center gap-2 text-sm text-slate-500 font-mono bg-white/5 backdrop-blur-md border border-white/10 px-4 py-2 rounded-xl">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                    <span id="server-timestamp">Connecting...</span>
+                <div class="metric-value" id="uptime-val">--</div>
+                <div class="metric-label">Continuous operation</div>
+            </div>
+
+            <div class="glass-card">
+                <div class="card-header">
+                    <div class="card-title">Heap Memory</div>
+                    <div class="card-icon icon-heap">⚡</div>
                 </div>
-            </header>
-
-            <!-- Status Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 fade-in-up delay-100">
-
-                <!-- Uptime -->
-                <div
-                    class="relative bg-white/6 backdrop-blur-2xl border border-white/10 rounded-2xl p-6 shadow-[0_8px_30px_rgba(0,0,0,0.35)] hover:border-orange-500/30 hover:ring-1 hover:ring-orange-500/20 transition group">
-                    <div class="flex justify-between items-start mb-4">
-                        <span class="text-xs uppercase tracking-widest text-white/60">Uptime</span>
-                        <div class="p-2 rounded-lg bg-emerald-500/10 text-emerald-400">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="text-3xl font-semibold text-white font-mono tracking-tight" id="uptime-val">--</div>
-                    <p class="text-sm text-white/40 mt-1">Continuous operation</p>
+                <div class="metric-value" id="heap-val">-- MB</div>
+                <div class="metric-label">Active memory usage</div>
+                <div class="progress-container">
+                    <div class="progress-bar progress-heap" id="heap-bar" style="width: 0%"></div>
                 </div>
-
-                <!-- RPM -->
-                <div
-                    class="relative bg-white/6 backdrop-blur-2xl border border-white/10 rounded-2xl p-6 shadow-[0_8px_30px_rgba(0,0,0,0.35)] hover:border-orange-500/30 hover:ring-1 hover:ring-orange-500/20 transition group">
-                    <div class="flex justify-between items-start mb-4">
-                        <span class="text-xs uppercase tracking-widest text-white/60">Requests / Min</span>
-                        <div class="p-2 rounded-lg bg-orange-500/10 text-orange-400">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="text-3xl font-semibold text-white font-mono tracking-tight" id="rpm-val">--</div>
-                    <div class="text-xs text-orange-400 mt-4 flex items-center gap-1">
-                        <span class="w-1.5 h-1.5 rounded-full bg-orange-400 animate-pulse"></span> Live Traffic
-                    </div>
-                </div>
-
-                <!-- Errors -->
-                <div class="relative bg-white/6 backdrop-blur-2xl border border-white/10 rounded-2xl p-6 shadow-[0_8px_30px_rgba(0,0,0,0.35)] hover:border-orange-500/30 hover:ring-1 hover:ring-orange-500/20 transition group"
-                    id="error-card">
-                    <div class="flex justify-between items-start mb-4">
-                        <span class="text-xs uppercase tracking-widest text-white/60">Error Rate</span>
-                        <div class="p-2 rounded-lg bg-rose-500/10 text-rose-400">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z">
-                                </path>
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="text-3xl font-semibold text-white font-mono tracking-tight" id="error-rate-val">--%
-                    </div>
-                    <p class="text-xs text-white/40 mt-4">Last 60 seconds</p>
-                </div>
-
-                <!-- Orders -->
-                <div
-                    class="relative bg-white/6 backdrop-blur-2xl border border-white/10 rounded-2xl p-6 shadow-[0_8px_30px_rgba(0,0,0,0.35)] hover:border-orange-500/30 hover:ring-1 hover:ring-orange-500/20 transition group">
-                    <div class="flex justify-between items-start mb-4">
-                        <span class="text-xs uppercase tracking-widest text-white/60">Orders Today</span>
-                        <div class="p-2 rounded-lg bg-purple-500/10 text-purple-400">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="text-3xl font-semibold text-white font-mono tracking-tight" id="orders-today-val">--
-                    </div>
-                    <p class="text-xs text-purple-400 mt-4">Real-time Sales</p>
+                <div class="progress-info">
+                    <span id="heap-used">--</span>
+                    <span>of 512MB</span>
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 fade-in-up delay-200">
-                <!-- Memory -->
-                <div
-                    class="relative bg-white/6 backdrop-blur-2xl border border-white/10 rounded-2xl p-6 shadow-[0_8px_30px_rgba(0,0,0,0.35)] hover:border-orange-500/30 hover:ring-1 hover:ring-orange-500/20 transition">
-                    <h3 class="text-sm font-medium text-slate-300 mb-6 uppercase tracking-widest">Memory Usage</h3>
-
-                    <div class="space-y-6">
-                        <div>
-                            <div class="flex justify-between text-xs mb-2">
-                                <span class="text-white/60">Heap Used</span>
-                                <span class="text-white font-mono" id="heap-val">--</span>
-                            </div>
-                            <div class="h-2 rounded-full bg-white/10 overflow-hidden">
-                                <div id="heap-bar"
-                                    class="h-full bg-orange-500 shadow-[0_0_12px_rgba(249,115,22,0.9)] transition-all duration-1000"
-                                    style="width: 0%"></div>
-                            </div>
-                        </div>
-
-                        <div>
-                            <div class="flex justify-between text-xs mb-1">
-                                <span class="text-white/60">RSS / Total</span>
-                                <span class="text-white font-mono" id="rss-val">--</span>
-                            </div>
-                        </div>
-                    </div>
+            <div class="glass-card">
+                <div class="card-header">
+                    <div class="card-title">RSS Memory</div>
+                    <div class="card-icon icon-rss">📊</div>
                 </div>
+                <div class="metric-value" id="rss-val">-- MB</div>
+                <div class="metric-label">Resident Set Size</div>
+                <div class="progress-container">
+                    <div class="progress-bar progress-rss"></div>
+                </div>
+                <div class="progress-info">
+                    <span>Allocated</span>
+                </div>
+            </div>
 
-                <!-- Database & Connectivity -->
-                <div
-                    class="relative bg-white/6 backdrop-blur-2xl border border-white/10 rounded-2xl p-6 shadow-[0_8px_30px_rgba(0,0,0,0.35)] hover:border-orange-500/30 hover:ring-1 hover:ring-orange-500/20 transition flex flex-col justify-between">
+            <div class="glass-card">
+                <div class="card-header">
+                    <div class="card-title">Database</div>
+                    <div class="card-icon icon-db">🗄️</div>
+                </div>
+                <!-- Added ID to status-indicator for toggling classes if needed -->
+                <div class="status-indicator" id="db-indicator-container">
+                    <div class="status-dot" id="db-indicator"></div>
                     <div>
-                        <h3 class="text-sm font-medium text-slate-300 mb-2 uppercase tracking-widest">Database
-                            Connection</h3>
-                        <div class="flex items-center gap-3 mt-4">
-                            <span
-                                class="inline-flex items-center gap-2 text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-lg ring-1 ring-emerald-500/20">
-                                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"
-                                    id="db-indicator"></span>
-                                <span id="db-status">Connected</span>
-                            </span>
-                        </div>
-                        <p class="text-xs text-white/40 mt-4">Google Firestore Service</p>
+                        <div class="status-text" id="db-status">Checking...</div>
+                        <div class="status-subtext">Firestore Service</div>
                     </div>
                 </div>
             </div>
 
-            <!-- Actions -->
-            <div class="flex flex-wrap gap-4 fade-in delay-300">
-                <a href="/api/docs"
-                    class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-orange-500/90 text-black font-medium shadow-[0_0_20px_rgba(249,115,22,0.6)] hover:bg-orange-400 transition group">
-                    <span>View API Docs</span>
-                    <svg class="w-4 h-4 text-black group-hover:translate-x-1 transition" fill="none"
-                        stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
-                    </svg>
-                </a>
-                <button onclick="fetchHealth()"
-                    class="px-6 py-3 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20 transition flex items-center gap-2">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15">
-                        </path>
-                    </svg>
-                    <span>Refresh Status</span>
-                </button>
-                <a href="/admin"
-                    class="px-6 py-3 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20 transition flex items-center gap-2">
-                    Admin Dashboard
-                </a>
+            <!-- Extra Cards for Analytics -->
+            <div class="glass-card" id="error-card">
+                <div class="card-header">
+                    <div class="card-title">Error Rate</div>
+                    <div class="card-icon icon-rpm" style="background: rgba(239, 68, 68, 0.1); color: #ef4444;">⚠️</div>
+                </div>
+                <div class="metric-value" id="error-rate-val">--%</div>
+                <div class="metric-label">Last 60 seconds</div>
             </div>
 
-        </main>
+            <div class="glass-card">
+                <div class="card-header">
+                    <div class="card-title">Sales Today</div>
+                    <div class="card-icon icon-db" style="background: rgba(168, 85, 247, 0.1); color: #a855f7;">💰</div>
+                </div>
+                <div class="metric-value" id="orders-today-val">--</div>
+                <div class="metric-label">Orders Completed</div>
+            </div>
 
-        <!-- Footer -->
-        <footer class="mt-24 py-6 text-xs text-white/40 border-t border-white/10 backdrop-blur-lg text-center">
-            <p>&copy; 2026 AeroBite Systems Inc. • <span class="font-mono text-white/20">v1.2.0</span></p>
+        </div>
+
+        <div class="action-buttons">
+            <a href="/api/docs" class="btn btn-primary">
+                <span class="btn-icon">📖</span>
+                View API Docs
+            </a>
+            <a href="/admin" class="btn btn-secondary">
+                <span class="btn-icon">⚙️</span>
+                Admin Dashboard
+            </a>
+            <button class="btn btn-secondary" onclick="fetchHealth()">
+                <span class="btn-icon">🔄</span>
+                Refresh Status
+            </button>
+        </div>
+
+        <footer class="footer">
+            <div>© 2026 AeroBite Systems Inc.</div>
+            <div class="footer-info">
+                <div class="footer-item">v1.2.0</div>
+                <div class="footer-item">ap-south-1</div>
+                <div class="footer-item">
+                    <span class="status-badge" id="footer-status">All Systems Nominal</span>
+                </div>
+            </div>
         </footer>
-
     </div>
 
     <script src="/dashboard.js"></script>

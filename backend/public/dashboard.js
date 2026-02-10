@@ -2,12 +2,14 @@ const ELEMENTS = {
     timestamp: document.getElementById('server-timestamp'),
     uptime: document.getElementById('uptime-val'),
     heapVal: document.getElementById('heap-val'),
-    heapTotal: document.getElementById('heap-total'),
+    heapUsed: document.getElementById('heap-used'),
     heapBar: document.getElementById('heap-bar'),
     rssVal: document.getElementById('rss-val'),
     dbStatus: document.getElementById('db-status'),
     dbIndicator: document.getElementById('db-indicator'),
-    globalStatus: document.getElementById('global-status')
+    dbContainer: document.getElementById('db-indicator-container'),
+    globalStatus: document.getElementById('global-status'),
+    footerStatus: document.getElementById('footer-status')
 };
 
 // Utils
@@ -22,7 +24,7 @@ const formatBytes = (bytes) => {
 const formatUptime = (seconds) => {
     const h = Math.floor(seconds / 3600);
     const m = Math.floor((seconds % 3600) / 60);
-    const s = Math.floor(seconds % 60); // Optional seconds
+    const s = Math.floor(seconds % 60);
     if (h > 0) return `${h}h ${m}m`;
     return `${m}m ${s}s`;
 };
@@ -31,10 +33,7 @@ const formatUptime = (seconds) => {
 // Logic
 async function fetchHealth() {
     try {
-        // Fetch
-        const start = performance.now();
         const res = await fetch('/api/health');
-
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
 
@@ -55,6 +54,7 @@ async function fetchHealth() {
             const rss = data.memory.rss || 0;
 
             ELEMENTS.heapVal.innerText = formatBytes(heapUsed);
+            if (ELEMENTS.heapUsed) ELEMENTS.heapUsed.innerText = formatBytes(heapUsed);
             if (ELEMENTS.rssVal) ELEMENTS.rssVal.innerText = formatBytes(rss);
 
             // Bar
@@ -66,25 +66,28 @@ async function fetchHealth() {
         // 4. DB Status
         if (data.dbConnection && ELEMENTS.dbStatus) {
             ELEMENTS.dbStatus.innerText = "Connected";
-            ELEMENTS.dbIndicator.className = "w-3 h-3 rounded-full bg-emerald-500 shadow-[0_0_10px_#10B981] animate-pulse";
+            // Remove offline styling if present
+            if (ELEMENTS.dbContainer) ELEMENTS.dbContainer.classList.remove('status-offline');
+        } else {
+            if (ELEMENTS.dbStatus) ELEMENTS.dbStatus.innerText = "Disconnected";
+            if (ELEMENTS.dbContainer) ELEMENTS.dbContainer.classList.add('status-offline');
         }
 
         // 5. Global Status
         if (ELEMENTS.globalStatus) {
-            ELEMENTS.globalStatus.innerText = "OPERATIONAL";
-            ELEMENTS.globalStatus.className = "text-xs font-medium text-emerald-500 tracking-wide";
+            ELEMENTS.globalStatus.innerText = "● OPERATIONAL";
+            // Ensure badge color is green (handled by CSS, but in case we want to toggle error state)
+            ELEMENTS.globalStatus.style.color = "#4ade80";
         }
 
     } catch (e) {
         console.error(e);
         if (ELEMENTS.globalStatus) {
-            ELEMENTS.globalStatus.innerText = "OFFLINE";
-            ELEMENTS.globalStatus.className = "text-xs font-medium text-red-500 tracking-wide";
+            ELEMENTS.globalStatus.innerText = "● OFFLINE";
+            ELEMENTS.globalStatus.style.color = "#ef4444";
         }
-        if (ELEMENTS.dbStatus) {
-            ELEMENTS.dbStatus.innerText = "Disconnected";
-            ELEMENTS.dbIndicator.className = "w-3 h-3 rounded-full bg-red-500";
-        }
+        if (ELEMENTS.dbContainer) ELEMENTS.dbContainer.classList.add('status-offline');
+        if (ELEMENTS.dbStatus) ELEMENTS.dbStatus.innerText = "Connection Failed";
     }
 }
 
@@ -92,30 +95,30 @@ async function fetchHealth() {
 async function fetchAnalytics() {
     try {
         const res = await fetch('/api/admin/stats');
+        // If 401 unauthorized (no cookie/token), just silently fail or show dashes
         if (res.status === 401) return;
         const data = await res.json();
 
         if (data) {
-            if (document.getElementById("rpm-val")) document.getElementById("rpm-val").innerText = data.rpm || 0;
+            // Error Rate
             if (document.getElementById("error-rate-val")) {
                 document.getElementById("error-rate-val").innerText = (data.errorRate || 0) + "%";
-                // Glass-specific error styling
                 const card = document.getElementById("error-card");
                 if (parseFloat(data.errorRate) > 5) {
-                    if (card) card.style.borderColor = "rgba(244, 63, 94, 0.5)"; // Red border
+                    if (card) card.style.borderColor = "#ef4444";
                 } else {
                     if (card) card.style.borderColor = "";
                 }
             }
-            if (document.getElementById("orders-today-val")) document.getElementById("orders-today-val").innerText = data.ordersToday || 0;
+            // Orders Today
+            if (document.getElementById("orders-today-val")) {
+                document.getElementById("orders-today-val").innerText = data.ordersToday || 0;
+            }
         }
     } catch (e) {
         console.error("Analytics Error", e);
     }
 }
-
-// Animation Utils (Placeholder for future)
-// function animateValue(obj, start, end, duration) { ... }
 
 // Init
 fetchAnalytics();

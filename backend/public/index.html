@@ -4,78 +4,195 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AeroBite API System</title>
+    <title>AeroBite API | System Status</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
     <style>
         :root {
-            --bg-color: #0f0f12;
-            --text-color: #e2e8f0;
-            --accent-color: #f97316;
-            /* Orange-500 */
-            --success-color: #22c55e;
-            --card-bg: #1e293b;
-            --font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            --bg-dark: #050507;
+            --card-bg: rgba(20, 20, 25, 0.6);
+            --accent-primary: #f97316;
+            /* Orange */
+            --accent-secondary: #ef4444;
+            /* Red */
+            --text-main: #ffffff;
+            --text-muted: #9ca3af;
+            --success: #22c55e;
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --font-main: 'Outfit', sans-serif;
+            --font-mono: 'Space Mono', monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
-            margin: 0;
-            padding: 0;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-family: var(--font-family);
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: var(--font-main);
+            height: 100vh;
             display: flex;
-            justify-content: center;
             align-items: center;
-            min-height: 100vh;
+            justify-content: center;
             overflow: hidden;
-        }
-
-        .container {
-            text-align: center;
-            max-width: 600px;
-            padding: 40px;
-            background: rgba(30, 41, 59, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 24px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
             position: relative;
-            z-index: 10;
         }
 
-        h1 {
-            font-size: 3rem;
+        /* Ambient Background Background */
+        .ambient-light {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: var(--accent-primary);
+            top: -10%;
+            left: -10%;
+            animation-delay: 0s;
+        }
+
+        .orb-2 {
+            width: 300px;
+            height: 300px;
+            background: var(--accent-secondary);
+            bottom: 10%;
+            right: -5%;
+            animation-delay: -5s;
+        }
+
+        .orb-3 {
+            width: 200px;
+            height: 200px;
+            background: #6366f1;
+            /* Indigo check */
+            top: 40%;
+            left: 40%;
+            opacity: 0.2;
+            animation-delay: -10s;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            33% {
+                transform: translate(30px, -50px) scale(1.1);
+            }
+
+            66% {
+                transform: translate(-20px, 20px) scale(0.9);
+            }
+        }
+
+        /* Grid Pattern Overlay */
+        .grid-overlay {
+            position: absolute;
+            inset: 0;
+            background-image: linear-gradient(var(--glass-border) 1px, transparent 1px),
+                linear-gradient(90deg, var(--glass-border) 1px, transparent 1px);
+            background-size: 50px 50px;
+            opacity: 0.05;
+            z-index: -1;
+            mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+            -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+        }
+
+        /* Dashboard Container */
+        .dashboard {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 32px;
+            padding: 48px;
+            width: 90%;
+            max-width: 900px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 40px;
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 24px;
+        }
+
+        .brand h1 {
+            font-size: 2.5rem;
             font-weight: 800;
-            margin-bottom: 0.5rem;
-            background: linear-gradient(135deg, #fff 0%, #cbd5e1 100%);
+            letter-spacing: -0.05em;
+            background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
             background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
         }
 
-        .status-badge {
-            display: inline-flex;
+        .brand p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .status-indicator {
+            display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 12px;
             background: rgba(34, 197, 94, 0.1);
-            color: var(--success-color);
-            padding: 6px 16px;
-            border-radius: 9999px;
-            font-size: 0.875rem;
-            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 100px;
             border: 1px solid rgba(34, 197, 94, 0.2);
-            margin-bottom: 2rem;
         }
 
-        .pulse {
+        .pulse-dot {
             width: 8px;
             height: 8px;
-            background-color: var(--success-color);
+            background: var(--success);
             border-radius: 50%;
             box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
-            animation: pulse-green 2s infinite;
+            animation: pulse 2s infinite;
         }
 
-        @keyframes pulse-green {
+        @keyframes pulse {
             0% {
                 transform: scale(0.95);
                 box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
@@ -83,7 +200,7 @@
 
             70% {
                 transform: scale(1);
-                box-shadow: 0 0 0 10px rgba(34, 197, 94, 0);
+                box-shadow: 0 0 0 6px rgba(34, 197, 94, 0);
             }
 
             100% {
@@ -92,122 +209,239 @@
             }
         }
 
-        .metrics-grid {
+        .status-text {
+            color: var(--success);
+            font-weight: 600;
+            font-size: 0.85rem;
+            letter-spacing: 0.05em;
+        }
+
+        /* Metrics Grid */
+        .metrics {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 16px;
-            margin-bottom: 2rem;
-            text-align: left;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
         }
 
-        .metric-card {
+        .card {
             background: rgba(255, 255, 255, 0.03);
-            padding: 16px;
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 24px;
+            transition: transform 0.3s ease, background 0.3s ease;
         }
 
-        .metric-label {
+        .card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .card-label {
+            color: var(--text-muted);
             font-size: 0.75rem;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
-            opacity: 0.6;
-            margin-bottom: 4px;
+            letter-spacing: 0.1em;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .metric-value {
-            font-size: 1.25rem;
-            font-weight: 600;
-            font-family: monospace;
+        .card-value {
+            font-family: var(--font-mono);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-main);
         }
 
-        .links {
+        .card-sub {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 8px;
+        }
+
+        /* Actions */
+        .actions {
             display: flex;
             gap: 16px;
-            justify-content: center;
+            flex-wrap: wrap;
         }
 
         .btn {
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-weight: 500;
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.95rem;
             text-decoration: none;
-            transition: all 0.2s;
-            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            flex: 1;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
         .btn-primary {
-            background: var(--accent-color);
-            color: #fff;
-            box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
+            background: linear-gradient(135deg, var(--accent-primary) 0%, #ea580c 100%);
+            color: white;
+            box-shadow: 0 10px 20px -5px rgba(249, 115, 22, 0.4);
+            border: none;
         }
 
         .btn-primary:hover {
-            background: #ea580c;
-            transform: translateY(-1px);
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px -5px rgba(249, 115, 22, 0.5);
         }
 
         .btn-secondary {
             background: rgba(255, 255, 255, 0.05);
-            color: var(--text-color);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid var(--glass-border);
         }
 
         .btn-secondary:hover {
             background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
         }
 
-        /* Background Ambient */
-        .bg-glow {
-            position: absolute;
-            width: 60vw;
-            height: 60vw;
-            background: radial-gradient(circle, rgba(249, 115, 22, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 0;
-            pointer-events: none;
+        /* Footer */
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* SVG Icons */
+        .icon {
+            width: 16px;
+            height: 16px;
+            opacity: 0.7;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+                align-items: center;
+            }
+
+            .dashboard {
+                padding: 24px;
+                width: 95%;
+            }
+
+            .metrics {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
         }
     </style>
 </head>
 
 <body>
 
-    <div class="bg-glow"></div>
-
-    <div class="container">
-        <h1>AeroBite API</h1>
-
-        <div class="status-badge">
-            <div class="pulse"></div>
-            System Operational
-        </div>
-
-        <div class="metrics-grid">
-            <div class="metric-card">
-                <div class="metric-label">Server Time</div>
-                <div class="metric-value" id="server-time">--:--:--</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-label">Uptime</div>
-                <div class="metric-value" id="uptime">0s</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-label">Environment</div>
-                <div class="metric-value">Production</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-label">Version</div>
-                <div class="metric-value">v1.2.0</div>
-            </div>
-        </div>
-
-        <div class="links">
-            <a href="/api/health" target="_blank" class="btn btn-secondary">Health Check</a>
-            <a href="#" class="btn btn-primary">Documentation</a>
-        </div>
+    <div class="ambient-light">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
     </div>
+    <div class="grid-overlay"></div>
+
+    <main class="dashboard">
+        <header>
+            <div class="brand">
+                <h1>AeroBite API</h1>
+                <p>High-Performance Backend Cluster</p>
+            </div>
+            <div class="status-indicator">
+                <div class="pulse-dot"></div>
+                <span class="status-text">SYSTEM OPERATIONAL</span>
+            </div>
+        </header>
+
+        <div class="metrics">
+            <!-- Server Time -->
+            <div class="card">
+                <div class="card-label">
+                    <svg class="icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Server Time
+                </div>
+                <div class="card-value" id="server-time">--:--:--</div>
+                <div class="card-sub">UTC+05:30 (IST)</div>
+            </div>
+
+            <!-- Uptime -->
+            <div class="card">
+                <div class="card-label">
+                    <svg class="icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                    Uptime
+                </div>
+                <div class="card-value" id="uptime">0s</div>
+                <div class="card-sub">Since last deploy</div>
+            </div>
+
+            <!-- Environment -->
+            <div class="card">
+                <div class="card-label">
+                    <svg class="icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                    </svg>
+                    Environment
+                </div>
+                <div class="card-value">Production</div>
+                <div class="card-sub">Region: ap-south-1</div>
+            </div>
+
+            <!-- DB Status -->
+            <div class="card">
+                <div class="card-label">
+                    <svg class="icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
+                    </svg>
+                    Database
+                </div>
+                <div class="card-value" style="color: var(--success);">Connected</div>
+                <div class="card-sub">Google Firestore</div>
+            </div>
+        </div>
+
+        <div class="actions">
+            <a href="/api/health" target="_blank" class="btn btn-secondary">
+                <svg class="icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                View JSON Raw
+            </a>
+            <a href="#" class="btn btn-primary">
+                <svg class="icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+                Read Documentation
+            </a>
+        </div>
+
+        <footer>
+            &copy; 2026 AeroBite Systems Inc. All systems nominal.
+        </footer>
+    </main>
 
     <script src="/dashboard.js"></script>
 </body>

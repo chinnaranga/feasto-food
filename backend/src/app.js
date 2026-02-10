@@ -57,7 +57,20 @@ app.use(cors(corsOptions));
 app.options('*', cors(corsOptions));
 
 // Now apply helmet and other middleware
-app.use(helmet());
+// Now apply helmet and other middleware
+app.use(helmet({
+    contentSecurityPolicy: {
+        directives: {
+            defaultSrc: ["'self'"],
+            scriptSrc: ["'self'", "'unsafe-inline'", "https://cdn.tailwindcss.com"], // Allow Tailwind CDN
+            styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://cdn.tailwindcss.com"], // Allow Fonts & Tailwind
+            fontSrc: ["'self'", "https://fonts.gstatic.com"],
+            imgSrc: ["'self'", "data:"],
+            connectSrc: ["'self'"],
+            upgradeInsecureRequests: [], // Optional: helpful for mixed content dev
+        },
+    },
+}));
 app.use(express.json());
 
 // Global DB injection

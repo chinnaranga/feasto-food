@@ -3,6 +3,7 @@ import cors from "cors";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 import { db } from "./config/firebase.js";
+import cookieParser from "cookie-parser";
 
 // Routes
 import authRoutes from "./routes/auth.routes.js";
@@ -72,6 +73,7 @@ app.use(helmet({
     },
 }));
 app.use(express.json());
+app.use(cookieParser());
 
 // Global DB injection
 app.use((req, res, next) => {
@@ -93,14 +95,7 @@ const __dirname = path.dirname(__filename);
 // Go up one level from src to backend root
 app.use(express.static(path.join(__dirname, "../public")));
 
-import cookieParser from "cookie-parser";
 
-// ... (imports)
-
-const app = express();
-app.use(cookieParser());
-
-// ... (middleware)
 
 // Root Route (Protected)
 app.get("/", (req, res) => {

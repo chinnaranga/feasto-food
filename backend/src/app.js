@@ -93,9 +93,40 @@ const __dirname = path.dirname(__filename);
 // Go up one level from src to backend root
 app.use(express.static(path.join(__dirname, "../public")));
 
-// Root Route (Serve HTML Landing Page)
+import cookieParser from "cookie-parser";
+
+// ... (imports)
+
+const app = express();
+app.use(cookieParser());
+
+// ... (middleware)
+
+// Root Route (Protected)
 app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "../public/index.html"));
+    const authCookie = req.cookies.admin_access;
+    if (authCookie === process.env.ADMIN_SECRET || authCookie === "feasto_secure_2026") {
+        res.sendFile(path.join(__dirname, "../public/status.html"));
+    } else {
+        res.sendFile(path.join(__dirname, "../public/access.html"));
+    }
+});
+
+// Verify Access
+app.post("/api/verify-access", (req, res) => {
+    const { password } = req.body;
+    const SECRET = process.env.ADMIN_SECRET || "feasto_secure_2026";
+
+    if (password === SECRET) {
+        res.cookie("admin_access", SECRET, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            maxAge: 24 * 60 * 60 * 1000 // 1 day
+        });
+        res.status(200).send({ success: true });
+    } else {
+        res.status(401).send({ error: "Invalid password" });
+    }
 });
 
 // JSON API Fallback for explicit check

@@ -159,7 +159,7 @@ app.get("/admin", (req, res) => {
 // Handle Admin Launch Redirect
 app.get("/admin/launch", (req, res) => {
     const frontendUrl = process.env.CLIENT_URL || "https://feasto.food";
-    res.redirect(`${frontendUrl}/admin`);
+    res.redirect(`${frontendUrl}/admin/login`);
 });
 
 export default app;

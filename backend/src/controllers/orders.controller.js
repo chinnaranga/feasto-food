@@ -15,6 +15,7 @@ export const createOrder = async (req, res) => {
         const orderData = {
             id: orderId,
             userId: req.user.uid, // From authMiddleware
+            restaurantId: items[0]?.restaurantId || null, // Extract restaurant ID for querying
             items,
             total,
             walletUsed: walletUsed || 0,

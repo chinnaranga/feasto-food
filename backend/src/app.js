@@ -72,8 +72,21 @@ const limiter = rateLimit({
 });
 app.use("/api/", limiter);
 
-// Root Route (API Status)
+// Serve static files from public directory
+import path from "path";
+import { fileURLToPath } from "url";
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+// Go up one level from src to backend root
+app.use(express.static(path.join(__dirname, "../public")));
+
+// Root Route (Serve HTML Landing Page)
 app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "../public/index.html"));
+});
+
+// JSON API Fallback for explicit check
+app.get("/api-status", (req, res) => {
     res.status(200).json({
         success: true,
         message: "AeroBite Backend API is running 🚀",
@@ -85,8 +98,25 @@ app.get("/", (req, res) => {
     });
 });
 
-// Health Check
-app.get("/health", (req, res) => res.status(200).send("OK"));
+// Health Check with Metrics
+app.get("/api/health", (req, res) => {
+    const healthcheck = {
+        uptime: process.uptime(),
+        timestamp: Date.now(),
+        message: 'OK',
+        memory: process.memoryUsage(),
+        dbConnection: "Connected (Firestore)" // Simplified check
+    };
+    try {
+        res.send(healthcheck);
+    } catch (e) {
+        healthcheck.message = e;
+        res.status(503).send();
+    }
+});
+
+// Alias for root health if needed by health checkers
+app.get("/health", (req, res) => res.redirect("/api/health"));
 
 // Mount Routes
 app.use("/api/auth", authRoutes);

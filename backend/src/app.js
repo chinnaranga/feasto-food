@@ -146,4 +146,9 @@ app.use("/api/admin", adminRoutes);
 app.use("/api/recommendations", recommendationsRoutes);
 app.use("/api/payment", paymentRoutes);
 
+// Serve API Docs
+app.get("/api/docs", (req, res) => {
+    res.sendFile(path.join(__dirname, "../public/docs.html"));
+});
+
 export default app;

@@ -168,7 +168,7 @@ app.get("/api/public-stats", async (req, res) => {
         // Parallelize queries
         const [ordersSnapshot, activeOrdersSnapshot] = await Promise.all([
             db.collection('orders').where('createdAt', '>=', today).count().get(),
-            db.collection('orders').where('status', 'in', ['Pending', 'Preparing', 'Ready', 'Out for delivery']).count().get()
+            db.collection('orders').where('status', 'in', ['Pending', 'Preparing', 'Ready', 'Out for delivery', 'PENDING', 'PREPARING', 'READY', 'OUT_FOR_DELIVERY']).count().get()
         ]);
 
         res.json({

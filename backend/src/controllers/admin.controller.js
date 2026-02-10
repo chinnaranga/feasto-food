@@ -44,7 +44,7 @@ export const getSystemStats = async (req, res) => {
             if (data.status === 'Paid') {
                 totalRevenue += (data.total || 0);
             }
-            if (['Pending', 'Preparing', 'Ready', 'Out for delivery'].includes(data.status)) {
+            if (['Pending', 'Preparing', 'Ready', 'Out for delivery', 'PENDING', 'PREPARING', 'READY', 'OUT_FOR_DELIVERY'].includes(data.status)) {
                 activeOrders++;
             }
         });

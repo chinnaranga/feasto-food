@@ -209,31 +209,7 @@
         </div>
     </div>
 
-    <script>
-        // Simple script to fetch health and update UI
-        async function fetchHealth() {
-            try {
-                const res = await fetch('/api/health');
-                const data = await res.json();
-
-                document.getElementById('server-time').innerText = new Date(data.timestamp).toLocaleTimeString();
-
-                // Format Uptime
-                const uptime = Math.floor(data.uptime);
-                const h = Math.floor(uptime / 3600);
-                const m = Math.floor((uptime % 3600) / 60);
-                const s = Math.floor(uptime % 60);
-                document.getElementById('uptime').innerText = `${h}h ${m}m ${s}s`;
-
-            } catch (e) {
-                console.error("Health check failed", e);
-            }
-        }
-
-        // Poll every 5 seconds
-        fetchHealth();
-        setInterval(fetchHealth, 5000);
-    </script>
+    <script src="/dashboard.js"></script>
 </body>
 
 </html>

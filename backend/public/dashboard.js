@@ -27,98 +27,84 @@ const formatUptime = (seconds) => {
     return `${m}m ${s}s`;
 };
 
+
 // Logic
 async function fetchHealth() {
     try {
         // Fetch
         const start = performance.now();
         const res = await fetch('/api/health');
-        const latency = Math.round(performance.now() - start);
 
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
 
         // 1. Timestamp
-        ELEMENTS.timestamp.innerText = new Date(data.timestamp).toLocaleString('en-US', {
-            hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true,
-            month: 'short', day: 'numeric', timeZoneName: 'short'
-        });
+        if (ELEMENTS.timestamp) {
+            ELEMENTS.timestamp.innerText = new Date(data.timestamp).toLocaleString('en-US', {
+                hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true,
+                month: 'short', day: 'numeric', timeZoneName: 'short'
+            });
+        }
 
         // 2. Uptime
-        ELEMENTS.uptime.innerText = formatUptime(data.uptime);
+        if (ELEMENTS.uptime) ELEMENTS.uptime.innerText = formatUptime(data.uptime);
 
-        // 3. Memory (Heap & RSS)
-        if (data.memory) {
-            // Heap
+        // 3. Memory
+        if (data.memory && ELEMENTS.heapVal) {
             const heapUsed = data.memory.heapUsed || 0;
-            const heapTotal = data.memory.heapTotal || 0; // If backend provides this
             const rss = data.memory.rss || 0;
 
             ELEMENTS.heapVal.innerText = formatBytes(heapUsed);
-            ELEMENTS.rssVal.innerText = formatBytes(rss);
+            if (ELEMENTS.rssVal) ELEMENTS.rssVal.innerText = formatBytes(rss);
 
-            // Bar - Assume 512MB limit if no total provided, or use total
+            // Bar
             const limit = 536870912; // 512MB
             const percent = Math.min((heapUsed / limit) * 100, 100);
-
-            ELEMENTS.heapBar.style.width = `${percent}%`;
-            ELEMENTS.heapTotal.innerText = `of ${formatBytes(limit)} (Allocated)`;
-
-            // Color logic
-            if (percent > 85) ELEMENTS.heapBar.className = "h-full bg-red-500 rounded-full transition-all duration-1000 ease-out";
-            else if (percent > 60) ELEMENTS.heapBar.className = "h-full bg-yellow-500 rounded-full transition-all duration-1000 ease-out";
-            else ELEMENTS.heapBar.className = "h-full bg-brand-500 rounded-full transition-all duration-1000 ease-out";
+            if (ELEMENTS.heapBar) ELEMENTS.heapBar.style.width = `${percent}%`;
         }
 
         // 4. DB Status
-        if (data.dbConnection) {
+        if (data.dbConnection && ELEMENTS.dbStatus) {
             ELEMENTS.dbStatus.innerText = "Connected";
-            ELEMENTS.dbStatus.className = "text-xl font-bold text-white tracking-tight";
-            ELEMENTS.dbIndicator.className = "w-3 h-3 rounded-full bg-emerald-500 animate-pulse";
-        } else {
-            // Fallback if data.dbConnection is missing/false but request succeeded
-            // logic depends on backend response shape
+            ELEMENTS.dbIndicator.className = "w-3 h-3 rounded-full bg-emerald-500 shadow-[0_0_10px_#10B981] animate-pulse";
         }
 
-        // 5. Global Status Update
-        ELEMENTS.globalStatus.innerText = "OPERATIONAL";
-        ELEMENTS.globalStatus.className = "text-xs font-medium text-emerald-500 tracking-wide";
+        // 5. Global Status
+        if (ELEMENTS.globalStatus) {
+            ELEMENTS.globalStatus.innerText = "OPERATIONAL";
+            ELEMENTS.globalStatus.className = "text-xs font-medium text-emerald-500 tracking-wide";
+        }
 
     } catch (e) {
         console.error(e);
-        // Error State
-        ELEMENTS.globalStatus.innerText = "OFFLINE";
-        ELEMENTS.globalStatus.className = "text-xs font-medium text-red-500 tracking-wide";
-
-        ELEMENTS.dbStatus.innerText = "Disconnected";
-        ELEMENTS.dbIndicator.className = "w-3 h-3 rounded-full bg-red-500";
+        if (ELEMENTS.globalStatus) {
+            ELEMENTS.globalStatus.innerText = "OFFLINE";
+            ELEMENTS.globalStatus.className = "text-xs font-medium text-red-500 tracking-wide";
+        }
+        if (ELEMENTS.dbStatus) {
+            ELEMENTS.dbStatus.innerText = "Disconnected";
+            ELEMENTS.dbIndicator.className = "w-3 h-3 rounded-full bg-red-500";
+        }
     }
 }
-
-// Init
 
 // Analytics Polling
 async function fetchAnalytics() {
     try {
         const res = await fetch('/api/admin/stats');
-        // Silent fail if unauthorized (e.g. cookie expired)
         if (res.status === 401) return;
-
         const data = await res.json();
 
         if (data) {
-            // Update UI
             if (document.getElementById("rpm-val")) document.getElementById("rpm-val").innerText = data.rpm || 0;
             if (document.getElementById("error-rate-val")) {
                 document.getElementById("error-rate-val").innerText = (data.errorRate || 0) + "%";
-                // Color coding for Error Rate
-                const errorEl = document.getElementById("error-rate-val").parentElement;
-                if (parseFloat(data.errorRate) > 10) {
-                    errorEl.classList.add('border-red-500/50');
-                    document.getElementById("error-rate-val").classList.add('text-red-500');
+                // Glass-specific error styling
+                const card = document.getElementById("error-card");
+                if (parseFloat(data.errorRate) > 5) {
+                    if (card) card.style.borderColor = "rgba(244, 63, 94, 0.5)"; // Red border
                 } else {
-                    errorEl.classList.remove('border-red-500/50');
-                    document.getElementById("error-rate-val").classList.remove('text-red-500');
+                    if (card) card.style.borderColor = "";
                 }
             }
             if (document.getElementById("orders-today-val")) document.getElementById("orders-today-val").innerText = data.ordersToday || 0;
@@ -128,8 +114,11 @@ async function fetchAnalytics() {
     }
 }
 
+// Animation Utils (Placeholder for future)
+// function animateValue(obj, start, end, duration) { ... }
+
 // Init
 fetchAnalytics();
 fetchHealth();
 setInterval(fetchHealth, 5000);
-setInterval(fetchAnalytics, 15000); // 15s poll for stats
+setInterval(fetchAnalytics, 15000);

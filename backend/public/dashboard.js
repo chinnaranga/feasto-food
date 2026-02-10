@@ -266,8 +266,8 @@ async function fetchHealth() {
 
 async function fetchAnalytics() {
     try {
-        const res = await fetch('/api/admin/stats');
-        if (res.status === 401) return;
+        const res = await fetch('/api/public-stats'); // Use public stats endpoint
+        if (res.status === 401 || res.status === 403) return;
         const data = await res.json();
 
         if (data) {
@@ -279,6 +279,9 @@ async function fetchAnalytics() {
             }
             const ordersEl = document.getElementById('orders-today-val');
             if (ordersEl) animateValue(ordersEl, data.ordersToday || 0);
+
+            const activeEl = document.getElementById('active-orders-val');
+            if (activeEl) animateValue(activeEl, data.activeOrders || 0);
         }
     } catch (e) {
         console.error('Analytics error:', e);

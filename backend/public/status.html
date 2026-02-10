@@ -850,6 +850,16 @@
             --card-glow: rgba(168, 85, 247, 0.1);
         }
 
+        .glass-card.card-active {
+            --card-accent: #f59e0b;
+            --card-glow: rgba(245, 158, 11, 0.1);
+        }
+
+        .icon-active {
+            background: rgba(245, 158, 11, 0.12);
+            color: #f59e0b;
+        }
+
         /* ═══════════════════════════════════════════
            RESPONSIVE
         ═══════════════════════════════════════════ */
@@ -1005,6 +1015,16 @@
                 </div>
                 <div class="metric-value" id="error-rate-val">--%</div>
                 <div class="metric-label">Last 60 seconds</div>
+            </div>
+
+            <!-- Active Orders -->
+            <div class="glass-card card-active" data-tilt>
+                <div class="card-header">
+                    <div class="card-title">Live Orders</div>
+                    <div class="card-icon icon-active">🍳</div>
+                </div>
+                <div class="metric-value" id="active-orders-val">--</div>
+                <div class="metric-label">Currently Processing</div>
             </div>
 
             <!-- Orders Today -->

@@ -152,6 +152,37 @@ setInterval(() => {
 // Import requireAdmin middleware
 import { requireAdmin } from "./middlewares/requireAdmin.js";
 
+// Status Page Stats (Cookie Protected)
+app.get("/api/public-stats", async (req, res) => {
+    const authCookie = req.cookies.admin_access;
+    const SECRET = process.env.ADMIN_SECRET || "feasto_secure_2026";
+
+    // Allow if authenticated via cookie OR if it's a local request (optional, but sticking to cookie for now)
+    if (authCookie !== SECRET) {
+        return res.status(401).json({ error: "Unauthorized" });
+    }
+
+    try {
+        const today = new Date().toISOString().split('T')[0] + 'T00:00:00.000Z';
+
+        // Parallelize queries
+        const [ordersSnapshot, activeOrdersSnapshot] = await Promise.all([
+            db.collection('orders').where('createdAt', '>=', today).count().get(),
+            db.collection('orders').where('status', 'in', ['Pending', 'Preparing', 'Ready', 'Out for delivery']).count().get()
+        ]);
+
+        res.json({
+            rpm: metricState.rpm,
+            errorRate: metricState.errorRate,
+            ordersToday: ordersSnapshot.data().count,
+            activeOrders: activeOrdersSnapshot.data().count
+        });
+    } catch (error) {
+        console.error("Public Stats Error:", error);
+        res.status(500).json({ error: "Stats failure" });
+    }
+});
+
 // Admin Stats Endpoint
 app.get("/api/admin/stats", requireAdmin, async (req, res) => {
     try {

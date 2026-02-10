@@ -158,9 +158,9 @@ app.get("/api/public-stats", async (req, res) => {
     const SECRET = process.env.ADMIN_SECRET || "feasto_secure_2026";
 
     // Allow if authenticated via cookie OR if it's a local request (optional, but sticking to cookie for now)
-    if (authCookie !== SECRET) {
-        return res.status(401).json({ error: "Unauthorized" });
-    }
+    // if (authCookie !== SECRET) {
+    //     return res.status(401).json({ error: "Unauthorized" });
+    // }
 
     try {
         const today = new Date().toISOString().split('T')[0] + 'T00:00:00.000Z';

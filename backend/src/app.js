@@ -2,9 +2,8 @@ import express from "express";
 import cors from "cors";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
+import compression from "compression";
 import { db } from "./config/firebase.js";
-import cookieParser from "cookie-parser";
-import Order from "./models/Order.js";
 
 // Routes
 import authRoutes from "./routes/auth.routes.js";
@@ -73,6 +72,7 @@ app.use(helmet({
         },
     },
 }));
+app.use(compression()); // Compress responses for better performance
 app.use(express.json());
 app.use(cookieParser());
 

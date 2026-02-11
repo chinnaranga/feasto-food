@@ -18,6 +18,11 @@ const restaurantSchema = new mongoose.Schema({
   ownerEmail: String,
 });
 
+// Production Indexes for Performance
+restaurantSchema.index({ cuisine: 1 }); // For filtering by cuisine
+restaurantSchema.index({ name: "text" }); // For text search
+restaurantSchema.index({ rating: -1 }); // For sorting by rating
+
 const Restaurant = mongoose.model('Restaurant', restaurantSchema);
 
 export default Restaurant;

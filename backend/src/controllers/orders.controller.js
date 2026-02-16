@@ -1,4 +1,6 @@
 import Order from "../models/Order.js";
+import User from "../models/User.js";
+import Restaurant from "../models/Restaurant.js";
 
 // @desc    Create new order
 // @route   POST /api/orders
@@ -11,9 +13,42 @@ export const createOrder = async (req, res) => {
             return res.status(400).json({ error: "No order items" });
         }
 
+        // 1. Fetch User Details for Name
+        const user = await User.findOne({ uid: req.user.uid });
+
+        // 2. Fetch Restaurant Details for Location
+        const restaurantId = items[0]?.restaurantId;
+        const restaurant = restaurantId ? await Restaurant.findById(restaurantId) : null;
+
+        // 3. Prepare Location Data
+        // Frontend should send deliveryAddress as object with lat/lng if available
+        let custLoc = { lat: 0, lng: 0 };
+        let custAddrStr = "";
+
+        if (typeof deliveryAddress === 'object' && deliveryAddress !== null) {
+            custLoc = { lat: deliveryAddress.lat || 0, lng: deliveryAddress.lng || 0 };
+            custAddrStr = deliveryAddress.address || deliveryAddress.street || "";
+            // Fallback: match with user addresses if lat/lng missing
+            if ((!custLoc.lat || !custLoc.lng) && user && user.addresses) {
+                const savedAddr = user.addresses.find(a => a.address === custAddrStr);
+                if (savedAddr) {
+                    custLoc = { lat: savedAddr.lat, lng: savedAddr.lng };
+                }
+            }
+        } else {
+            custAddrStr = String(deliveryAddress);
+            // Try to find in user addresses
+            if (user && user.addresses) {
+                const savedAddr = user.addresses.find(a => a.address === custAddrStr);
+                if (savedAddr) {
+                    custLoc = { lat: savedAddr.lat, lng: savedAddr.lng };
+                }
+            }
+        }
+
         const order = new Order({
             userId: req.user.uid,
-            restaurantId: items[0]?.restaurantId || null,
+            restaurantId: restaurantId || null,
             items,
             total,
             walletUsed: walletUsed || 0,
@@ -21,9 +56,17 @@ export const createOrder = async (req, res) => {
             paymentMethod,
             provider,
             transactionId,
-            deliveryAddress,
+            deliveryAddress: typeof deliveryAddress === 'object' ? deliveryAddress : { address: deliveryAddress }, // Ensure Map/Object compatibility
             deliveryOption,
-            status: onlinePaid > 0 ? "Paid" : "Pending"
+            status: onlinePaid > 0 ? "Paid" : "Pending",
+
+            // Location Populations
+            customerName: user?.displayName || "Valued Customer",
+            customerAddress: custAddrStr,
+            customerLocation: custLoc,
+            restaurantName: restaurant?.name || "Restaurant",
+            restaurantAddress: restaurant?.address || "Partner Location",
+            restaurantLocation: restaurant?.location || { lat: 0, lng: 0 }
         });
 
         const createdOrder = await order.save();

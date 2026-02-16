@@ -1,6 +1,5 @@
-import { getFirestore } from 'firebase-admin/firestore';
-
-const db = getFirestore();
+import Order from "../models/Order.js";
+import Restaurant from "../models/Restaurant.js";
 
 /**
  * Get user's previous orders for "Reorder Again" section
@@ -12,34 +11,37 @@ export const getReorderItems = async (req, res) => {
             return res.status(401).json({ error: 'Unauthorized' });
         }
 
-        // Fetch user's completed orders
-        const ordersSnapshot = await db
-            .collection('orders')
-            .where('userId', '==', userId)
-            .where('status', '==', 'delivered')
-            .orderBy('createdAt', 'desc')
-            .limit(20)
-            .get();
+        // Fetch user's completed orders using Mongoose
+        const orders = await Order.find({
+            userId: userId,
+            status: { $in: ['delivered', 'picked_up'] } // Case insensitive check handled by logic or enum usually
+        })
+            .sort({ createdAt: -1 })
+            .limit(20);
+
 
         // Extract food items and count frequency
         const foodMap = new Map();
 
-        ordersSnapshot.forEach(doc => {
-            const order = doc.data();
+        orders.forEach(order => {
             if (order.items && Array.isArray(order.items)) {
                 order.items.forEach(item => {
-                    const existing = foodMap.get(item.id) || {
+                    const itemId = item.id || item._id?.toString();
+                    if (!itemId) return;
+
+                    const existing = foodMap.get(itemId) || {
                         ...item,
+                        id: itemId, // Ensure ID is present
                         orderCount: 0,
                         lastOrdered: null
                     };
 
                     existing.orderCount++;
-                    if (!existing.lastOrdered || order.createdAt > existing.lastOrdered) {
+                    if (!existing.lastOrdered || new Date(order.createdAt) > new Date(existing.lastOrdered)) {
                         existing.lastOrdered = order.createdAt;
                     }
 
-                    foodMap.set(item.id, existing);
+                    foodMap.set(itemId, existing);
                 });
             }
         });
@@ -52,7 +54,7 @@ export const getReorderItems = async (req, res) => {
                     return b.orderCount - a.orderCount;
                 }
                 // Then by recency
-                return b.lastOrdered - a.lastOrdered;
+                return new Date(b.lastOrdered) - new Date(a.lastOrdered);
             })
             .slice(0, 10); // Top 10 items
 
@@ -61,9 +63,6 @@ export const getReorderItems = async (req, res) => {
             items: reorderItems
         });
     } catch (error) {
-        if (error.code === 9) { // FAILED_PRECONDITION
-            console.error('Firestore Index Required. Please run: firebase deploy --only firestore:indexes');
-        }
         console.error('Error fetching reorder items:', error);
         res.status(500).json({ error: 'Failed to fetch reorder items' });
     }
@@ -80,12 +79,10 @@ export const getRecommendations = async (req, res) => {
         }
 
         // Fetch user's order history for context
-        const ordersSnapshot = await db
-            .collection('orders')
-            .where('userId', '==', userId)
-            .where('status', '==', 'delivered')
-            .limit(10)
-            .get();
+        const orders = await Order.find({
+            userId: userId,
+            status: 'delivered'
+        }).limit(10);
 
         // Extract user preferences
         const orderedCategories = new Set();
@@ -94,11 +91,11 @@ export const getRecommendations = async (req, res) => {
         let avgPrice = 0;
         let prefersSpicy = false;
 
-        ordersSnapshot.forEach(doc => {
-            const order = doc.data();
+        orders.forEach(order => {
             if (order.items) {
                 order.items.forEach(item => {
-                    orderedItems.add(item.id);
+                    if (item.id) orderedItems.add(item.id);
+                    if (item._id) orderedItems.add(item._id.toString());
                     if (item.category) orderedCategories.add(item.category);
                     if (item.isSpicy) prefersSpicy = true;
                 });
@@ -106,17 +103,37 @@ export const getRecommendations = async (req, res) => {
             if (order.total) totalSpent += order.total;
         });
 
-        if (ordersSnapshot.size > 0) {
-            avgPrice = totalSpent / ordersSnapshot.size;
+        if (orders.length > 0) {
+            avgPrice = totalSpent / orders.length;
+        } else {
+            // Default avg price if no history
+            avgPrice = 300;
         }
 
-        // Fetch all available food items
-        const foodSnapshot = await db.collection('food').get();
-        const allFood = foodSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        // Fetch all available restaurants and their menus
+        // We only fetch open restaurants
+        const restaurants = await Restaurant.find({ isOpen: true });
+
+        // Flatten all menu items
+        let allFood = [];
+        restaurants.forEach(rest => {
+            if (rest.menu && Array.isArray(rest.menu)) {
+                rest.menu.forEach(item => {
+                    if (item.isAvailable) {
+                        allFood.push({
+                            ...item.toObject(), // Convert Mongoose subdoc to object
+                            restaurantId: rest._id, // Add restaurant reference
+                            restaurantName: rest.name,
+                            _id: item._id.toString()
+                        });
+                    }
+                });
+            }
+        });
 
         // Filter and score recommendations
         const recommendations = allFood
-            .filter(food => !orderedItems.has(food.id)) // Exclude already ordered
+            .filter(food => !orderedItems.has(food._id)) // Exclude already ordered
             .map(food => {
                 let score = 0;
                 let reason = '';
@@ -139,21 +156,18 @@ export const getRecommendations = async (req, res) => {
                     reason = 'Matches your spicy preference';
                 }
 
-                // Score based on rating
-                if (food.rating >= 4.5) {
-                    score += 2;
-                    reason = reason || 'Highly rated';
-                }
+                // Score based on rating (if item has rating, or fallback to something)
+                // Assuming items might not have individual ratings yet, we could use restaurant rating
+                // For now, let's assume food items don't have individual ratings in schema yet,
+                // so we skip or use restaurant rating if we linked it.
+                // Let's rely on 'isPopular' or similar if existed, or just random boost for now.
 
-                // Score trending items
-                if (food.trending) {
-                    score += 1;
-                    reason = reason || 'Trending now';
-                }
+                // Boost random items slightly to give variety
+                score += Math.random();
 
                 return { ...food, score, reason: reason || 'You might like this' };
             })
-            .filter(food => food.score > 0)
+            // Return even low score items if user has no history, to show *something*
             .sort((a, b) => b.score - a.score)
             .slice(0, 12); // Top 12 recommendations
 

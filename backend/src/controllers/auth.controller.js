@@ -26,17 +26,33 @@ export const loginWithOTP = async (req, res) => {
     const decoded = await firebaseAuth.verifyIdToken(firebaseToken);
     const uid = decoded.uid;
 
-    // 3. Check for Admin Claim logic
-    let role = "user";
-    if (decoded.admin === true) {
-      role = "admin";
+    // 3. Sync User to MongoDB
+    let user = await User.findOne({ uid });
+
+    if (!user) {
+      // Create new user if not exists
+      user = await User.create({
+        uid,
+        email: decoded.email,
+        displayName: decoded.name || decoded.email?.split('@')[0] || "User",
+        photoURL: decoded.picture,
+        role: decoded.admin ? 'admin' : 'user'
+      });
+      console.log(`Created new MongoDB user for UID: ${uid}`);
+    } else {
+      // Update existing user info if needed (optional)
+      // user.lastLogin = new Date();
+      // await user.save();
     }
 
-    // Fetch user from DB (Mongo / Firestore) or use decoded info
-    const user = { uid, role };
+    const payload = {
+      uid: user.uid,
+      role: user.role,
+      _id: user._id
+    };
 
-    const access = signAccessToken(user);
-    const refresh = signRefreshToken(user);
+    const access = signAccessToken(payload);
+    const refresh = signRefreshToken(payload);
 
     res.cookie("refreshToken", refresh, {
       httpOnly: true,

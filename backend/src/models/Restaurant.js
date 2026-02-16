@@ -16,6 +16,22 @@ const restaurantSchema = new mongoose.Schema({
   isEcoFriendly: Boolean,
   ownerId: { type: String, required: true, index: true }, // Firebase UID of owner
   ownerEmail: String,
+  isOpen: { type: Boolean, default: true },
+  isAvailable: { type: Boolean, default: true },
+  address: { type: String, default: "123 Food Street, Bangalore" }, // Default for migration
+  location: {
+    lat: { type: Number, default: 12.9716 },
+    lng: { type: Number, default: 77.5946 }
+  },
+  menu: [{
+    name: { type: String, required: true },
+    price: { type: Number, required: true },
+    description: String,
+    image: String,
+    category: { type: String, default: "Main" },
+    isVeg: { type: Boolean, default: false },
+    isAvailable: { type: Boolean, default: true }
+  }]
 });
 
 // Production Indexes for Performance

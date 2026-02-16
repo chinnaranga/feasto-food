@@ -1,8 +1,22 @@
 import express from "express";
 import admin from "firebase-admin";
-import { getRestaurantProfile, updateRestaurantOrderStatus } from "../controllers/restaurants.controller.js";
+import {
+    getRestaurantProfile,
+    updateRestaurantOrderStatus,
+    getMenu,
+    updateMenu,
+    toggleRestaurantStatus,
+    addMenuItem,
+    deleteMenuItem,
+    getAllRestaurants,
+    getRestaurantById
+} from "../controllers/restaurants.controller.js";
 
 const router = express.Router();
+
+// Public Routes
+router.get("/", getAllRestaurants);
+router.get("/:id", getRestaurantById);
 
 // Middleware to verify Firebase token for restaurants
 const requireRestaurantAuth = async (req, res, next) => {
@@ -29,5 +43,14 @@ router.get("/me", requireRestaurantAuth, getRestaurantProfile);
 
 // PATCH /api/restaurant/orders/:orderId/status
 router.patch("/orders/:orderId/status", requireRestaurantAuth, updateRestaurantOrderStatus);
+
+// Menu Management
+router.get("/menu", requireRestaurantAuth, getMenu);
+router.put("/menu", requireRestaurantAuth, updateMenu);
+router.post("/menu", requireRestaurantAuth, addMenuItem);
+router.delete("/menu/:itemId", requireRestaurantAuth, deleteMenuItem);
+
+// Status Management
+router.post("/toggle", requireRestaurantAuth, toggleRestaurantStatus);
 
 export default router;

@@ -1,5 +1,5 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { db } from "../config/firebase.js";
+import Restaurant from "../models/Restaurant.js";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
@@ -11,12 +11,25 @@ export const chatWithAI = async (req, res) => {
             return res.status(400).json({ error: "Message is required" });
         }
 
-        // 1. Fetch Menu Context
-        const foodSnapshot = await db.collection("food").limit(20).get();
-        const menuItems = foodSnapshot.docs.map(doc => {
-            const data = doc.data();
-            return `${data.name} (₹${data.price}) - ${data.description} [${data.category}]`;
-        }).join("\n");
+        // 1. Fetch Menu Context from MongoDB
+        // We fetch restaurants and flatten their menus to get a list of items
+        const restaurants = await Restaurant.find({ isOpen: true, isAvailable: true }).limit(10).select('name menu');
+
+        let menuItemsContext = "";
+        restaurants.forEach(restaurant => {
+            if (restaurant.menu && restaurant.menu.length > 0) {
+                // Take up to 5 items per restaurant to save context window
+                restaurant.menu.slice(0, 5).forEach(item => {
+                    if (item.isAvailable) {
+                        menuItemsContext += `- ${item.name} (${item.category}) at ${restaurant.name}: ₹${item.price}. ${item.description || ''}\n`;
+                    }
+                });
+            }
+        });
+
+        if (!menuItemsContext) {
+            menuItemsContext = "No items currently available.";
+        }
 
         const systemPrompt = `
       You are 'Feasto Bot', the helpful AI assistant for the Feasto food delivery platform.
@@ -26,16 +39,16 @@ export const chatWithAI = async (req, res) => {
       - You ONLY discuss food, orders, and the Feasto menu.
       - If asked about non-food topics, politely steer back to food.
       
-      Menu Context:
-      ${menuItems}
+      Current Available Menu Context:
+      ${menuItemsContext}
       
       User's Request: ${message}
       
-      Answer as Feasto Bot. If suggesting food, mention the price.
+      Answer as Feasto Bot. If suggesting food, mention the restaurant and price.
+      Keep it short (under 50 words unless asked for a list).
     `;
 
         // 2. Generate Response
-        // Using gemini-1.5-flash as requested in the recommended fix
         const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
         const result = await model.generateContent(systemPrompt);

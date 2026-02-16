@@ -14,11 +14,13 @@ import aiRoutes from "./routes/ai.routes.js";
 import restaurantRoutes from "./routes/restaurants.routes.js";
 import ordersRoutes from "./routes/orders.routes.js";
 import riderWalletRoutes from "./routes/riderWallet.routes.js";
-import riderStatusRoutes from "./routes/riderStatus.routes.js";
+import riderRoutes from "./routes/rider.routes.js";
 import adminRoutes from "./routes/admin.routes.js";
 import stripeRoutes from "./routes/stripe.routes.js";
 import recommendationsRoutes from "./routes/recommendations.routes.js";
 import paymentRoutes from "./routes/payment.routes.js";
+import reviewsRoutes from "./routes/reviews.routes.js";
+import userRoutes from "./routes/user.routes.js";
 
 const app = express();
 
@@ -231,10 +233,12 @@ app.use("/api/ai", aiRoutes);
 app.use("/api/restaurant", restaurantRoutes);
 app.use("/api/orders", ordersRoutes);
 app.use("/api/rider-wallet", riderWalletRoutes);
-app.use("/api/rider", riderStatusRoutes);
+app.use("/api/rider", riderRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/recommendations", recommendationsRoutes);
 app.use("/api/payment", paymentRoutes);
+app.use("/api/reviews", reviewsRoutes);
+app.use("/api/user", userRoutes);
 
 // Serve API Docs
 app.get("/api/docs", (req, res) => {

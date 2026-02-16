@@ -27,7 +27,7 @@ const orderSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['Pending', 'Confirmed', 'Preparing', 'Ready', 'Out_for_delivery', 'Delivered', 'Cancelled', 'Paid'],
+        enum: ['Pending', 'Confirmed', 'Preparing', 'Ready', 'Driver_Assigned', 'Picked_Up', 'Out_for_delivery', 'Delivered', 'Cancelled', 'Paid'],
         default: 'Pending'
     },
     paymentMethod: {
@@ -51,7 +51,21 @@ const orderSchema = new mongoose.Schema({
     date: {
         type: Date,
         default: Date.now
-    }
+    },
+    // Location Details for Rider/Tracking
+    restaurantLocation: {
+        lat: Number,
+        lng: Number
+    },
+    customerLocation: {
+        lat: Number,
+        lng: Number
+    },
+    restaurantName: String,
+    restaurantAddress: String,
+    customerName: String,
+    customerAddress: String // Duplicate for easy access if needed
+
 }, { timestamps: true });
 
 // Production Indexes for Performance

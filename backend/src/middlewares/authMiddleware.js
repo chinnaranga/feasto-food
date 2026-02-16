@@ -1,4 +1,5 @@
 import { auth } from "../config/firebase.js";
+import User from "../models/User.js";
 
 export const protect = async (req, res, next) => {
   const authHeader = req.headers["authorization"];
@@ -9,9 +10,33 @@ export const protect = async (req, res, next) => {
   }
 
   try {
-    // Verify Firebase ID Token
+    // 1. Verify Firebase ID Token
     const decodedToken = await auth.verifyIdToken(token);
-    req.user = decodedToken; // attach user info (uid, email, etc.)
+
+    // 2. Sync with MongoDB
+    let user = await User.findOne({ uid: decodedToken.uid });
+
+    if (!user) {
+      user = await User.create({
+        uid: decodedToken.uid,
+        email: decodedToken.email,
+        displayName: decodedToken.name || "User",
+        photoURL: decodedToken.picture,
+        role: 'user' // Default role
+      });
+    }
+
+    // 3. Attach User to Request
+    // We attach the Mongoose document, which creates a unified User object
+    // But we ensure 'uid' is accessible as expected by controllers
+    req.user = user;
+
+    // Compatibility: Controllers might expect req.user.uid from token directly
+    // Mongoose doc has .uid, so this works.
+    // They might expect .name from token. User model has .displayName.
+    // We can add a virtual or just rely on controllers using User model.
+    // For now, let's mix in the decoded token props if needed, or just use user.
+
     next();
   } catch (err) {
     console.error("Auth Middleware Error:", err.message);

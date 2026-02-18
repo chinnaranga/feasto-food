@@ -1,25 +1,44 @@
-# Frontend (Tracked)
-# frontend/
-# frontend/**/*
-
-# Backend Secrets
-.env
-service-account-key.json
-node_modules/
-
-# Backend Utils
-backend_temp/
-project-root/
-# backend/  <-- UNCOMMENTED TO ALLOW TRACKING
+# General
 .DS_Store
 .vscode/
+.idea/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
-# Backend Secrets (Must stay ignored)
-backend/.env
-backend/service-account-key.json
-backend/node_modules/
-backend/package-lock.json # Keep tracked usually? User might want to track lockfile. Keeping lockfile tracked is standard.
+# Dependencies
+node_modules/
+**/node_modules/
+dist/
+**/dist/
+build/
+**/build/
+coverage/
+**/coverage/
 
+# Environment Variables
+.env
+.env.*
+!.env.example
+service-account-key.json
+**/service-account-key.json
+
+# Trash / Temporary
+node_modules_trash_*/
+**/node_modules_trash_*/
+backend_temp/
+project-root/
+dist_debug/
+**/dist_debug/
+
+# Framework specific
+.firebase/
+**/.firebase/
+dataconnect-generated/
+**/dataconnect-generated/
+.pnp
+.pnp.js
 
 # Artifacts
 task.md

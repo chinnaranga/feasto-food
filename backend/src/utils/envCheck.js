@@ -6,9 +6,14 @@
 export const checkRequiredEnvVars = () => {
     const required = [
         'JWT_SECRET',
-        'FIREBASE_SERVICE_ACCOUNT',
         'MONGODB_URI',
     ];
+
+    // Check for either Firebase variable
+    if (!process.env.FIREBASE_SERVICE_ACCOUNT && !process.env.FIREBASE_SERVICE_ACCOUNT_JSON) {
+        console.error('❌ CRITICAL: Missing FIREBASE_SERVICE_ACCOUNT or FIREBASE_SERVICE_ACCOUNT_JSON');
+        process.exit(1);
+    }
 
     const criticalForPayments = [
         'RAZORPAY_KEY_ID',

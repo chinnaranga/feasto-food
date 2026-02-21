@@ -18,8 +18,14 @@ export const requireAdmin = async (req, res, next) => {
             "ADMIN_UID_FROM_CONSOLE"
         ];
 
-        // Allow if email is admin@aerobite.com (Fallback for dev)
-        if (decoded.email === "admin@aerobite.com" || decoded.admin === true || ADMIN_UIDS.includes(decoded.uid)) {
+        // Allow if email is admin@aerobite.com, admin@feasto.food, ends with @aerobite.com, has admin token, or is in ADMIN_UIDS
+        if (
+            decoded.email === "admin@aerobite.com" ||
+            decoded.email === "admin@feasto.food" ||
+            (decoded.email && decoded.email.endsWith("@aerobite.com")) ||
+            decoded.admin === true ||
+            ADMIN_UIDS.includes(decoded.uid)
+        ) {
             req.admin = decoded;
             next();
         } else {

@@ -22,6 +22,7 @@ import recommendationsRoutes from "./routes/recommendations.routes.js";
 import paymentRoutes from "./routes/payment.routes.js";
 import reviewsRoutes from "./routes/reviews.routes.js";
 import userRoutes from "./routes/user.routes.js";
+import cashfreeRoutes from "./routes/cashfree.routes.js";
 
 const app = express();
 
@@ -156,6 +157,8 @@ setInterval(() => {
 // Import requireAdmin middleware
 import { requireAdmin } from "./middlewares/requireAdmin.js";
 
+import Order from "./models/Order.js";
+
 // Status Page Stats (Cookie Protected)
 app.get("/api/public-stats", async (req, res) => {
     const authCookie = req.cookies.admin_access;
@@ -240,6 +243,7 @@ app.use("/api/recommendations", recommendationsRoutes);
 app.use("/api/payment", paymentRoutes);
 app.use("/api/reviews", reviewsRoutes);
 app.use("/api/user", userRoutes);
+app.use("/api/cashfree", cashfreeRoutes);
 
 // Serve API Docs
 app.get("/api/docs", (req, res) => {

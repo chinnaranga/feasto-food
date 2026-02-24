@@ -1,0 +1,23 @@
+[
+  {
+    "id": "proj-01",
+    "name": "Redesign Website",
+    "status": "In Progress",
+    "budget": 5000,
+    "dueDate": "2025-10-15"
+  },
+  {
+    "id": "proj-02",
+    "name": "Develop Mobile App",
+    "status": "Completed",
+    "budget": 12000,
+    "dueDate": "2025-09-01"
+  },
+  {
+    "id": "proj-03",
+    "name": "Marketing Campaign",
+    "status": "Not Started",
+    "budget": 7500,
+    "dueDate": "2025-11-20"
+  }
+]

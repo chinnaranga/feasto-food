@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#0f0f12" />
+  <meta name="description" content="AeroBite - Premium Food Delivery Platform" />
+
+  <!-- Security & Privacy Headers -->
+  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+
+  <!-- 
+      Permissions Policy for Payment Gateways
+      Razorpay uses device sensors for fraud detection (accelerometer, gyroscope)
+      These permissions allow the payment iframe to access required features
+    -->
+  <meta http-equiv="Permissions-Policy" content="
+      accelerometer=(self),
+      gyroscope=(self),
+      magnetometer=(self),
+      payment=(self 'https://api.razorpay.com' 'https://checkout.razorpay.com'),
+      usb=()
+    " />
+
+  <title>AeroBite | Food Delivery</title>
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="apple-touch-icon" href="/vite.svg" />
+  <script type="module" crossorigin src="/assets/index-DtA9Iu2a.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/vendor-utils-B7O91-dT.js">
+  <link rel="modulepreload" crossorigin href="/assets/vendor-core-DwRYKWfi.js">
+  <link rel="modulepreload" crossorigin href="/assets/firebase-gc6XL6XB.js">
+  <link rel="stylesheet" crossorigin href="/assets/vendor-core-DpsRipQV.css">
+  <link rel="stylesheet" crossorigin href="/assets/index-4C2afKJm.css">
+</head>
+
+<body>
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+
+  <div id="recaptcha-container-stable"></div>
+
+  <div id="root"></div>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</body>
+
+</html>

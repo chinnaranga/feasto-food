@@ -1,0 +1,188 @@
+2026-02-22T05:01:12.612Z vite:config bundled config file loaded in 80.94ms
+2026-02-22T05:01:12.651Z vite:config using resolved config: {
+  root: '/Users/ravipatichinnaranga/Desktop/index.html/food platform/frontend',
+  cacheDir: '/Users/ravipatichinnaranga/Desktop/index.html/food platform/frontend/node_modules/.vite',
+  plugins: [
+    'vite:build-metadata',
+    'vite:watch-package-data',
+    'vite:pre-alias',
+    'alias',
+    'vite:react-babel',
+    'vite:react-refresh',
+    'vite:modulepreload-polyfill',
+    'vite:resolve',
+    'vite:html-inline-proxy',
+    'vite:css',
+    'vite:esbuild',
+    'vite:json',
+    'vite:wasm-helper',
+    'vite:worker',
+    'vite:asset',
+    'vite:react-virtual-preamble',
+    'vite:wasm-fallback',
+    'vite:define',
+    'vite:css-post',
+    'vite:build-html',
+    'vite:worker-import-meta-url',
+    'vite:asset-import-meta-url',
+    'vite:force-systemjs-wrap-complete',
+    'commonjs',
+    'vite:data-uri',
+    'vite:dynamic-import-vars',
+    'vite:import-glob',
+    'vite:build-import-analysis',
+    'vite:esbuild-transpile',
+    'vite:terser',
+    'vite:reporter',
+    'vite:load-fallback'
+  ],
+  publicDir: '/Users/ravipatichinnaranga/Desktop/index.html/food platform/frontend/public',
+  server: {
+    preTransformRequests: true,
+    host: true,
+    sourcemapIgnoreList: [Function: isInNodeModules$1],
+    middlewareMode: false,
+    fs: {
+      strict: true,
+      allow: [Array],
+      deny: [Array],
+      cachedChecks: undefined
+    }
+  },
+  build: {
+    target: 'esnext',
+    cssTarget: 'esnext',
+    outDir: 'dist',
+    assetsDir: 'assets',
+    assetsInlineLimit: 4096,
+    cssCodeSplit: true,
+    sourcemap: false,
+    rollupOptions: { output: [Object], onwarn: [Function: onwarn] },
+    minify: 'esbuild',
+    terserOptions: {},
+    write: true,
+    emptyOutDir: true,
+    copyPublicDir: true,
+    manifest: false,
+    lib: false,
+    ssr: false,
+    ssrManifest: false,
+    ssrEmitAssets: false,
+    reportCompressedSize: false,
+    chunkSizeWarningLimit: 1000,
+    watch: null,
+    commonjsOptions: { include: [Array], extensions: [Array] },
+    dynamicImportVarsOptions: { warnOnError: true, exclude: [Array] },
+    modulePreload: { polyfill: true },
+    cssMinify: true
+  },
+  optimizeDeps: {
+    holdUntilCrawlEnd: true,
+    include: [
+      'react-phone-number-input',
+      'react',
+      'react-dom',
+      'react/jsx-dev-runtime',
+      'react/jsx-runtime'
+    ],
+    esbuildOptions: { preserveSymlinks: false, jsx: 'automatic' }
+  },
+  esbuild: { jsxDev: false, legalComments: 'none', jsx: 'automatic' },
+  configFile: '/Users/ravipatichinnaranga/Desktop/index.html/food platform/frontend/vite.config.js',
+  configFileDependencies: [
+    '/Users/ravipatichinnaranga/Desktop/index.html/food platform/frontend/vite.config.js'
+  ],
+  inlineConfig: {
+    root: undefined,
+    base: undefined,
+    mode: undefined,
+    configFile: undefined,
+    logLevel: undefined,
+    clearScreen: undefined,
+    build: {}
+  },
+  base: '/',
+  decodedBase: '/',
+  rawBase: '/',
+  resolve: {
+    mainFields: [ 'browser', 'module', 'jsnext:main', 'jsnext' ],
+    conditions: [],
+    extensions: [
+      '.mjs',  '.js',
+      '.mts',  '.ts',
+      '.jsx',  '.tsx',
+      '.json'
+    ],
+    dedupe: [],
+    preserveSymlinks: false,
+    alias: [ [Object], [Object] ]
+  },
+  command: 'build',
+  mode: 'production',
+  ssr: {
+    target: 'node',
+    optimizeDeps: { noDiscovery: true, esbuildOptions: [Object] }
+  },
+  isWorker: false,
+  mainConfig: null,
+  bundleChain: [],
+  isProduction: true,
+  css: { lightningcss: undefined },
+  preview: {
+    port: undefined,
+    strictPort: undefined,
+    host: true,
+    allowedHosts: undefined,
+    https: undefined,
+    open: undefined,
+    proxy: undefined,
+    cors: undefined,
+    headers: undefined
+  },
+  envDir: '/Users/ravipatichinnaranga/Desktop/index.html/food platform/frontend',
+  env: {
+    VITE_RAZORPAY_KEY_ID: 'rzp_test_Rwcd489xdNgbPB',
+    VITE_API_URL: 'https://feasto-backend-production-c08e.up.railway.app',
+    VITE_FIREBASE_AUTH_DOMAIN: 'food-platform-b022f.web.app',
+    VITE_FORCE_MAINTENANCE: 'true',
+    BASE_URL: '/',
+    MODE: 'production',
+    DEV: false,
+    PROD: true
+  },
+  assetsInclude: [Function: assetsInclude],
+  logger: {
+    hasWarned: false,
+    info: [Function: info],
+    warn: [Function: warn],
+    warnOnce: [Function: warnOnce],
+    error: [Function: error],
+    clearScreen: [Function: clearScreen],
+    hasErrorLogged: [Function: hasErrorLogged]
+  },
+  packageCache: Map(1) {
+    'fnpd_/Users/ravipatichinnaranga/Desktop/index.html/food platform/frontend' => {
+      dir: '/Users/ravipatichinnaranga/Desktop/index.html/food platform/frontend',
+      data: [Object],
+      hasSideEffects: [Function: hasSideEffects],
+      webResolvedImports: {},
+      nodeResolvedImports: {},
+      setResolvedCache: [Function: setResolvedCache],
+      getResolvedCache: [Function: getResolvedCache]
+    },
+    set: [Function (anonymous)]
+  },
+  createResolver: [Function: createResolver],
+  worker: { format: 'iife', plugins: '() => plugins', rollupOptions: {} },
+  appType: 'spa',
+  experimental: { importGlobRestoreExtension: false, hmrPartialAccept: false },
+  webSocketToken: 'rgF7D2RQblWF',
+  additionalAllowedHosts: [],
+  getSortedPlugins: [Function: getSortedPlugins],
+  getSortedPluginHooks: [Function: getSortedPluginHooks]
+}
+vite v5.4.21 building for production...
+transforming...
+2026-02-22T05:01:12.939Z vite:resolve 2.74ms tailwindcss/base -> /Users/ravipatichinnaranga/Desktop/index.html/food platform/frontend/node_modules/.pnpm/tailwindcss@3.4.19/node_modules/tailwindcss/base.css
+2026-02-22T05:01:12.970Z vite:resolve 0.43ms tailwindcss/components -> /Users/ravipatichinnaranga/Desktop/index.html/food platform/frontend/node_modules/.pnpm/tailwindcss@3.4.19/node_modules/tailwindcss/components.css
+2026-02-22T05:01:24.182Z vite:resolve 1.02ms tailwindcss/utilities -> /Users/ravipatichinnaranga/Desktop/index.html/food platform/frontend/node_modules/.pnpm/tailwindcss@3.4.19/node_modules/tailwindcss/utilities.css

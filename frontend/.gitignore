@@ -1,0 +1,22 @@
+# General
+.DS_Store
+.env
+.env.*
+!.env.example
+*.bak
+*.debug.js
+build.log
+
+# Dependencies
+node_modules/
+dist/
+dist_debug/
+build/
+coverage/
+
+# Misc
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnp
+.pnp.js

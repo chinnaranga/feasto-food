@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import Restaurant from "../models/Restaurant.js";
 import Order from "../models/Order.js";
 
@@ -6,23 +7,38 @@ import Order from "../models/Order.js";
 // @access  Private (Restaurant Owner)
 export const getRestaurantProfile = async (req, res) => {
     try {
+        if (!req.user || !req.user.uid) {
+            console.error("❌ CRITICAL: req.user is undefined or missing uid in getRestaurantProfile");
+            return res.status(401).json({ message: "Authentication failed. User not attached to request." });
+        }
+
+        console.log(`[DEBUG /me] Fetching restaurant profile for Firebase UID: ${req.user.uid}`);
         const { uid, email } = req.user;
 
         // Find by ownerId (preferred) or ownerEmail
         let restaurant = await Restaurant.findOne({ ownerId: uid });
 
         if (!restaurant && email) {
+            console.log(`[DEBUG /me] No restaurant found using ownerId. Falling back to ownerEmail: ${email}`);
             restaurant = await Restaurant.findOne({ ownerEmail: email });
         }
 
         if (!restaurant) {
+            console.log(`[DEBUG /me] 404 - No restaurant profile found in MongoDB for user ${uid}.`);
             return res.status(404).json({ message: "No restaurant profile found for this user." });
         }
 
+        console.log(`[DEBUG /me] Successfully found restaurant: ${restaurant._id}`);
         res.json(restaurant);
     } catch (error) {
-        console.error("Error fetching restaurant profile:", error);
-        res.status(500).json({ message: "Server error" });
+        console.error("❌ Error fetching restaurant profile (500 crash):", error);
+        console.error(error.stack);
+        // Expose error message to frontend to easily debug Railway issues
+        res.status(500).json({
+            message: "Server error in /api/restaurant/me",
+            error: error.message,
+            stack: error.stack
+        });
     }
 };
 
@@ -82,8 +98,8 @@ export const getMenu = async (req, res) => {
 
         res.json(restaurant.menu || []);
     } catch (error) {
-        console.error("Get Menu Error:", error);
-        res.status(500).json({ message: "Server error" });
+        console.error("❌ Get Menu Error:", error);
+        res.status(500).json({ message: "Server error fetching menu", error: error.message });
     }
 };
 
@@ -130,8 +146,8 @@ export const toggleRestaurantStatus = async (req, res) => {
 
         res.json({ success: true, isOpen: restaurant.isOpen, message: `Restaurant is now ${restaurant.isOpen ? 'Open' : 'Closed'}` });
     } catch (error) {
-        console.error("Toggle Status Error:", error);
-        res.status(500).json({ message: "Server error" });
+        console.error("❌ Toggle Status Error:", error);
+        res.status(500).json({ message: "Server error toggling status", error: error.message });
     }
 };
 
@@ -155,8 +171,8 @@ export const addMenuItem = async (req, res) => {
         const addedItem = restaurant.menu[restaurant.menu.length - 1];
         res.status(201).json(addedItem);
     } catch (error) {
-        console.error("Add Menu Item Error:", error);
-        res.status(500).json({ message: "Server error" });
+        console.error("❌ Add Menu Item Error:", error);
+        res.status(500).json({ message: "Server error adding menu item", error: error.message });
     }
 };
 
@@ -179,8 +195,8 @@ export const deleteMenuItem = async (req, res) => {
 
         res.json({ success: true, message: "Item deleted" });
     } catch (error) {
-        console.error("Delete Menu Item Error:", error);
-        res.status(500).json({ message: "Server error" });
+        console.error("❌ Delete Menu Item Error:", error);
+        res.status(500).json({ message: "Server error deleting item", error: error.message });
     }
 };
 
@@ -204,6 +220,12 @@ export const getAllRestaurants = async (req, res) => {
 export const getRestaurantById = async (req, res) => {
     try {
         const { id } = req.params;
+
+        // Validate MongoDB ObjectId format before querying
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({ message: "Invalid restaurant ID format" });
+        }
+
         const restaurant = await Restaurant.findById(id).select('-ownerId -ownerEmail -__v');
 
         if (!restaurant) {
@@ -212,6 +234,10 @@ export const getRestaurantById = async (req, res) => {
 
         res.json(restaurant);
     } catch (error) {
+        // Safety net for any remaining CastError edge cases
+        if (error.name === "CastError") {
+            return res.status(400).json({ message: "Invalid restaurant ID" });
+        }
         console.error("Get Restaurant Error:", error);
         res.status(500).json({ message: "Server error" });
     }

@@ -16,7 +16,6 @@ const router = express.Router();
 
 // Public Routes
 router.get("/", getAllRestaurants);
-router.get("/:id", getRestaurantById);
 
 // Middleware to verify Firebase token for restaurants
 const requireRestaurantAuth = async (req, res, next) => {
@@ -33,8 +32,12 @@ const requireRestaurantAuth = async (req, res, next) => {
         req.user = decodedToken;
         next();
     } catch (error) {
-        console.error("Auth Error:", error);
-        res.status(401).json({ message: "Unauthorized: Invalid token" });
+        console.error("❌ Firebase Auth Verification Error:", error.message);
+        res.status(401).json({
+            message: "Unauthorized: Invalid or expired token",
+            error: error.message,
+            code: error.code
+        });
     }
 };
 
@@ -52,5 +55,8 @@ router.delete("/menu/:itemId", requireRestaurantAuth, deleteMenuItem);
 
 // Status Management
 router.post("/toggle", requireRestaurantAuth, toggleRestaurantStatus);
+
+// GET /api/restaurant/:id (Must be last)
+router.get("/:id", getRestaurantById);
 
 export default router;

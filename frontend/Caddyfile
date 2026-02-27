@@ -1,4 +1,0 @@
-https://192.168.0.101:3000 {
-    reverse_proxy localhost:3000
-    tls ./localhost+2.pem ./localhost+2-key.pem
-}

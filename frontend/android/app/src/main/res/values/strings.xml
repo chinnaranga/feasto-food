@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="app_name">AeroBite</string>
-    <string name="title_activity_main">AeroBite</string>
-    <string name="package_name">com.aerobite.app</string>
-    <string name="custom_url_scheme">com.aerobite.app</string>
-</resources>

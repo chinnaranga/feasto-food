@@ -7,7 +7,11 @@ const defaultClientSecret = "cfsk_ma_test_" + "2c05aac7aa42c0583122a731a5c133bf_
 
 const clientId = process.env.CASHFREE_CLIENT_ID || defaultClientId;
 const clientSecret = process.env.CASHFREE_CLIENT_SECRET || defaultClientSecret;
-const environment = process.env.NODE_ENV === "production" ? CFEnvironment.PRODUCTION : CFEnvironment.SANDBOX;
+
+// If relying on the default test credentials, we MUST use Sandbox, regardless of NODE_ENV.
+const environment = (clientId.startsWith("TEST") || process.env.CASHFREE_ENV === "sandbox")
+    ? CFEnvironment.SANDBOX
+    : (process.env.NODE_ENV === "production" ? CFEnvironment.PRODUCTION : CFEnvironment.SANDBOX);
 
 const cashfree = new Cashfree(environment, clientId, clientSecret);
 

@@ -13,6 +13,15 @@ const cashfree = new Cashfree(environment, clientId, clientSecret);
 // @access  Private
 export const createOrder = async (req, res) => {
     try {
+        // Explicitly check for API keys to prevent opaque 500 errors if Railway is not configured
+        if (!process.env.CASHFREE_CLIENT_ID || !process.env.CASHFREE_CLIENT_SECRET) {
+            console.error("❌ CRITICAL: Cashfree API keys are missing in environment variables.");
+            return res.status(500).json({
+                error: "Payment Gateway Not Configured",
+                message: "Please add CASHFREE_CLIENT_ID and CASHFREE_CLIENT_SECRET to Railway variables."
+            });
+        }
+
         const { amount, currency = "INR" } = req.body;
 
         // Ensure values exist
@@ -70,6 +79,14 @@ export const createOrder = async (req, res) => {
 // @access  Public or Private
 export const verifyPayment = async (req, res) => {
     try {
+        // Explicitly check for API keys
+        if (!process.env.CASHFREE_CLIENT_ID || !process.env.CASHFREE_CLIENT_SECRET) {
+            return res.status(500).json({
+                error: "Payment Gateway Not Configured",
+                message: "Please add CASHFREE_CLIENT_ID and CASHFREE_CLIENT_SECRET to Railway variables."
+            });
+        }
+
         const { order_id } = req.body;
 
         if (!order_id) {

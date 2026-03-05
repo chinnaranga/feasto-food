@@ -61,7 +61,8 @@ export const createOrder = async (req, res) => {
 
             res.json({
                 id: order_id,
-                payment_session_id: responseData.payment_session_id
+                payment_session_id: responseData.payment_session_id,
+                environment: environment === CFEnvironment.SANDBOX ? "sandbox" : "production"
             });
         }).catch((error) => {
             console.error("Cashfree order creation error:", error.response?.data || error.message);

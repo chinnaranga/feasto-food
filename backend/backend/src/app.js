@@ -24,66 +24,80 @@ import paymentRoutes from "./routes/payment.routes.js";
 import reviewsRoutes from "./routes/reviews.routes.js";
 import userRoutes from "./routes/user.routes.js";
 import cashfreeRoutes from "./routes/cashfree.routes.js";
+import notificationRoutes from "./routes/notification.routes.js";
+import { maintenanceMiddleware } from "./middlewares/maintenance.js";
+
 
 const app = express();
 
 // Middleware
 app.set("trust proxy", 1);
 
-// CORS configuration - MUST be before helmet and other middleware
 const corsOptions = {
-    origin: (origin, callback) => {
-        const allowedOrigins = [
-            process.env.CLIENT_URL,
-            "https://feasto.food",
-            "http://localhost:5173",
-            "http://localhost:3000",
-            "https://food-platform-b022f.web.app",
-            "https://feasto-backend-production.up.railway.app",
-            "https://feasto-backend-production-c08e.up.railway.app"
-        ];
-        // Allow requests with no origin (like mobile apps or curl requests)
-        if (!origin) return callback(null, true);
-
-        if (allowedOrigins.indexOf(origin) !== -1 || origin.endsWith(".web.app")) {
-            callback(null, true);
-        } else {
-            console.warn("Blocked by CORS:", origin);
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
+    origin: [
+        "https://feasto.food",
+        "https://www.feasto.food",
+        "https://food-platform-b022f.web.app",
+        "http://localhost:5173",
+        "http://localhost:3000"
+    ],
     credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"]
 };
 
 app.use(cors(corsOptions));
 
 // Handle preflight requests explicitly
-app.options('*', cors(corsOptions));
+app.options("*", cors(corsOptions));
 
-// Now apply helmet and other middleware
-// Now apply helmet and other middleware
 app.use(helmet({
     contentSecurityPolicy: {
         directives: {
             defaultSrc: ["'self'"],
-            scriptSrc: ["'self'", "'unsafe-inline'", "https://cdn.tailwindcss.com"], // Allow Tailwind CDN
-            styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://cdn.tailwindcss.com"], // Allow Fonts & Tailwind
+            scriptSrc: ["'self'", "'unsafe-inline'", "https://cdn.tailwindcss.com", "https://apis.google.com", "https://www.gstatic.com"],
+            styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://cdn.tailwindcss.com"],
             fontSrc: ["'self'", "https://fonts.gstatic.com"],
-            imgSrc: ["'self'", "data:"],
-            connectSrc: ["'self'"],
-            upgradeInsecureRequests: [], // Optional: helpful for mixed content dev
+            imgSrc: ["'self'", "data:", "https://*.googleusercontent.com", "https://www.google.com"],
+            connectSrc: [
+                "'self'",
+                "https://feasto.food",
+                "https://www.feasto.food",
+                "https://*.googleapis.com",
+                "https://*.firebaseio.com",
+                "https://*.razorpay.com",
+                "https://*.cashfree.com",
+                "https://*.stripe.com",
+                "https://api.razorpay.com",
+                "https://api.cashfree.com",
+                "https://api.stripe.com",
+                "https://*.up.railway.app",
+                "wss://*.up.railway.app"
+            ],
+            frameSrc: [
+                "'self'",
+                "https://*.firebaseapp.com",
+                "https://*.web.app",
+                "https://*.razorpay.com",
+                "https://*.cashfree.com",
+                "https://*.stripe.com"
+            ],
+            upgradeInsecureRequests: [],
         },
     },
+    crossOriginResourcePolicy: { policy: "cross-origin" }
 }));
 app.use(compression()); // Compress responses for better performance
 app.use(express.json());
 app.use(cookieParser());
 
-// Global DB injection
+// Global DB injection & Maintenance Check
 app.use((req, res, next) => {
     req.db = db;
+
+    // Log requests for debugging deployment issues
+    console.log(`[${new Date().toISOString()}] ${req.method} ${req.path} - ${req.ip}`);
+
     // Metrics Counting
     metricState.requests++;
     res.on('finish', () => {
@@ -91,7 +105,9 @@ app.use((req, res, next) => {
             metricState.errors++;
         }
     });
-    next();
+
+    // Apply Maintenance Check
+    maintenanceMiddleware(req, res, next);
 });
 
 const limiter = rateLimit({
@@ -215,15 +231,17 @@ app.get("/api/health", (req, res) => {
         dbConnection: "Connected (MongoDB)"
     };
     try {
-        res.send(healthcheck);
+        res.status(200).send(healthcheck);
     } catch (e) {
         healthcheck.message = e;
-        res.status(503).send();
+        res.status(503).send(healthcheck);
     }
 });
 
-// Alias for root health if needed by health checkers
-app.get("/health", (req, res) => res.redirect("/api/health"));
+// Avoid redirect for health check to ensure compatibility with all orchestrators
+app.get("/health", (req, res) => {
+    res.status(200).json({ status: "UP", message: "AeroBite Backend is Healthy" });
+});
 
 // Mount Routes
 app.use("/api/auth", authRoutes);
@@ -242,6 +260,7 @@ app.use("/api/payment", paymentRoutes);
 app.use("/api/reviews", reviewsRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/cashfree", cashfreeRoutes);
+app.use("/api/notifications", notificationRoutes);
 
 // Serve API Docs
 app.get("/api/docs", (req, res) => {

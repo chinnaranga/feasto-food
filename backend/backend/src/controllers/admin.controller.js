@@ -1,6 +1,8 @@
 import Order from "../models/Order.js";
 import Rider from "../models/Rider.js";
 import User from "../models/User.js";
+import { createNotification } from "./notification.controller.js";
+
 
 // @desc    Get all orders (paginated)
 // @route   GET /api/admin/orders
@@ -146,6 +148,14 @@ export const updateOrderStatus = async (req, res) => {
         if (!order) {
             return res.status(404).json({ error: "Order not found" });
         }
+
+        // Emit notification to user
+        await createNotification(order.userId, {
+            title: "Order Status Updated",
+            description: `Your order status is now ${status.replace(/_/g, ' ')}.`,
+            type: "order",
+            metadata: { orderId: order._id.toString() }
+        });
 
         res.json({ id, status, message: "Order status updated" });
     } catch (error) {

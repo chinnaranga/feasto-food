@@ -1,6 +1,8 @@
 import Order from "../models/Order.js";
 import User from "../models/User.js";
 import Restaurant from "../models/Restaurant.js";
+import { createNotification } from "./notification.controller.js";
+
 
 // @desc    Create new order
 // @route   POST /api/orders
@@ -70,6 +72,14 @@ export const createOrder = async (req, res) => {
         });
 
         const createdOrder = await order.save();
+
+        // Emit notification
+        await createNotification(req.user.uid, {
+            title: "Order Placed! 🍕",
+            description: `Your order for ${order.restaurantName} has been received.`,
+            type: "order",
+            metadata: { orderId: createdOrder._id.toString() }
+        });
 
         res.status(201).json(createdOrder);
 

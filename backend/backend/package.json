@@ -18,10 +18,15 @@
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^7.6.0",
     "razorpay": "^2.9.2",
+    "socket.io": "^4.8.3",
     "stripe": "^20.1.2",
     "uuid": "^13.0.0"
   },
   "scripts": {
     "start": "node src/server.js"
-  }
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
 }

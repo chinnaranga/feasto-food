@@ -1,6 +1,8 @@
 import Rider from "../models/Rider.js";
 import Order from "../models/Order.js";
 import Tracking from "../models/Tracking.js";
+import { createNotification } from "./notification.controller.js";
+
 
 // @desc    Get Rider Profile
 // @route   GET /api/rider/profile
@@ -126,6 +128,14 @@ export const acceptOrder = async (req, res) => {
             path: []
         });
 
+        // Emit notification to user
+        await createNotification(order.userId, {
+            title: "Rider Assigned 🛵",
+            description: "A delivery partner is on their way to pick up your order.",
+            type: "order",
+            metadata: { orderId: order._id.toString() }
+        });
+
         res.status(200).json({ success: true });
     } catch (error) {
         console.error("Accept Order Error:", error);
@@ -189,6 +199,28 @@ export const updateOrderStatus = async (req, res) => {
             },
             { upsert: true }
         );
+
+        // Emit notification to user
+        let title = "Order Update";
+        let desc = `Your order status is now ${status.replace(/_/g, ' ')}.`;
+
+        if (status === 'Picked_Up') {
+            title = "Order Picked Up! 🥡";
+            desc = "Your delicious meal is now with our delivery partner.";
+        } else if (status === 'Out_for_delivery') {
+            title = "Out for Delivery! 🛵";
+            desc = "Your order is arriving soon. Get ready!";
+        } else if (status === 'Delivered') {
+            title = "Order Delivered! 🎉";
+            desc = "Enjoy your meal! Please rate your experience.";
+        }
+
+        await createNotification(order.userId, {
+            title,
+            description: desc,
+            type: "order",
+            metadata: { orderId: order._id.toString() }
+        });
 
         res.status(200).json({ success: true, status });
     } catch (error) {

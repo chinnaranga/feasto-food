@@ -5,7 +5,7 @@ export const protect = async (req, res, next) => {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1]; // Bearer TOKEN
 
-  if (!token) {
+  if (!token || token === 'undefined' || token === 'null') {
     return res.status(401).json({ error: "No token provided" });
   }
 
@@ -27,19 +27,11 @@ export const protect = async (req, res, next) => {
     }
 
     // 3. Attach User to Request
-    // We attach the Mongoose document, which creates a unified User object
-    // But we ensure 'uid' is accessible as expected by controllers
     req.user = user;
-
-    // Compatibility: Controllers might expect req.user.uid from token directly
-    // Mongoose doc has .uid, so this works.
-    // They might expect .name from token. User model has .displayName.
-    // We can add a virtual or just rely on controllers using User model.
-    // For now, let's mix in the decoded token props if needed, or just use user.
 
     next();
   } catch (err) {
-    console.error("Auth Middleware Error:", err.message);
+    console.error(`Auth Middleware Error: ${err.message}. Token length: ${token.length}, Starts with: ${token.substring(0, 15)}...`);
     res.status(401).json({ error: "Invalid or expired token" });
   }
 };

@@ -20,7 +20,7 @@
     "razorpay": "^2.9.2",
     "socket.io": "^4.8.3",
     "stripe": "^20.1.2",
-    "uuid": "^13.0.0"
+    "uuid": "^14.0.0"
   },
   "scripts": {
     "start": "node src/server.js"

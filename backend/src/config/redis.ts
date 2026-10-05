@@ -16,9 +16,11 @@ export const getRedisClient = (): Redis => {
       enableReadyCheck: true,
       lazyConnect: true,
       retryStrategy(times: number) {
-        const delay = Math.min(times * 100, 3000);
-        logger.warn({ times, delay }, 'Redis reconnecting...');
-        return delay;
+        if (times > 3) {
+          logger.warn('Redis unavailable after 3 attempts. Stopping reconnects; running without Redis cache.');
+          return null;
+        }
+        return Math.min(times * 200, 2000);
       },
     });
 
@@ -31,7 +33,7 @@ export const getRedisClient = (): Redis => {
     });
 
     redisClient.on('error', (err: Error) => {
-      logger.error({ err: err.message }, 'Redis connection error');
+      logger.warn({ err: err.message }, 'Redis connection unavailable (continuing without cache)');
     });
 
     redisClient.on('end', () => {
@@ -43,14 +45,14 @@ export const getRedisClient = (): Redis => {
 };
 
 export const connectRedis = async (): Promise<void> => {
-  const client = getRedisClient();
   try {
+    const client = getRedisClient();
     if (client.status === 'ready' || client.status === 'connecting') {
       return;
     }
     await client.connect();
   } catch (error) {
-    logger.error({ error }, 'Failed to connect to Redis');
+    logger.warn('Redis connection failed; application running with in-memory fallback');
   }
 };
 

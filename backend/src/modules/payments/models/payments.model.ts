@@ -19,12 +19,10 @@ const PaymentSchema = new Schema<PaymentDocument>(
       type: String,
       required: true,
       unique: true,
-      index: true,
     },
     orderId: {
       type: String,
       required: true,
-      index: true,
     },
     customerId: {
       type: String,

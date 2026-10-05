@@ -44,10 +44,10 @@ export const connectDB = async (): Promise<typeof mongoose | void> => {
     isConnected = true;
     return conn;
   } catch (error) {
-    logger.error({ error }, '❌ MongoDB initial connection failed');
-    if (env.NODE_ENV === 'production') {
-      process.exit(1);
-    }
+    logger.error({ error }, '❌ MongoDB initial connection failed - server will continue and retry in background');
+    setTimeout(() => {
+      connectDB().catch(() => { });
+    }, 10000);
   }
 };
 

@@ -13,9 +13,9 @@ const startServer = async () => {
   try {
     verifyEnvironmentSetup();
 
-    // Initialize databases & cloud integrations
-    await connectDB();
-    await connectRedis();
+    // Initialize databases & cloud integrations (non-blocking for resilient boot)
+    connectDB().catch((err) => logger.warn({ err }, 'Database initial connection delayed'));
+    connectRedis().catch((err) => logger.warn({ err }, 'Redis initial connection delayed'));
     initCloudinary();
     initFirebase();
 

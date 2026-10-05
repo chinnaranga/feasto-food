@@ -32,16 +32,16 @@ function parseEnv() {
 
   // In production builds or on production domains, NEVER connect to localhost
   if ((import.meta.env.PROD || isProductionHost) && (!rawApiBase || rawApiBase.includes('localhost') || rawApiBase.includes('127.0.0.1'))) {
-    rawApiBase = 'https://feasto-backend.onrender.com/api/v1';
+    rawApiBase = 'https://feasto-backend-n4nn.onrender.com/api/v1';
   }
 
   const defaultApiBase = import.meta.env.PROD
-    ? 'https://feasto-backend.onrender.com/api/v1'
-    : 'http://localhost:8080/api/v1';
+    ? 'https://feasto-backend-n4nn.onrender.com/api/v1'
+    : 'https://feasto-backend-n4nn.onrender.com/api/v1';
 
   const defaultSocketUrl = import.meta.env.PROD
-    ? 'https://feasto-backend.onrender.com'
-    : 'http://localhost:8080';
+    ? 'https://feasto-backend-n4nn.onrender.com'
+    : 'https://feasto-backend-n4nn.onrender.com';
 
   const envObj = {
     VITE_API_BASE_URL: rawApiBase || defaultApiBase,

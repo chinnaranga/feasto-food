@@ -11,10 +11,18 @@ const connectionOptions = {
   port: Number(process.env.REDIS_PORT) || 6379,
 };
 
+const hasRedis = !!(
+  process.env.REDIS_HOST ||
+  (process.env.REDIS_URL &&
+    !process.env.REDIS_URL.includes('127.0.0.1') &&
+    !process.env.REDIS_URL.includes('localhost'))
+);
+
 let notificationWorker: Worker | null = null;
 
-try {
-  notificationWorker = new Worker(
+if (hasRedis) {
+  try {
+    notificationWorker = new Worker(
     'notifications',
     async (job: Job) => {
       logger.info(`[NotificationWorker] Processing job ${job.id} - ${job.name}`);
@@ -49,7 +57,8 @@ try {
     logger.error(`[NotificationWorker] Job ${job?.id} failed: ${err.message}`);
   });
 } catch (err: any) {
-  logger.warn(`[NotificationWorker] Disabled in environment: ${err.message}`);
+    logger.warn(`[NotificationWorker] Disabled in environment: ${err.message}`);
+  }
 }
 
 export { notificationWorker };

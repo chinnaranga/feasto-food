@@ -1,0 +1,147 @@
+@import "tailwindcss";
+@source "../**/*.{ts,tsx}";
+@source "../../index.html";
+@import "./variables.css";
+@import "./typography.css";
+@import "./animations.css";
+@import "./scrollbar.css";
+
+/* Reset & Feasto Canvas Foundations */
+html, body {
+  background-color: var(--color-primary-bg, #F3F0E8);
+  color: var(--color-text-primary, #141518);
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+}
+
+body {
+  background-color: #F3F0E8;
+  /* Subtle tactile editorial paper texture using ultra-soft noise grain & hair grid */
+  background-image: 
+    radial-gradient(circle at 100% 0%, rgba(27, 59, 255, 0.02) 0%, transparent 40%),
+    radial-gradient(circle at 0% 100%, rgba(102, 21, 39, 0.02) 0%, transparent 50%);
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+
+/* Editorial Rules & Hairlines */
+.editorial-grid {
+  background-size: 80px 80px;
+  background-image: 
+    linear-gradient(to right, rgba(20, 21, 24, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(20, 21, 24, 0.04) 1px, transparent 1px);
+}
+
+.hairline-b {
+  border-bottom: 1px solid var(--color-border-main, #E2DED4);
+}
+
+.hairline-t {
+  border-top: 1px solid var(--color-border-main, #E2DED4);
+}
+
+.hairline-r {
+  border-right: 1px solid var(--color-border-main, #E2DED4);
+}
+
+.hairline-l {
+  border-left: 1px solid var(--color-border-main, #E2DED4);
+}
+
+/* Focus state */
+.focus-ring {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+.focus-ring:focus-visible {
+  outline: 2px solid #1B3BFF;
+}
+
+.transition-main {
+  transition: all var(--transition-normal, 240ms cubic-bezier(0.16, 1, 0.3, 1));
+}
+
+/* Editorial Paper & Ink surfaces */
+.paper-surface {
+  background-color: var(--color-surface-bg, #FAF8F5);
+  border: 1px solid var(--color-border-main, #E2DED4);
+}
+
+.paper-surface-elevated {
+  background-color: #FFFFFF;
+  border: 1px solid var(--color-border-main, #E2DED4);
+  box-shadow: var(--shadow-medium);
+}
+
+.ink-surface {
+  background-color: var(--color-canvas-dark, #141518);
+  color: var(--color-text-light, #F3F0E8);
+  border: 1px solid var(--color-border-dark, rgba(255, 255, 255, 0.12));
+}
+
+/* Graphic Action Buttons (Minimal, typographic, high-contrast) */
+.btn-graphic-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background-color: #141518;
+  color: #F3F0E8;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.75rem;
+  padding: 0.75rem 1.5rem;
+  border: 1px solid #141518;
+  transition: all 180ms ease;
+}
+
+.btn-graphic-primary:hover {
+  background-color: #1B3BFF;
+  border-color: #1B3BFF;
+  color: #FFFFFF;
+}
+
+.btn-graphic-acid {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background-color: #D7F04A;
+  color: #141518;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.75rem;
+  padding: 0.75rem 1.5rem;
+  border: 1px solid #141518;
+  transition: all 180ms ease;
+}
+
+.btn-graphic-acid:hover {
+  background-color: #141518;
+  color: #D7F04A;
+}
+
+.btn-graphic-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #141518;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.8125rem;
+  letter-spacing: 0.04em;
+  border-bottom: 1px solid #141518;
+  padding-bottom: 2px;
+  transition: all 160ms ease;
+}
+
+.btn-graphic-ghost:hover {
+  color: #1B3BFF;
+  border-bottom-color: #1B3BFF;
+}

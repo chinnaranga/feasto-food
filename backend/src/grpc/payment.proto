@@ -1,0 +1,80 @@
+syntax = "proto3";
+
+package feasto.payment;
+
+option java_package = "com.feasto.payment";
+
+// ─── Payment Service ─────────────────────────────────────────────────────────
+
+service PaymentService {
+  // Process a new payment
+  rpc ProcessPayment (PaymentRequest) returns (PaymentResponse);
+
+  // Verify an existing payment
+  rpc VerifyPayment (VerifyRequest) returns (VerifyResponse);
+
+  // Issue a refund
+  rpc RefundPayment (RefundRequest) returns (RefundResponse);
+
+  // Get payment status
+  rpc GetPaymentStatus (StatusRequest) returns (StatusResponse);
+}
+
+// ─── Messages ─────────────────────────────────────────────────────────────────
+
+message PaymentRequest {
+  string order_id     = 1;
+  double amount       = 2;
+  string currency     = 3;
+  string provider     = 4;   // "stripe" | "razorpay" | "cashfree"
+  string customer_id  = 5;
+  string customer_email = 6;
+  string description  = 7;
+}
+
+message PaymentResponse {
+  bool   success         = 1;
+  string transaction_id  = 2;
+  string payment_url     = 3;   // Checkout URL for redirect-based flows
+  string session_id      = 4;   // Stripe session ID
+  string order_id        = 5;   // Gateway order ID
+  string error_message   = 6;
+  string provider        = 7;
+}
+
+message VerifyRequest {
+  string transaction_id = 1;
+  string order_id       = 2;
+  string provider       = 3;
+  string signature      = 4;   // Razorpay signature
+  string payment_id     = 5;   // Razorpay payment_id
+}
+
+message VerifyResponse {
+  bool   verified      = 1;
+  string status        = 2;
+  string error_message = 3;
+}
+
+message RefundRequest {
+  string transaction_id = 1;
+  double amount         = 2;
+  string reason         = 3;
+  string provider       = 4;
+}
+
+message RefundResponse {
+  bool   success       = 1;
+  string refund_id     = 2;
+  string error_message = 3;
+}
+
+message StatusRequest {
+  string transaction_id = 1;
+  string provider       = 2;
+}
+
+message StatusResponse {
+  string status        = 1;
+  string error_message = 2;
+}

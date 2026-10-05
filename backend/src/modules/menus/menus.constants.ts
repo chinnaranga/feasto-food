@@ -1,0 +1,30 @@
+export const MENU_CONSTANTS = {
+  MAX_CATEGORIES_PER_MENU: 50,
+  MAX_ITEMS_PER_CATEGORY: 100,
+  MAX_VARIANTS_PER_ITEM: 20,
+  MAX_ADDONS_PER_ITEM: 15,
+  SUPPORTED_DIETARY_TAGS: [
+    'veg',
+    'non_veg',
+    'vegan',
+    'jain',
+    'halal',
+    'gluten_free',
+    'nut_free',
+    'dairy_free',
+    'spicy',
+    'high_protein',
+    'healthy',
+  ],
+} as const;
+
+export const MENU_ERROR_CODES = {
+  MENU_NOT_FOUND: 'MENU_NOT_FOUND',
+  CATEGORY_NOT_FOUND: 'CATEGORY_NOT_FOUND',
+  ITEM_NOT_FOUND: 'ITEM_NOT_FOUND',
+  VARIANT_NOT_FOUND: 'VARIANT_NOT_FOUND',
+  ADDON_NOT_FOUND: 'ADDON_NOT_FOUND',
+  MAX_CATEGORIES_EXCEEDED: 'MAX_CATEGORIES_EXCEEDED',
+  MAX_ITEMS_EXCEEDED: 'MAX_ITEMS_EXCEEDED',
+  UNAUTHORIZED_MENU_ACCESS: 'UNAUTHORIZED_MENU_ACCESS',
+} as const;

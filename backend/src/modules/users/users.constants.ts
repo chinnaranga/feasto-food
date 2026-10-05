@@ -1,0 +1,22 @@
+export const USER_CONSTANTS = {
+  MAX_ADDRESSES_PER_USER: 10,
+  MAX_FAVORITES_PER_USER: 100,
+  SUPPORTED_DIETARY_TAGS: [
+    'vegetarian',
+    'vegan',
+    'halal',
+    'gluten_free',
+    'nut_free',
+    'dairy_free',
+    'keto',
+  ],
+} as const;
+
+export const USER_ERROR_CODES = {
+  USER_NOT_FOUND: 'USER_NOT_FOUND',
+  ADDRESS_NOT_FOUND: 'ADDRESS_NOT_FOUND',
+  FAVORITE_NOT_FOUND: 'FAVORITE_NOT_FOUND',
+  MAX_ADDRESSES_EXCEEDED: 'MAX_ADDRESSES_EXCEEDED',
+  FAVORITE_ALREADY_EXISTS: 'FAVORITE_ALREADY_EXISTS',
+  UNAUTHORIZED_USER_ACTION: 'UNAUTHORIZED_USER_ACTION',
+} as const;

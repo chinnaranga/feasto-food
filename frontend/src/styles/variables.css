@@ -1,0 +1,89 @@
+@theme {
+  /* ─── FEASTO CANVAS: Editorial Print & Architectural Food Universe ─────── */
+  --color-primary-bg: #F3F0E8;
+  --color-secondary-bg: #EBE7DD;
+  --color-surface-bg: #FAF8F5;
+  --color-surface-elevated: #FFFFFF;
+  --color-canvas-dark: #141518;
+  --color-canvas-dark-elevated: #22242B;
+
+  --color-border-main: #E2DED4;
+  --color-border-hover: #141518;
+  --color-border-dark: rgba(255, 255, 255, 0.12);
+
+  --color-text-primary: #141518;
+  --color-text-secondary: #52555F;
+  --color-text-muted: #8A8D98;
+  --color-text-light: #F3F0E8;
+
+  /* Editorial Graphic Accents */
+  --color-brand-cobalt: #1B3BFF;
+  --color-brand-acid: #D7F04A;
+  --color-brand-burgundy: #661527;
+
+  /* Aliases for engineering compatibility */
+  --color-brand-indigo: #1B3BFF;
+  --color-brand-cyan: #D7F04A;
+  --color-brand-orange: #1B3BFF;
+  --color-brand-accent: #D7F04A;
+
+  /* Semantic status colors */
+  --color-success-main: #15803D;
+  --color-warning-main: #B45309;
+  --color-error-main: #991B1B;
+  --color-info-main: #1B3BFF;
+
+  /* Font Families */
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-syne: 'Syne', sans-serif;
+  --font-heading: 'Space Grotesk', system-ui, sans-serif;
+  --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-mono: 'Space Mono', monospace;
+
+  /* Spacing Scale */
+  --spacing-1: 0.25rem;
+  --spacing-2: 0.5rem;
+  --spacing-3: 0.75rem;
+  --spacing-4: 1rem;
+  --spacing-5: 1.25rem;
+  --spacing-6: 1.5rem;
+  --spacing-8: 2rem;
+  --spacing-10: 2.5rem;
+  --spacing-12: 3rem;
+  --spacing-16: 4rem;
+  --spacing-20: 5rem;
+  --spacing-24: 6rem;
+  --spacing-32: 8rem;
+
+  /* Architectural Sharpness & Precision (Minimal radii) */
+  --radius-xs: 0px;
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-2xl: 16px;
+  --radius-full: 9999px;
+
+  /* Shadows: Editorial subtle drop & ink depth */
+  --shadow-soft: 0 1px 3px rgba(20, 21, 24, 0.05);
+  --shadow-medium: 0 4px 12px rgba(20, 21, 24, 0.08);
+  --shadow-floating: 0 16px 48px rgba(20, 21, 24, 0.12), 0 0 0 1px rgba(20, 21, 24, 0.08);
+  --shadow-dark-floating: 0 20px 60px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.08);
+
+  /* Transitions */
+  --transition-fast: 140ms cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-normal: 240ms cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-slow: 400ms cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Z-Index */
+  --z-index-hide: -1;
+  --z-index-base: 1;
+  --z-index-dropdown: 100;
+  --z-index-sticky: 200;
+  --z-index-header: 500;
+  --z-index-drawer: 1000;
+  --z-index-modal: 2000;
+  --z-index-toast: 5000;
+
+  --container-max-width: 1440px;
+}

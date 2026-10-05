@@ -85,15 +85,15 @@ export const DashboardOverviewTab: React.FC = () => {
           <div className="pt-4 border-t border-[#E2DED4] flex flex-col gap-2 font-mono text-xs">
             <div className="flex justify-between">
               <span className="text-[#52555F]">Preparing right now</span>
-              <span className="font-bold text-[#141518]">{liveOps.preparingCount || 7}</span>
+              <span className="font-bold text-[#141518]">{liveOps.preparingCount ?? liveOps.preparing ?? 7}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-[#52555F]">Ready for pickup</span>
-              <span className="font-bold text-[#15803D]">{liveOps.readyForPickupCount || 4}</span>
+              <span className="font-bold text-[#15803D]">{liveOps.readyForPickupCount ?? liveOps.ready ?? 4}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-[#52555F]">Dispatched</span>
-              <span className="font-bold text-[#1B3BFF]">{liveOps.dispatchedCount || 2}</span>
+              <span className="font-bold text-[#1B3BFF]">{liveOps.dispatchedCount ?? liveOps.delayed ?? 2}</span>
             </div>
           </div>
         </div>

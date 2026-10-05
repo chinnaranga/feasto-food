@@ -18,7 +18,11 @@ import {
 import usePortalMenuStore, { MenuItem } from '../../store/portalMenuStore';
 import { PublishDialog, DeleteDialog, DuplicateDialog } from '../../components/menu/MenuDialogs';
 
-export const MenuExplorer: React.FC = () => {
+export interface MenuExplorerProps {
+  statusFilterPreset?: string;
+}
+
+export const MenuExplorer: React.FC<MenuExplorerProps> = ({ statusFilterPreset }) => {
   const navigate = useNavigate();
   const {
     items,
@@ -43,6 +47,7 @@ export const MenuExplorer: React.FC = () => {
 
   // Group items by category to create spatial Canvas sections
   const filteredItems = items.filter((item) => {
+    if (statusFilterPreset && item.status !== statusFilterPreset) return false;
     if (filters.category !== 'all' && item.category !== filters.category) return false;
     if (filters.dietary !== 'all' && item.dietary !== filters.dietary) return false;
     if (searchQuery.trim() !== '') {

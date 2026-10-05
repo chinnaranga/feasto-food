@@ -46,6 +46,7 @@ export interface MenuItem {
   tags: string[];
   images: string[];
   primaryImage?: string;
+  image?: string;
   variants: VariantOption[];
   addons: AddonOption[];
   availability: ChannelAvailability;

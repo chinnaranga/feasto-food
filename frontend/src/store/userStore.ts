@@ -23,6 +23,7 @@ export interface Order {
   paymentMethod: PaymentMethod;
   placedAt: string;
   deliveredAt?: string;
+  deliveryOtp?: string;
 }
 
 export interface UserProfile {

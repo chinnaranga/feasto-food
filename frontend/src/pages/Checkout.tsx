@@ -373,7 +373,7 @@ export const Checkout: React.FC = () => {
       console.log('[PAYMENT] loading Razorpay');
       setPaymentState('creating_payment_order');
       const scriptLoaded = await loadRazorpayScript();
-      if (!scriptLoaded || typeof window.Razorpay === 'undefined') {
+      if (!scriptLoaded || typeof (window as any).Razorpay === 'undefined') {
         setPaymentState('service_unavailable');
         setErrorMessage('Secure payment gateway could not be loaded. Please try again.');
         return;

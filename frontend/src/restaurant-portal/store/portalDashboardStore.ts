@@ -62,6 +62,9 @@ export interface LiveOperationsSummary {
   ready: number;
   delayed: number;
   highPriority: number;
+  preparingCount?: number;
+  readyForPickupCount?: number;
+  dispatchedCount?: number;
 }
 
 interface DashboardState {

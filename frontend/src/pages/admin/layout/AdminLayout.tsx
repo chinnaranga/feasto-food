@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { NavLink, Outlet, useLocation } from 'react-router-dom';
+import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import {
   Shield,
   LayoutDashboard,
@@ -13,11 +13,15 @@ import {
   Settings,
   Activity,
   ShieldCheck,
+  LogOut,
 } from 'lucide-react';
 import useAdminStore, { AdminRole } from '../../../store/admin/adminStore';
+import { useAuthStore } from '../../../store/authStore';
 
 export const AdminLayout: React.FC = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { logout } = useAuthStore();
   const { activeRole, setActiveRole } = useAdminStore();
 
   const navItems = [

@@ -38,18 +38,11 @@ const { language, dir } = useI18nStore.getState();
 document.documentElement.dir = dir;
 document.documentElement.lang = language;
 
-// ─── F1 — Session Bootstrap ────────────────────────────────────────────────
+// ─── F1 — Persistent Session Bootstrap ─────────────────────────────────────────
 //
-// Replaces Firebase onAuthStateChanged.
-//
-// On page load, call initializeSession() which:
-//  1. If no access token in memory → immediately marks isInitializing: false
-//     (tokens are cleared on page refresh — users will need to log in again)
-//  2. If a token is in memory → validates with GET /auth/me
-//     (happens within a Single Page App session without full page reload)
-//
-// This resolves the isInitializing flag so ProtectedRoute does NOT redirect
-// to /auth/signin before the session check completes.
+// Automatically restores persisted session from localStorage via Zustand persist.
+// Validates and refreshes backend JWT tokens silently in the background so users
+// remain signed in across page reloads without flicker or unexpected sign-outs.
 //
 useAuthStore.getState().initializeSession();
 

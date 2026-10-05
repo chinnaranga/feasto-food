@@ -15,9 +15,15 @@ async function refreshAccessToken(): Promise<string | null> {
 
   refreshPromise = (async () => {
     try {
-      const storedRefreshToken = useAuthStore.getState().refreshToken;
+      const storedRefreshToken =
+        useAuthStore.getState().refreshToken ||
+        localStorage.getItem('feasto_refresh_token');
+
       if (!storedRefreshToken) {
-        useAuthStore.getState().clearSession();
+        const currentToken = useAuthStore.getState().token;
+        if (!currentToken) {
+          useAuthStore.getState().clearSession();
+        }
         return null;
       }
 
@@ -31,8 +37,14 @@ async function refreshAccessToken(): Promise<string | null> {
         body: JSON.stringify({ refreshToken: storedRefreshToken }),
       });
 
-      if (!response.ok) {
+      if (response.status === 401 || response.status === 403) {
+        // Only clear session if token is explicitly revoked on the backend
         useAuthStore.getState().clearSession();
+        return null;
+      }
+
+      if (!response.ok) {
+        // Cold start or server 5xx: keep active local session
         return null;
       }
 
@@ -44,8 +56,9 @@ async function refreshAccessToken(): Promise<string | null> {
         return newAccessToken;
       }
       return null;
-    } catch {
-      useAuthStore.getState().clearSession();
+    } catch (err) {
+      // Network failure or timeout: keep session alive
+      console.warn('[AUTH] Session token refresh network warning:', err);
       return null;
     } finally {
       refreshPromise = null;

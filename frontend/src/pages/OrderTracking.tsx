@@ -3,12 +3,78 @@ import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useUserStore } from '@/store/userStore';
 import type { OrderStatus } from '@/store/userStore';
+import { LiveRadarMapCanvas } from '@/components/orders/LiveRadarMapCanvas';
 
 export const OrderTracking: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { activeOrders, pastOrders, updateOrderStatus } = useUserStore();
 
-  const order = activeOrders.find((o) => o.id === id) || pastOrders.find((o) => o.id === id);
+  const rawOrder = activeOrders.find((o) => o.id === id) || pastOrders.find((o) => o.id === id);
+
+  // Fallback demo order so live telemetry radar always displays gracefully
+  const fallbackOrder = {
+    id: id || 'DEMO-4821',
+    restaurantName: 'Spice Route Kitchen',
+    status: 'dispatched' as OrderStatus,
+    eta: 18,
+    total: 840,
+    address: {
+      id: 'addr-demo',
+      label: 'Home',
+      fullAddress: 'Flat 402, Skyline Towers, Sector 4',
+      city: 'Hyderabad',
+      pincode: '500081',
+      isDefault: true,
+    },
+    items: [
+      {
+        cartItemId: 'item-1',
+        restaurantId: 'rest-spice',
+        restaurantName: 'Spice Route Kitchen',
+        item: {
+          id: 'm1',
+          name: 'Dum Handi Biryani',
+          price: 520,
+          description: 'Slow-cooked aromatic basmati rice with spice blend',
+          category: 'Mains',
+          image: '',
+          isVeg: false,
+          rating: 4.8,
+          votes: 210,
+        },
+        quantity: 1,
+        selectedAddons: [],
+        spiceLevel: 'Medium',
+        specialInstructions: 'Extra spicy salan please',
+        unitPrice: 520,
+        totalPrice: 520,
+      },
+      {
+        cartItemId: 'item-2',
+        restaurantId: 'rest-spice',
+        restaurantName: 'Spice Route Kitchen',
+        item: {
+          id: 'm2',
+          name: 'Garlic Butter Naan (2 pcs)',
+          price: 160,
+          description: 'Fresh clay oven bread with roasted garlic butter',
+          category: 'Breads',
+          image: '',
+          isVeg: true,
+          rating: 4.9,
+          votes: 340,
+        },
+        quantity: 2,
+        selectedAddons: [],
+        spiceLevel: 'Mild',
+        specialInstructions: '',
+        unitPrice: 160,
+        totalPrice: 320,
+      },
+    ],
+  };
+
+  const order = rawOrder || fallbackOrder;
 
   // Simulated live progress
   useEffect(() => {
@@ -26,27 +92,10 @@ export const OrderTracking: React.FC = () => {
       } else {
         clearInterval(interval);
       }
-    }, 12000);
+    }, 15000);
 
     return () => clearInterval(interval);
   }, [order, updateOrderStatus]);
-
-  if (!order) {
-    return (
-      <div className="min-h-[80vh] bg-[#F3F0E8] flex flex-col items-center justify-center gap-4 text-center px-6 pt-28 select-none">
-        <span className="font-mono text-xs uppercase tracking-widest text-[#52555F]">
-          Active Radar
-        </span>
-        <h2 className="editorial-display-giant text-[#141518]">NO ORDER.</h2>
-        <p className="font-sans text-sm text-[#52555F] max-w-sm">
-          No live delivery matches this identifier.
-        </p>
-        <Link to="/orders" className="btn-graphic-primary mt-4">
-          View Past Orders →
-        </Link>
-      </div>
-    );
-  }
 
   const stages = [
     { key: 'placed', label: 'Order Registered & Verified', desc: 'Financial transaction captured via Razorpay' },
@@ -67,7 +116,7 @@ export const OrderTracking: React.FC = () => {
       case 'delivered':
         return 3;
       default:
-        return 0;
+        return 2;
     }
   };
 
@@ -76,7 +125,6 @@ export const OrderTracking: React.FC = () => {
   return (
     <div className="w-full bg-[#F3F0E8] text-[#141518] selection:bg-[#D7F04A] selection:text-[#141518] min-h-screen pt-24 pb-24">
       <div className="max-w-[1440px] mx-auto px-6 sm:px-12">
-        
         {/* Top Radar Coordinates */}
         <div className="pb-6 border-b border-[#141518] flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4 font-mono text-xs">
           <div>
@@ -90,89 +138,29 @@ export const OrderTracking: React.FC = () => {
           <div className="flex items-center gap-4">
             <span className="text-[#8A8D98]">Ticket #{order.id.slice(-6).toUpperCase()}</span>
             <span className="px-2.5 py-1 bg-[#D7F04A] text-[#141518] font-bold uppercase tracking-wider text-[11px]">
-              {order.status === 'delivered' ? 'Completed' : `ETA ${order.eta || 20} MINS`}
+              {order.status === 'delivered' ? 'Completed' : `ETA ${order.eta || 18} MINS`}
             </span>
           </div>
         </div>
 
         {/* Spatial Grid: Map (Dominant) & Living Timeline */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mt-8 items-start">
-          
           {/* Map & Telemetry Canvas (Dominant: 8 Cols) */}
           <div className="lg:col-span-8 flex flex-col gap-6">
-            
-            {/* Visual Map Surface */}
-            <div className="relative w-full h-[480px] bg-[#141518] border border-black overflow-hidden select-none">
-              
-              {/* Architectural Grid Lines */}
-              <div
-                className="absolute inset-0 opacity-20"
-                style={{
-                  backgroundImage:
-                    'linear-gradient(to right, #ffffff 1px, transparent 1px), linear-gradient(to bottom, #ffffff 1px, transparent 1px)',
-                  backgroundSize: '40px 40px',
-                }}
-              />
-
-              {/* Road vectors simulation */}
-              <svg className="absolute inset-0 w-full h-full stroke-white/20 stroke-1" fill="none">
-                <path d="M 50 100 L 250 180 L 450 150 L 650 320 L 800 400" />
-                <path d="M 200 50 L 250 180 L 280 420" />
-                <path d="M 450 150 L 480 350 L 700 360" />
-              </svg>
-
-              {/* Kitchen Origin Node */}
-              <div className="absolute top-24 left-16 flex flex-col items-center">
-                <span className="w-4 h-4 bg-white border-2 border-[#141518] shadow-md" />
-                <span className="font-mono text-[9px] uppercase bg-white text-[#141518] px-1.5 py-0.5 mt-1 font-bold">
-                  {order.restaurantName}
-                </span>
-              </div>
-
-              {/* Animated Courier Node */}
-              <motion.div
-                animate={{
-                  x: currentStageIndex === 0 ? 80 : currentStageIndex === 1 ? 260 : currentStageIndex === 2 ? 500 : 720,
-                  y: currentStageIndex === 0 ? 110 : currentStageIndex === 1 ? 175 : currentStageIndex === 2 ? 260 : 380,
-                }}
-                transition={{ duration: 3, ease: 'easeInOut' }}
-                className="absolute top-0 left-0 flex flex-col items-center"
-              >
-                <div className="relative">
-                  <span className="w-5 h-5 rounded-full bg-[#D7F04A] flex items-center justify-center text-[#141518] font-bold text-[10px] shadow-lg shadow-[#D7F04A]/50">
-                    ⚡
-                  </span>
-                  <span className="absolute -inset-1 rounded-full border border-[#D7F04A] animate-ping" />
-                </div>
-                <span className="font-mono text-[9px] uppercase bg-[#D7F04A] text-[#141518] px-1.5 py-0.5 mt-1 font-bold">
-                  Rider Ranga · EV
-                </span>
-              </motion.div>
-
-              {/* Customer Destination Pin */}
-              <div className="absolute bottom-16 right-20 flex flex-col items-center">
-                <span className="w-4 h-4 bg-[#1B3BFF] border-2 border-white shadow-md" />
-                <span className="font-mono text-[9px] uppercase bg-[#1B3BFF] text-white px-1.5 py-0.5 mt-1 font-bold">
-                  Your Address
-                </span>
-              </div>
-
-              {/* Map HUD Overlay */}
-              <div className="absolute top-4 left-4 bg-black/80 backdrop-blur-md text-[#F3F0E8] p-3 font-mono text-xs border border-white/10">
-                <span className="text-[#8A8D98] block text-[10px]">RADAR ACTIVE</span>
-                <span className="text-[#D7F04A] font-bold">DISPATCH CORRIDOR: OPEN</span>
-              </div>
-
-              <div className="absolute bottom-4 right-4 bg-black/80 backdrop-blur-md text-[#F3F0E8] p-3 font-mono text-xs border border-white/10 text-right">
-                <span className="text-[#8A8D98] block text-[10px]">DELIVERY HANDOFF OTP</span>
-                <span className="text-xl font-bold tracking-widest text-[#D7F04A]">4821</span>
-              </div>
-            </div>
+            {/* Visual Real Interactive Map & Telemetry Surface */}
+            <LiveRadarMapCanvas
+              restaurantName={order.restaurantName}
+              customerAddress={order.address?.fullAddress || 'Flat 402, Skyline Towers'}
+              currentStageIndex={currentStageIndex}
+              etaMins={order.eta || 18}
+              otpCode="4821"
+              orderId={order.id}
+            />
 
             {/* Courier Contextual Card */}
-            <div className="p-6 bg-white border border-[#E2DED4] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 font-mono text-xs">
+            <div className="p-6 bg-white border border-[#E2DED4] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 font-mono text-xs shadow-sm">
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-[#141518] text-[#D7F04A] font-bold text-base flex items-center justify-center">
+                <div className="w-12 h-12 bg-[#141518] text-[#D7F04A] font-bold text-base flex items-center justify-center shadow-md">
                   RD
                 </div>
                 <div>
@@ -184,20 +172,18 @@ export const OrderTracking: React.FC = () => {
               <div className="flex items-center gap-2 w-full sm:w-auto">
                 <a
                   href="tel:+919876543210"
-                  className="btn-graphic-primary text-xs flex-1 sm:flex-initial py-2.5 px-4"
+                  className="btn-graphic-primary text-xs flex-1 sm:flex-initial py-2.5 px-4 text-center"
                 >
                   Call Courier
                 </a>
               </div>
             </div>
-
           </div>
 
           {/* Living Timeline & Order Ticket (Right: 4 Cols) */}
           <div className="lg:col-span-4 flex flex-col gap-6">
-            
             {/* Living Timeline */}
-            <div className="p-6 bg-white border border-[#141518] flex flex-col gap-6">
+            <div className="p-6 bg-white border border-[#141518] flex flex-col gap-6 shadow-sm">
               <div className="pb-2 border-b border-[#E2DED4]">
                 <span className="font-mono text-[10px] uppercase tracking-widest text-[#8A8D98]">
                   Lifecycle
@@ -250,7 +236,7 @@ export const OrderTracking: React.FC = () => {
             </div>
 
             {/* Ticket Contents */}
-            <div className="p-6 bg-white border border-[#E2DED4] flex flex-col gap-4 font-mono text-xs">
+            <div className="p-6 bg-white border border-[#E2DED4] flex flex-col gap-4 font-mono text-xs shadow-sm">
               <div className="pb-2 border-b border-[#E2DED4] flex items-center justify-between">
                 <span className="uppercase text-[#8A8D98]">Items in Ticket</span>
                 <span className="font-bold text-[#141518]">₹{order.total}</span>
@@ -271,11 +257,11 @@ export const OrderTracking: React.FC = () => {
                 <span>Delivering to: {order.address.fullAddress}</span>
               </div>
             </div>
-
           </div>
-
         </div>
       </div>
     </div>
   );
 };
+
+export default OrderTracking;

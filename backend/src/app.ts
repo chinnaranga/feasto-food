@@ -14,6 +14,9 @@ import apiRouter from './routes/index.js';
 export const createApp = (): Application => {
   const app: Application = express();
 
+  // Trust Render reverse proxy for accurate IP and rate-limiting
+  app.set('trust proxy', 1);
+
   // 1. Security Headers
   app.use(securityHeaders);
 

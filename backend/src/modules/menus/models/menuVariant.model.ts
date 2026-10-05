@@ -49,8 +49,6 @@ const menuVariantSchema = new Schema<IMenuVariantDocument>(
   }
 );
 
-menuVariantSchema.index({ itemId: 1 });
-
 export const MenuVariant = model<IMenuVariantDocument>(
   'MenuVariant',
   menuVariantSchema

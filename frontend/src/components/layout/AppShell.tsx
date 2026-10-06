@@ -20,6 +20,8 @@ import { PrivacyPreferencesDialog } from '../security/PrivacyPreferencesDialog';
 import { ConsentConfirmationToast } from '../security/ConsentConfirmationToast';
 import { ReauthPromptCard } from '../security/ReauthPromptCard';
 
+import { GlobalFeastoAI } from '../ai/GlobalFeastoAI';
+
 export const AppShell: React.FC = () => {
   const [isCommandOpen, setIsCommandOpen] = useState(false);
 
@@ -76,6 +78,9 @@ export const AppShell: React.FC = () => {
 
       {/* Floating Cart Object (Discreet architectural beacon) */}
       <FloatingCartObject />
+
+      {/* Global Autonomous Culinary AI Companion (NVIDIA Nemotron 3 Ultra) */}
+      <GlobalFeastoAI />
 
       {/* Editorial Colophon */}
       <EditorialColophon />

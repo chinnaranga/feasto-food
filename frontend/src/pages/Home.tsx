@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Sparkles } from 'lucide-react';
 import { useCartStore } from '@/store/cartStore';
 import { useToastStore } from '@/store/toastStore';
+import { useAIStore } from '@/store/aiStore';
 import { MOCK_RESTAURANTS } from '@/data/restaurants';
 
 // Food Objects on the Opening Canvas
@@ -157,6 +159,58 @@ export const Home: React.FC = () => {
               >
                 View Seasonal Archive
               </button>
+            </div>
+
+            {/* Live Autonomous AI Craving Trigger Bar */}
+            <div className="mt-8 max-w-xl p-2 rounded-2xl bg-white border border-[#141518] shadow-lg flex items-center gap-2">
+              <div className="w-8 h-8 rounded-xl bg-[#E07A5F]/20 text-[#E07A5F] flex items-center justify-center shrink-0">
+                <Sparkles size={16} />
+              </div>
+              <input
+                type="text"
+                placeholder="Craving spicy biryani under ₹400, or healthy bowls?"
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && e.currentTarget.value.trim()) {
+                    useAIStore.getState().setIsOpen(true);
+                    useAIStore.getState().sendChatMessage(e.currentTarget.value.trim());
+                    e.currentTarget.value = '';
+                  }
+                }}
+                className="w-full bg-transparent text-xs sm:text-sm font-sans focus:outline-none placeholder:text-[#8A8D98]"
+              />
+              <button
+                onClick={(e) => {
+                  const input = e.currentTarget.parentElement?.querySelector('input') as HTMLInputElement;
+                  if (input && input.value.trim()) {
+                    useAIStore.getState().setIsOpen(true);
+                    useAIStore.getState().sendChatMessage(input.value.trim());
+                    input.value = '';
+                  } else {
+                    useAIStore.getState().setIsOpen(true);
+                  }
+                }}
+                className="px-3.5 py-1.5 rounded-xl bg-[#141518] text-[#F3F0E8] hover:bg-[#D7F04A] hover:text-[#141518] transition-all font-mono text-xs font-bold shrink-0 cursor-pointer flex items-center gap-1.5"
+              >
+                <span>Ask AI</span>
+                <span>→</span>
+              </button>
+            </div>
+
+            {/* Quick Prompt Chips */}
+            <div className="mt-3 flex flex-wrap items-center gap-2 text-[11px] font-mono">
+              <span className="text-[#8A8D98]">Instant Cravings:</span>
+              {['Spicy Dum Biryani under ₹400', 'Clean Protein Bowl', 'Wood-fired Pizza'].map((tag) => (
+                <button
+                  key={tag}
+                  onClick={() => {
+                    useAIStore.getState().setIsOpen(true);
+                    useAIStore.getState().sendChatMessage(tag);
+                  }}
+                  className="px-2.5 py-0.5 rounded-full border border-[#DCD6C8] bg-[#FAF8F5] hover:border-[#141518] text-[#52555F] hover:text-[#141518] transition-colors cursor-pointer"
+                >
+                  {tag}
+                </button>
+              ))}
             </div>
           </div>
         </div>

@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { LogOut } from 'lucide-react';
+import { LogOut, Sparkles } from 'lucide-react';
 import { useCartStore } from '@/store/cartStore';
 import { useAuthStore } from '@/store/authStore';
 import { useToastStore } from '@/store/toastStore';
+import { useAIStore } from '@/store/aiStore';
 
 interface FeastoFloatingNavProps {
   onOpenCommand: () => void;
@@ -67,16 +68,14 @@ export const FeastoFloatingNav: React.FC<FeastoFloatingNavProps> = ({ onOpenComm
 
         <span className="w-px h-3.5 bg-white/20" />
 
-        {/* Command Layer Prompt */}
+        {/* Feasto AI Trigger */}
         <button
-          onClick={onOpenCommand}
-          className="hidden sm:flex items-center gap-2 px-2.5 py-1 text-xs text-[#F3F0E8]/70 hover:text-[#D7F04A] hover:bg-white/10 rounded-full transition-colors focus:outline-none cursor-pointer"
-          title="Open Feasto Command Canvas (⌘K)"
+          onClick={() => useAIStore.getState().setIsOpen(true)}
+          className="flex items-center gap-1.5 px-3 py-1 text-xs font-semibold rounded-full bg-[#E07A5F]/20 text-[#E07A5F] hover:bg-[#E07A5F] hover:text-white transition-all focus:outline-none cursor-pointer border border-[#E07A5F]/40 shadow-xs"
+          title="Open Feasto Culinary AI (NVIDIA Nemotron 3 Ultra)"
         >
-          <span className="font-sans">Ask Feasto</span>
-          <kbd className="font-mono text-[10px] bg-white/10 px-1.5 py-0.5 rounded text-white/60">
-            ⌘K
-          </kbd>
+          <Sparkles size={12} />
+          <span className="font-sans">AI Sommelier</span>
         </button>
 
         {/* Cart Quick Badge */}

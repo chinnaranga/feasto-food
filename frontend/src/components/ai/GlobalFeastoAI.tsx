@@ -116,11 +116,15 @@ export const GlobalFeastoAI: React.FC = () => {
         whileTap={{ scale: 0.95 }}
         onClick={() => setIsOpen(true)}
         aria-label="Open Feasto AI Companion"
-        className="fixed bottom-6 right-6 z-[600] flex items-center gap-2 px-4 py-3 rounded-2xl bg-[#141518] text-[#F3F0E8] font-bold text-xs shadow-2xl shadow-black/40 hover:bg-[#202228] transition-all border border-[#2D3039] select-none group"
+        className="fixed bottom-6 left-6 z-[600] flex items-center gap-2.5 px-4 py-3 rounded-full bg-[#141518] text-[#F3F0E8] font-bold text-xs shadow-2xl shadow-black/40 hover:bg-[#202228] transition-all border border-[#2D3039] select-none group cursor-pointer"
       >
-        <Sparkles size={16} className="text-[#E07A5F] animate-pulse" />
-        <span className="hidden sm:inline tracking-wide font-sans">Ask Feasto AI</span>
-        <kbd className="hidden md:inline-block ml-1 px-1.5 py-0.5 text-[10px] font-mono rounded bg-white/10 text-white/80 border border-white/15">
+        <span className="w-2 h-2 rounded-full bg-[#E07A5F] shadow-xs shadow-[#E07A5F] animate-pulse" />
+        <Sparkles size={15} className="text-[#E07A5F]" />
+        <span className="tracking-wide font-sans font-semibold">Ask Feasto AI</span>
+        <span className="hidden md:inline text-[10px] text-[#A7ACB8] font-mono border-l border-white/20 pl-2">
+          Nemotron 550B
+        </span>
+        <kbd className="hidden lg:inline-block ml-1 px-1.5 py-0.5 text-[10px] font-mono rounded bg-white/10 text-white/80 border border-white/15">
           ⌘K
         </kbd>
       </motion.button>

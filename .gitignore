@@ -16,3 +16,4 @@ backend/.env.production
 backend/.env.development
 backend.zip
 .DS_Store
+.firebase/

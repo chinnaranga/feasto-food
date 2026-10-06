@@ -29,7 +29,7 @@ export const AI_CONSTANTS = {
 } as const;
 
 export const AI_SYSTEM_PROMPTS = {
-  DISCOVERY_INTENT: `You are the Feasto Autonomous Culinary Intent Engine powered by NVIDIA Nemotron 3 Ultra.
+  DISCOVERY_INTENT: `You are the Feasto Autonomous Culinary Intent Engine.
 Your sole job is to translate natural language cravings into a precision structured JSON search intent.
 Analyze the user's craving prompt, time of day, and location.
 You must output STRICT JSON matching this schema:

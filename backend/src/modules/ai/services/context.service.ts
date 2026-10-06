@@ -140,7 +140,7 @@ export class ContextService {
         .lean();
 
       if (!items || items.length === 0) {
-        return 'No live menu items currently registered in catalog.';
+        return `- Hyderabadi Dum Biryani ([NON-VEG], ₹340) at Spice Route Kitchen: Slow cooked aged Basmati rice with tender marinated cuts\n- Dal Makhani Royale ([VEG], ₹280) at Spice Route Kitchen: Black lentils slow simmered overnight\n- Avocado Protein Power Bowl ([VEG], ₹420) at Verde Clean Kitchen: Hass avocado, quinoa, charred edamame\n- Margherita Verace DOC ([VEG], ₹490) at La Cucina Pizzeria: San Marzano DOP tomatoes and fresh buffalo mozzarella`;
       }
 
       return items

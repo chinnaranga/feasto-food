@@ -95,7 +95,7 @@ export const AICartAssistantBar: React.FC<AICartAssistantBarProps> = ({ restaura
           </span>
         </div>
         <span className="text-[10px] text-[#8A8D98] tracking-widest uppercase">
-          NVIDIA Nemotron 3 Ultra
+          Feasto Culinary AI
         </span>
       </div>
 

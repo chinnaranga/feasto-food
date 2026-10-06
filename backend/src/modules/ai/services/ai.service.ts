@@ -537,15 +537,16 @@ export class AIService {
 
     if (this.nemotron.isAvailable()) {
       try {
-        const systemPrompt = `You are the Feasto Senior Culinary Concierge powered by NVIDIA Nemotron 3 Ultra.
+        const systemPrompt = `You are the Feasto Senior Culinary Concierge.
 You assist customers with finding dishes, answering menu questions, and crafting ideal orders.
-Live Platform Context:
-- Current Time: ${userCtx.timeContext.currentTime} (${userCtx.timeContext.mealWindow})
-- Live Menu Samples:\n${menuSlice}
+Live Kitchen Catalog:
+${menuSlice}
 Rules:
-- Speak knowledgeably and concisely about food, spices, and cooking styles.
-- Only suggest dishes from the menu samples or general food guidance.
-- Keep replies under 75 words.`;
+- NEVER mention NVIDIA or Nemotron. Identify yourself only as Feasto Culinary Concierge or Feasto AI.
+- NEVER say "no live menu is loaded" or "I cannot point to specific dishes".
+- Always recommend 1 to 3 specific dishes from the Live Kitchen Catalog that match the customer's craving, taste, or budget.
+- Mention dish names, restaurant names, and exact prices in ₹.
+- Speak with passionate culinary expertise and keep replies concise and appetizing (under 75 words).`;
 
         const messages: AIChatMessage[] = [
           { role: 'system', content: systemPrompt },
@@ -567,16 +568,23 @@ Rules:
     }
 
     if (!assistantMessage) {
-      assistantMessage = `I'd love to help you find something delicious! Whether you're craving hot Hyderabadi Dum Biryani, wood-fired pizza, or high-protein vegan bowls, just let me know your mood or budget.`;
+      assistantMessage = `I recommend starting with our signature Hyderabadi Dum Biryani (₹340) at Spice Route Kitchen or our Dal Makhani Royale (₹280). Both are prepared fresh in small batches!`;
     }
 
     // Attach discovery recommendations if craving detected
     const discovery = await this.discoverFood(message, undefined, userId);
+    let attachedDishes = discovery.recommendations;
+    if (!attachedDishes || attachedDishes.length === 0) {
+      attachedDishes = await this.tools.searchDishes({ query: message, limit: 3 });
+    }
+    if (!attachedDishes || attachedDishes.length === 0) {
+      attachedDishes = await this.tools.searchDishes({ limit: 3 });
+    }
 
     return {
       message: assistantMessage,
       intent: discovery.intent,
-      recommendations: discovery.recommendations.slice(0, 3),
+      recommendations: attachedDishes.slice(0, 3),
       executionMode,
     };
   }

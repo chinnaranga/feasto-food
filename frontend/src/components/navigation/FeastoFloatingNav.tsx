@@ -72,7 +72,7 @@ export const FeastoFloatingNav: React.FC<FeastoFloatingNavProps> = ({ onOpenComm
         <button
           onClick={() => useAIStore.getState().setIsOpen(true)}
           className="flex items-center gap-1.5 px-3 py-1 text-xs font-semibold rounded-full bg-[#E07A5F]/20 text-[#E07A5F] hover:bg-[#E07A5F] hover:text-white transition-all focus:outline-none cursor-pointer border border-[#E07A5F]/40 shadow-xs"
-          title="Open Feasto Culinary AI (NVIDIA Nemotron 3 Ultra)"
+          title="Open Feasto Culinary AI Concierge"
         >
           <Sparkles size={12} />
           <span className="font-sans">AI Sommelier</span>

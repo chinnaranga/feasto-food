@@ -14,6 +14,8 @@ import {
   orderAssistSchema,
   trackingAssistSchema,
   chatAISchema,
+  voiceRespondSchema,
+  voiceTranscribeSchema,
 } from './ai.schemas.js';
 
 const router = Router();
@@ -121,6 +123,29 @@ router.post(
   '/stream',
   optionalAuthenticate,
   catchAsync(aiController.stream)
+);
+
+// 11. Real-time Siri-like Voice Assistant: Session Capabilities
+router.get(
+  '/voice/session',
+  optionalAuthenticate,
+  catchAsync(aiController.voiceSession)
+);
+
+// 12. Real-time Siri-like Voice Assistant: Respond & Tool Execution
+router.post(
+  '/voice/respond',
+  optionalAuthenticate,
+  validateRequest({ body: voiceRespondSchema }),
+  catchAsync(aiController.voiceRespond)
+);
+
+// 13. Real-time Siri-like Voice Assistant: Audio Transcription Verification
+router.post(
+  '/voice/transcribe',
+  optionalAuthenticate,
+  validateRequest({ body: voiceTranscribeSchema }),
+  catchAsync(aiController.voiceTranscribe)
 );
 
 export default router;

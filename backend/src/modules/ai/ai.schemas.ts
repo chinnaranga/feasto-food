@@ -113,3 +113,71 @@ export const rawNemotronRecommenderSchema = z.object({
     })
   ).default([]),
 });
+
+// --- Voice Assistant Request Schemas ---
+export const voiceRespondSchema = z.object({
+  transcript: z.string().min(1, 'Transcript cannot be empty').max(1000),
+  context: z
+    .object({
+      currentPage: z.string().optional(),
+      currentRoute: z.string().optional(),
+      currentRestaurant: z
+        .object({
+          id: z.string(),
+          name: z.string(),
+        })
+        .optional(),
+      currentMenu: z.array(z.any()).optional(),
+      currentCart: z
+        .object({
+          restaurantId: z.string().optional(),
+          restaurantName: z.string().optional(),
+          totalPrice: z.number().default(0),
+          itemCount: z.number().default(0),
+          items: z
+            .array(
+              z.object({
+                id: z.string(),
+                name: z.string(),
+                price: z.number(),
+                quantity: z.number(),
+              })
+            )
+            .default([]),
+        })
+        .optional(),
+      currentOrder: z
+        .object({
+          orderId: z.string().optional(),
+          orderNumber: z.string().optional(),
+          status: z.string().optional(),
+          estimatedArrival: z.string().optional(),
+        })
+        .optional(),
+      userPreferences: z
+        .object({
+          isVeg: z.boolean().optional(),
+          favoriteCuisines: z.array(z.string()).optional(),
+          spicePreference: z.string().optional(),
+        })
+        .optional(),
+      recentConversation: z
+        .array(
+          z.object({
+            role: z.enum(['user', 'assistant']),
+            content: z.string(),
+          })
+        )
+        .optional(),
+      time: z.string().optional(),
+    })
+    .optional(),
+  language: z.string().default('en-IN'),
+});
+
+export const voiceTranscribeSchema = z.object({
+  audioBase64: z.string().optional(),
+  mimeType: z.string().optional(),
+  transcript: z.string().optional(),
+  language: z.string().default('en-IN'),
+});

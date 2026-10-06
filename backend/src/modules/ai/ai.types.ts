@@ -126,3 +126,72 @@ export interface AIChatResponse {
   requiresConfirmation?: boolean;
   executionMode: 'nemotron_live' | 'deterministic_fallback';
 }
+
+// --- Voice Assistant Realtime Interfaces ---
+export type VoiceState =
+  | 'IDLE'
+  | 'LISTENING'
+  | 'THINKING'
+  | 'SPEAKING'
+  | 'INTERRUPTED'
+  | 'ERROR'
+  | 'PERMISSION_REQUIRED'
+  | 'DISCONNECTED';
+
+export interface VoiceContext {
+  currentPage?: string;
+  currentRoute?: string;
+  currentRestaurant?: { id: string; name: string };
+  currentMenu?: any[];
+  currentCart?: {
+    restaurantId?: string;
+    restaurantName?: string;
+    totalPrice: number;
+    itemCount: number;
+    items: Array<{ id: string; name: string; price: number; quantity: number }>;
+  };
+  currentOrder?: {
+    orderId?: string;
+    orderNumber?: string;
+    status?: string;
+    estimatedArrival?: string;
+  };
+  userPreferences?: {
+    isVeg?: boolean;
+    favoriteCuisines?: string[];
+    spicePreference?: string;
+  };
+  recentConversation?: Array<{ role: 'user' | 'assistant'; content: string }>;
+  time?: string;
+}
+
+export interface VoiceToolCall {
+  tool: string;
+  arguments: Record<string, any>;
+  result?: any;
+  requiresConfirmation?: boolean;
+}
+
+export interface VoiceRespondRequest {
+  transcript: string;
+  context?: VoiceContext;
+  language?: string;
+}
+
+export interface VoiceRespondResponse {
+  spokenResponse: string; // 1-2 natural, concise sentences for TTS
+  displayText: string;    // Formatted editorial response for UI
+  toolAction?: VoiceToolCall;
+  visualResults?: AIRecommendedFoodCard[];
+  suggestedFollowUps?: string[];
+  executionMode: 'nemotron_live' | 'deterministic_fallback';
+  modelLatencyMs: number;
+}
+
+export interface VoiceSessionInfo {
+  status: 'ready' | 'degraded';
+  model: string;
+  supportedLanguages: Array<{ code: string; label: string }>;
+  availableTools: string[];
+  streamingSupported: boolean;
+}

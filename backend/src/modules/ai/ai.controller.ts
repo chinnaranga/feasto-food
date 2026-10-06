@@ -1,12 +1,16 @@
 import { Request, Response } from 'express';
 import { aiService, AIService } from './services/ai.service.js';
+import { voiceService, VoiceService } from './services/voice.service.js';
 import { sendSuccess } from '../../shared/utils/response.js';
 import { HttpStatus } from '../../shared/constants/httpStatusCodes.js';
 import { UnauthorizedError } from '../../shared/errors/UnauthorizedError.js';
 import { logger } from '../../shared/utils/logger.js';
 
 export class AIController {
-  constructor(private service: AIService = aiService) {}
+  constructor(
+    private service: AIService = aiService,
+    private voice: VoiceService = voiceService
+  ) {}
 
   public getHealth = async (_req: Request, res: Response): Promise<void> => {
     const health = this.service.getHealthStatus();
@@ -111,6 +115,36 @@ export class AIController {
       res.write(`data: ${JSON.stringify({ error: 'Streaming interrupted' })}\n\n`);
       res.end();
     }
+  };
+
+  /**
+   * Real-time Siri-like Voice Assistant:
+   * Process voice transcript + application context -> Nemotron reasoning -> Tool calling -> Spoken response.
+   */
+  public voiceRespond = async (req: Request, res: Response): Promise<void> => {
+    const { transcript, context, language } = req.body;
+    const userId = req.user?.id;
+    const result = await voiceService.respondToVoice(
+      { transcript, context, language },
+      userId
+    );
+    sendSuccess(res, result, 'Voice assistant response synthesized');
+  };
+
+  /**
+   * Retrieves voice session parameters, supported languages, and active tools.
+   */
+  public voiceSession = async (_req: Request, res: Response): Promise<void> => {
+    const session = voiceService.getSessionInfo();
+    sendSuccess(res, session, 'Voice session parameters retrieved');
+  };
+
+  /**
+   * Audio transcription fallback handler.
+   */
+  public voiceTranscribe = async (req: Request, res: Response): Promise<void> => {
+    const { transcript, language } = req.body;
+    sendSuccess(res, { transcript: transcript || '', language: language || 'en-IN' }, 'Transcript verified');
   };
 }
 

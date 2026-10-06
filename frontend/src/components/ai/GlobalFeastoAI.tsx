@@ -14,9 +14,11 @@ import {
   Clock, 
   Star, 
   Compass,
-  Plus
+  Plus,
+  Mic,
 } from 'lucide-react';
 import { useAIStore, AIMessage } from '@/store/aiStore';
+import { useVoiceStore } from '@/store/voiceStore';
 import { useCartStore } from '@/store/cartStore';
 import { AIRecommendedFoodCard } from '@/services/api/aiApi';
 
@@ -699,6 +701,17 @@ export const GlobalFeastoAI: React.FC = () => {
                     className="w-full px-4 py-3 rounded-2xl bg-[#171922] text-xs sm:text-[13px] text-[#FAF8F5] placeholder-[#717684] border border-[#2E323E] focus:outline-none focus:border-[#E07A5F] focus:ring-1 focus:ring-[#E07A5F]/40 transition-all font-sans"
                   />
                 </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsOpen(false);
+                    useVoiceStore.getState().openVoice();
+                  }}
+                  title="Speak with Feasto Voice (⌘M)"
+                  className="p-3 rounded-2xl bg-white/5 hover:bg-white/10 text-[#E07A5F] hover:text-[#FAF8F5] transition-all border border-white/10 cursor-pointer active:scale-95 shrink-0"
+                >
+                  <Mic size={16} />
+                </button>
                 <button
                   type="submit"
                   disabled={!inputPrompt.trim() || isThinking}

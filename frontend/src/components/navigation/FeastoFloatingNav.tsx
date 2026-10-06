@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { LogOut, Sparkles } from 'lucide-react';
+import { LogOut, Sparkles, Mic } from 'lucide-react';
 import { useCartStore } from '@/store/cartStore';
 import { useAuthStore } from '@/store/authStore';
 import { useToastStore } from '@/store/toastStore';
 import { useAIStore } from '@/store/aiStore';
+import { useVoiceStore } from '@/store/voiceStore';
 
 interface FeastoFloatingNavProps {
   onOpenCommand: () => void;
@@ -76,6 +77,16 @@ export const FeastoFloatingNav: React.FC<FeastoFloatingNavProps> = ({ onOpenComm
         >
           <Sparkles size={12} />
           <span className="font-sans">AI Sommelier</span>
+        </button>
+
+        {/* Feasto Real-Time Voice Trigger */}
+        <button
+          onClick={() => useVoiceStore.getState().openVoice()}
+          className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-full bg-white/5 text-[#FAF8F5] hover:bg-[#E07A5F] hover:text-white transition-all focus:outline-none cursor-pointer border border-white/10 shadow-xs"
+          title="Speak with Feasto Voice (⌘M)"
+        >
+          <Mic size={12} className="text-[#E07A5F]" />
+          <span className="font-sans hidden sm:inline">Voice</span>
         </button>
 
         {/* Cart Quick Badge */}

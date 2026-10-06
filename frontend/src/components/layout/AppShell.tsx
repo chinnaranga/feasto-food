@@ -21,6 +21,7 @@ import { ConsentConfirmationToast } from '../security/ConsentConfirmationToast';
 import { ReauthPromptCard } from '../security/ReauthPromptCard';
 
 import { GlobalFeastoAI } from '../ai/GlobalFeastoAI';
+import { FeastoVoice } from '../voice/FeastoVoice';
 
 export const AppShell: React.FC = () => {
   const [isCommandOpen, setIsCommandOpen] = useState(false);
@@ -79,8 +80,11 @@ export const AppShell: React.FC = () => {
       {/* Floating Cart Object (Discreet architectural beacon) */}
       <FloatingCartObject />
 
-      {/* Global Autonomous Culinary AI Companion (NVIDIA Nemotron 3 Ultra) */}
+      {/* Global Autonomous Culinary AI Companion */}
       <GlobalFeastoAI />
+
+      {/* Global Real-Time Siri-Like Voice Companion */}
+      <FeastoVoice />
 
       {/* Editorial Colophon */}
       <EditorialColophon />

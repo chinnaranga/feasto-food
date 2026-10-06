@@ -169,7 +169,7 @@ export const useVoiceStore = create<VoiceStoreState>((set, get) => ({
               name: args.itemName || 'Curated Dish',
               price: args.price || 300,
               description: '',
-              tags: ['Recommended'],
+              tags: ['Healthy'],
               spiceLevel: 'medium',
               isPopular: true,
             },

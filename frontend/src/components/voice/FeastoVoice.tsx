@@ -73,7 +73,7 @@ export const FeastoVoice: React.FC = () => {
         name: dish.name,
         price: dish.price,
         description: dish.description,
-        tags: dish.dietaryTags,
+        tags: (dish.dietaryTags || []) as any,
         spiceLevel: dish.spiceLevel || 'medium',
         isPopular: true,
       },

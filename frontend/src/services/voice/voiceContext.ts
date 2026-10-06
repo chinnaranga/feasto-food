@@ -19,10 +19,10 @@ export function getActiveVoiceContext(
   }));
 
   const cartPayload = {
-    restaurantId: cartState.restaurantId || undefined,
-    restaurantName: cartState.restaurantName || undefined,
-    totalPrice: cartState.totalPrice,
-    itemCount: cartState.totalCount,
+    restaurantId: cartState.items[0]?.restaurantId || undefined,
+    restaurantName: cartState.items[0]?.restaurantName || undefined,
+    totalPrice: cartState.getTotal(),
+    itemCount: cartState.getItemCount(),
     items: cartItems,
   };
 
@@ -33,7 +33,7 @@ export function getActiveVoiceContext(
     const restaurantId = restaurantMatch[1];
     currentRestaurant = {
       id: restaurantId,
-      name: cartState.restaurantName || 'Current Kitchen',
+      name: cartState.items[0]?.restaurantName || 'Current Kitchen',
     };
   }
 

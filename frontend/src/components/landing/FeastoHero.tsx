@@ -38,7 +38,6 @@ export const FeastoHero: React.FC = () => {
     setPrompt(queryText);
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 320));
       const res = await aiFoodDiscoveryService.parseCraving(queryText);
       setResult(res);
       setUiState('recommendations');

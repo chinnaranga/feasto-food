@@ -6,6 +6,7 @@ import type { MenuItem, MenuCategory } from '@/data/restaurants';
 import { useCartStore } from '@/store/cartStore';
 import { useToastStore } from '@/store/toastStore';
 import { useDiscoveryStore } from '@/store/discoveryStore';
+import { RestaurantAISommelier } from '@/components/menu/RestaurantAISommelier';
 
 export const RestaurantDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -206,6 +207,12 @@ export const RestaurantDetail: React.FC = () => {
               );
             })}
           </nav>
+
+          {/* Dedicated Menu Sommelier powered by Nemotron */}
+          <RestaurantAISommelier
+            restaurantId={restaurant.id}
+            restaurantName={restaurant.name}
+          />
 
           <div className="pt-6 border-t border-[#E2DED4] flex flex-col gap-2 text-[11px] text-[#52555F]">
             <span className="font-bold text-[#141518]">Kitchen Protocol</span>

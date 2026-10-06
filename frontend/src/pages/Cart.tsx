@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
 import { useCartStore } from '@/store/cartStore';
+import { AICartAssistantBar } from '@/components/cart/AICartAssistantBar';
 
 export const Cart: React.FC = () => {
   const {
@@ -155,6 +155,9 @@ export const Cart: React.FC = () => {
                 </div>
               ))}
             </div>
+
+            {/* AI Cart Copilot */}
+            <AICartAssistantBar restaurantId={items[0]?.restaurantId || 'feasto-kitchen'} />
 
             {/* Promo Code Input */}
             <form onSubmit={handleApplyPromo} className="pt-2">

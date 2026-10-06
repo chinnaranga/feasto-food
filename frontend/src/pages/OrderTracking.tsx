@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { useUserStore } from '@/store/userStore';
 import type { OrderStatus } from '@/store/userStore';
 import { LiveRadarMapCanvas } from '@/components/orders/LiveRadarMapCanvas';
+import { AITrackingAssistantCard } from '@/components/orders/AITrackingAssistantCard';
 
 export const OrderTracking: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -257,6 +258,9 @@ export const OrderTracking: React.FC = () => {
                 <span>Delivering to: {order.address.fullAddress}</span>
               </div>
             </div>
+
+            {/* AI Live Telemetry Dispatch Assistant */}
+            <AITrackingAssistantCard orderId={order.id} />
           </div>
         </div>
       </div>

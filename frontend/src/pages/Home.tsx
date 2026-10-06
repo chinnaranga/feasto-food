@@ -391,19 +391,19 @@ export const Home: React.FC = () => {
               {/* Direct Quick Triggers */}
               <div className="pt-2 flex flex-wrap gap-2 text-xs font-mono">
                 <button
-                  onClick={() => navigate('/restaurants?search=vegetarian%20comfort')}
+                  onClick={() => window.dispatchEvent(new CustomEvent('open-feasto-ai', { detail: { prompt: 'Show vegetarian comfort under ₹400' } }))}
                   className="px-3 py-1.5 border border-white/20 hover:border-[#D7F04A] hover:text-[#D7F04A] transition-colors"
                 >
                   "Show vegetarian comfort" →
                 </button>
                 <button
-                  onClick={() => navigate('/restaurants?search=high%20protein')}
+                  onClick={() => window.dispatchEvent(new CustomEvent('open-feasto-ai', { detail: { prompt: 'High-protein dinner with clean ingredients' } }))}
                   className="px-3 py-1.5 border border-white/20 hover:border-[#D7F04A] hover:text-[#D7F04A] transition-colors"
                 >
                   "High-protein post workout" →
                 </button>
                 <button
-                  onClick={() => navigate('/restaurants?search=light%20dinner')}
+                  onClick={() => window.dispatchEvent(new CustomEvent('open-feasto-ai', { detail: { prompt: 'Light dinner under 500 kcal' } }))}
                   className="px-3 py-1.5 border border-white/20 hover:border-[#D7F04A] hover:text-[#D7F04A] transition-colors"
                 >
                   "Light dinner under 500 kcal" →

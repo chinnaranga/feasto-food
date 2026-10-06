@@ -11,3 +11,4 @@ export * from './trackingApi';
 export * from './paymentApi';
 export * from './notificationApi';
 export * from './adminApi';
+export * from './aiApi';

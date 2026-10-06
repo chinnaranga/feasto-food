@@ -35,6 +35,14 @@ const envSchema = z.object({
   
   RAZORPAY_KEY_ID: z.string().optional(),
   RAZORPAY_KEY_SECRET: z.string().optional(),
+
+  // NVIDIA Nemotron AI Service
+  AI_PROVIDER: z.string().default('nemotron'),
+  AI_MODEL: z.string().default('nvidia/nemotron-3-ultra-550b-a55b'),
+  NEMOTRON_API_KEY: z.string().optional().default(''),
+  NEMOTRON_BASE_URL: z.string().default('https://integrate.api.nvidia.com/v1'),
+  NEMOTRON_TIMEOUT_MS: z.string().default('15000').transform((val: string) => parseInt(val, 10)),
+  NEMOTRON_MAX_RETRIES: z.string().default('2').transform((val: string) => parseInt(val, 10)),
 });
 
 export type Env = z.infer<typeof envSchema>;

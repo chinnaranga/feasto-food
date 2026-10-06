@@ -29,8 +29,11 @@ import {
   riderAssignmentsRouter,
 } from '../modules/dispatch/dispatch.routes.js';
 import adminRouter from '../modules/admin/admin.routes.js';
+import aiRouter from '../modules/ai/ai.routes.js';
 
 const apiRouter = Router();
+
+apiRouter.use('/ai', aiRouter);
 
 apiRouter.use('/health', healthRouter);
 apiRouter.use('/auth', authRouter);

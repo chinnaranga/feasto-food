@@ -27,7 +27,12 @@ interface RiderAuthState {
   reviewStatus: AccountReviewStatus;
   sessions: RiderAuthSession[];
 
+  isAuthenticated: boolean;
+
   // Actions
+  login: (credentials: { phone: string; password?: string }) => boolean;
+  loginWithOtp: (phone: string, otp: string) => boolean;
+  logoutRider: () => void;
   setCurrentStep: (step: OnboardingStep) => void;
   setLanguage: (lang: string) => void;
   setPhone: (phone: string) => void;
@@ -122,6 +127,34 @@ export const useRiderAuthStore = create<RiderAuthState>()(
           locationCity: 'Mumbai, IN',
         },
       ],
+      isAuthenticated: true,
+
+      login: ({ phone, password }) => {
+        set({
+          isAuthenticated: true,
+          phone: phone || '+91 98765 43210',
+          isOtpVerified: true,
+          currentStep: 'approved',
+        });
+        return true;
+      },
+
+      loginWithOtp: (phone, otp) => {
+        set({
+          isAuthenticated: true,
+          phone: phone || '+91 98765 43210',
+          otpCode: otp,
+          isOtpVerified: true,
+          currentStep: 'approved',
+        });
+        return true;
+      },
+
+      logoutRider: () => {
+        set({
+          isAuthenticated: false,
+        });
+      },
 
       setCurrentStep: (currentStep) => set({ currentStep }),
       setLanguage: (language) => set({ language }),

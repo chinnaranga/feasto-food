@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { Key } from 'lucide-react';
 import { RiderButton, RiderInput, RiderPageHeader } from '../../components/RiderUIComponents';
 
@@ -42,6 +42,15 @@ export const RiderForgotPasswordPage: React.FC = () => {
               ✓ RECOVERY LINK DISPATCHED VIA SMS. REDIRECTING...
             </div>
           )}
+
+          <div className="pt-2 text-center">
+            <Link
+              to="/rider/login"
+              className="text-xs font-mono font-black uppercase text-[#141518] hover:text-[#1B3BFF] underline underline-offset-4 decoration-[#D7F04A] decoration-2"
+            >
+              ← BACK TO COURIER LOGIN
+            </Link>
+          </div>
         </form>
       </div>
     </div>

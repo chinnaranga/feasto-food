@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { ShieldCheck, PhoneCall, Lock, Key, Zap } from 'lucide-react';
 import useRiderAuthStore from '../../store/useRiderAuthStore';
 import { RiderButton, RiderPageHeader } from '../../components/RiderUIComponents';
@@ -17,8 +17,26 @@ export const RiderOtpPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F3F0E8] flex flex-col text-left py-4 sm:py-8 px-4 sm:px-6 selection:bg-[#D7F04A] selection:text-[#141518]">
-      <div className="max-w-6xl mx-auto w-full space-y-6 my-auto">
+    <div className="min-h-screen bg-[#F3F0E8] flex flex-col justify-between text-left py-4 sm:py-8 px-4 sm:px-6 selection:bg-[#D7F04A] selection:text-[#141518]">
+      {/* Header Bar */}
+      <header className="max-w-6xl mx-auto w-full flex items-center justify-between pb-3 border-b border-[#141518]/15">
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 bg-[#141518] text-[#D7F04A] flex items-center justify-center font-mono font-black text-xs border border-[#141518]">
+            FC
+          </div>
+          <span className="font-mono text-xs font-black uppercase tracking-wider text-[#141518]">
+            FEASTO // COURIER REGISTRATION 2FA
+          </span>
+        </div>
+        <Link
+          to="/rider/login"
+          className="text-[11px] font-mono font-bold uppercase tracking-wider text-[#141518] hover:text-[#1B3BFF] underline underline-offset-4 decoration-[#D7F04A] decoration-2 transition-colors"
+        >
+          BACK TO COURIER LOGIN →
+        </Link>
+      </header>
+
+      <div className="max-w-6xl mx-auto w-full space-y-6 my-auto py-4">
         <VerificationStepper currentStep="otp" />
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
@@ -92,6 +110,17 @@ export const RiderOtpPage: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Footer */}
+      <footer className="max-w-6xl mx-auto w-full flex items-center justify-between py-2 border-t border-[#141518]/15 font-mono text-[10px] text-[#55565B]">
+        <span>FEASTO COURIER PARTNER ONBOARDING PIPELINE</span>
+        <div className="flex items-center gap-3">
+          <Link to="/rider/login" className="hover:text-[#141518] underline">
+            ALREADY REGISTERED? LOGIN
+          </Link>
+          <span>STEP 2 OF 6</span>
+        </div>
+      </footer>
     </div>
   );
 };

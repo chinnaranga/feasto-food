@@ -14,7 +14,6 @@ export const RiderWelcomePage: React.FC = () => {
   };
 
   const handleSignIn = () => {
-    setCurrentStep('otp');
     navigate('/rider/login');
   };
 
@@ -99,7 +98,7 @@ export const RiderWelcomePage: React.FC = () => {
               REGISTER AS COURIER PARTNER →
             </RiderButton>
             <RiderButton variant="outline" size="md" fullWidth onClick={handleSignIn}>
-              EXISTING PARTNER LOGIN (SMS 2FA)
+              EXISTING COURIER LOGIN →
             </RiderButton>
           </div>
         </div>

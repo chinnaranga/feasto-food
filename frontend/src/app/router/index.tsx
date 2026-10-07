@@ -267,7 +267,7 @@ const RiderEarningsPayoutsPage = lazy(() => import('@/rider/pages/earnings/Rider
 const RiderEarningsBonusesPage = lazy(() => import('@/rider/pages/earnings/RiderEarningsBonusesPage').then(m => ({ default: m.RiderEarningsBonusesPage })));
 const RiderEarningsDeductionsPage = lazy(() => import('@/rider/pages/earnings/RiderEarningsDeductionsPage').then(m => ({ default: m.RiderEarningsDeductionsPage })));
 const RiderEarningsStatementsPage = lazy(() => import('@/rider/pages/earnings/RiderEarningsStatementsPage').then(m => ({ default: m.RiderEarningsStatementsPage })));
-
+const RiderLoginPage = lazy(() => import('@/rider/pages/auth/RiderLoginPage').then(m => ({ default: m.RiderLoginPage })));
 const RiderWelcomePage = lazy(() => import('@/rider/pages/auth/RiderWelcomePage').then(m => ({ default: m.RiderWelcomePage })));
 const RiderRegisterPage = lazy(() => import('@/rider/pages/auth/RiderRegisterPage').then(m => ({ default: m.RiderRegisterPage })));
 const RiderOtpPage = lazy(() => import('@/rider/pages/auth/RiderOtpPage').then(m => ({ default: m.RiderOtpPage })));
@@ -1285,7 +1285,7 @@ export const router = createBrowserRouter([
   },
   {
     path: 'rider/login',
-    element: <RiderOtpPage />,
+    element: <RiderLoginPage />,
   },
   { path: 'rider/welcome', element: <RiderWelcomePage /> },
   { path: 'rider/register', element: <RiderRegisterPage /> },

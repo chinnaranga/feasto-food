@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { RiderButton, RiderInput, RiderPageHeader } from '../../components/RiderUIComponents';
 import { PasswordStrength } from '../../components/auth/RiderAuthComponents';
 
@@ -36,6 +36,15 @@ export const RiderResetPasswordPage: React.FC = () => {
           <RiderButton variant="primary" size="lg" fullWidth type="submit">
             COMMIT CREDENTIAL & LOGIN →
           </RiderButton>
+
+          <div className="pt-2 text-center">
+            <Link
+              to="/rider/login"
+              className="text-xs font-mono font-black uppercase text-[#141518] hover:text-[#1B3BFF] underline underline-offset-4 decoration-[#D7F04A] decoration-2"
+            >
+              ← BACK TO COURIER LOGIN
+            </Link>
+          </div>
         </form>
       </div>
     </div>

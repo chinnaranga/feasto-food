@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 
 const run = async () => {
   try {
-    const uri = "mongodb+srv://feasto_user:Feasto77024848@feasto.k9rhwi1.mongodb.net/food_platform?retryWrites=true&w=majority";
+    const uri = "mongodb+srv://feasto_user:Feastoxxxxx@feasto.k9rhwi1.mongodb.net/food_platform?retryWrites=true&w=majority";
     console.log("Connecting to MongoDB...");
     await mongoose.connect(uri);
     console.log("Connected!");

@@ -1,17 +1,45 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import {
+  Flame,
+  ArrowRight,
+  Clock,
+  CheckCircle2,
+  AlertTriangle,
+  ShoppingBag,
+  Sparkles,
+  Truck,
+  RotateCcw,
+} from 'lucide-react';
 import usePortalDashboardStore from '../../store/portalDashboardStore';
 import usePortalStore from '../../store/portalStore';
+import { usePortalOrderStore } from '../../store/portalOrderStore';
+import {
+  FeastoEditorialHeading,
+  FeastoOperationalStatement,
+  FeastoSectionHeader,
+  FeastoMetric,
+  FeastoStatus,
+  FeastoButton,
+} from '@/components/design-system';
 
 export const DashboardOverviewTab: React.FC = () => {
   const navigate = useNavigate();
   const { selectedRestaurant } = usePortalStore();
-  const { metrics, liveOps, subscribeToRealtimeOrders } = usePortalDashboardStore();
+  const { metrics, liveOps, alerts, subscribeToRealtimeOrders } = usePortalDashboardStore();
+  const { orders, updateOrderStatus, acceptOrder } = usePortalOrderStore();
 
   useEffect(() => {
     const unsub = subscribeToRealtimeOrders();
     return () => unsub();
   }, [subscribeToRealtimeOrders]);
+
+  const restaurantName = selectedRestaurant?.name?.toUpperCase() || 'KITCHEN WORKSPACE';
+
+  const inPrepOrders = orders.filter(
+    (o) => o.status === 'placed' || o.status === 'confirmed' || o.status === 'preparing'
+  );
+  const readyOrders = orders.filter((o) => o.status === 'ready');
 
   const formattedRevenue = new Intl.NumberFormat('en-IN', {
     style: 'currency',
@@ -20,195 +48,264 @@ export const DashboardOverviewTab: React.FC = () => {
   }).format(metrics.revenueToday || 42800);
 
   return (
-    <div className="w-full bg-[#F3F0E8] text-[#141518] p-6 sm:p-8 select-none min-h-[85vh]">
-      
-      {/* Studio Workspace Header */}
-      <div className="pb-6 border-b border-[#141518] flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4">
+    <div className="w-full space-y-8 text-left select-none">
+      {/* ── 01. EDITORIAL OPENING STATEMENT ── */}
+      <section className="pb-6 border-b border-[#141518]/20 flex flex-col lg:flex-row lg:items-end justify-between gap-6">
         <div>
-          <span className="font-mono text-xs uppercase tracking-widest text-[#52555F] block mb-1">
-            Restaurant Studio · Station Alpha
+          <div className="flex items-center gap-2 font-mono text-[10px] sm:text-xs uppercase tracking-widest text-[#52555F] mb-1">
+            <span className="font-bold text-[#1B3BFF]">01 · OPERATIONAL OVERVIEW</span>
+            <span>·</span>
+            <span>HYDERABAD METROPOLE · 17°23'N</span>
+          </div>
+
+          <span className="font-mono text-xs uppercase tracking-wider text-[#8A8D98] block">
+            GOOD MORNING,
           </span>
-          <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-[#141518]">
-            {selectedRestaurant?.name ? selectedRestaurant.name.toUpperCase() : 'KITCHEN WORKSPACE'}
-          </h1>
+          <FeastoEditorialHeading as="h1" className="text-3xl sm:text-5xl text-[#141518] mt-1">
+            {restaurantName}
+          </FeastoEditorialHeading>
         </div>
-        <div className="flex items-center gap-4 font-mono text-xs">
-          <span className="flex items-center gap-1.5 text-[#15803D] font-bold">
-            <span className="w-2 h-2 rounded-full bg-[#15803D] animate-ping" />
-            Kitchen Firing Live
-          </span>
-          <span className="text-[#8A8D98]">17°23'N · Hyd Metropole</span>
+
+        {/* Today at a Glance summary pill */}
+        <div className="flex flex-wrap items-center gap-3 font-mono text-xs">
+          <div className="p-3 bg-[#FAF8F5] border border-[#141518]/20">
+            <span className="text-[10px] text-[#8A8D98] uppercase block">TODAY AT A GLANCE</span>
+            <div className="flex items-center gap-4 mt-1 font-bold">
+              <span className="text-[#15803D]">● {inPrepOrders.length} In Prep</span>
+              <span className="text-[#1B3BFF]">● {readyOrders.length} Ready for Pickup</span>
+              <span className="text-[#141518]">● {metrics.ordersToday || 38} Completed</span>
+            </div>
+          </div>
+
+          <FeastoButton
+            variant="acid"
+            size="md"
+            icon={<Flame size={14} />}
+            onClick={() => navigate('/restaurant-portal/kitchen')}
+          >
+            OPEN KITCHEN (KDS) →
+          </FeastoButton>
         </div>
+      </section>
+
+      {/* ── 02. PRIMARY OPERATIONAL HIERARCHY: METRICS WITH ATTITUDE ── */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <FeastoMetric
+          index="01"
+          label="TODAY'S REVENUE"
+          value={formattedRevenue}
+          delta={{ value: '+14.2% VS YESTERDAY', positive: true }}
+          subtitle="Net settlements after dispatch fee"
+          highlight
+        />
+
+        <FeastoMetric
+          index="02"
+          label="ORDERS IN MOTION"
+          value={inPrepOrders.length + readyOrders.length}
+          delta={{ value: `${inPrepOrders.length} ON FIRE`, neutral: true }}
+          subtitle="Target ticket pace: 16m"
+        />
+
+        <FeastoMetric
+          index="03"
+          label="AVERAGE TICKET SPEED"
+          value={`${metrics.avgPrepTimeMin || 18}m`}
+          delta={{ value: '2m FASTER', positive: true }}
+          subtitle="Hearth cycle efficiency 98.4%"
+        />
+
+        <FeastoMetric
+          index="04"
+          label="ONLINE CAPACITY"
+          value="100%"
+          delta={{ value: 'ALL HEARTHS ON', positive: true }}
+          subtitle="Staff active: 6 line cooks, 2 runners"
+        />
       </div>
 
-      {/* Main Studio Workspace: 3 Cohesive Visual Panes */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mt-8 items-start">
-        
-        {/* Pane 1: Today's Kitchen (Left: 3 Cols) */}
-        <div className="lg:col-span-3 bg-white border border-[#141518] p-6 flex flex-col gap-6">
-          <div className="pb-2 border-b border-[#E2DED4]">
-            <span className="font-mono text-[10px] uppercase tracking-widest text-[#8A8D98] block">
-              Active Stations
-            </span>
-            <h3 className="font-heading font-bold text-base text-[#141518]">
-              Kitchen Floor
-            </h3>
-          </div>
+      {/* ── 03. LIVE OPERATIONS MATRIX: ORDERS NOW + KITCHEN STATIONS ── */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        {/* LEFT / CENTER: LIVE ORDERS WORKSPACE (8 COLS) */}
+        <div className="lg:col-span-8 space-y-4">
+          <FeastoSectionHeader
+            index="02"
+            title="ACTIVE ORDERS NOW"
+            subtitle="Immediate line queue. Tickets automatically sorted by urgency and courier arrival ETA."
+            rightElement={
+              <FeastoButton
+                variant="ghost"
+                size="sm"
+                onClick={() => navigate('/restaurant-portal/orders')}
+              >
+                VIEW FULL WORKSPACE →
+              </FeastoButton>
+            }
+          />
 
-          <div className="flex flex-col gap-4 font-mono text-xs">
-            <div className="flex items-center justify-between p-3 bg-[#FAF8F5] border border-[#E2DED4]">
-              <div>
-                <span className="font-bold text-[#141518] block">Dum Hearth 01</span>
-                <span className="text-[10px] text-[#52555F]">Biryani Deghs</span>
-              </div>
-              <span className="text-xs font-bold text-[#1B3BFF]">4 ACTIVE</span>
+          {inPrepOrders.length === 0 ? (
+            <div className="p-12 border border-[#141518]/20 bg-[#FAF8F5] text-center font-mono space-y-2">
+              <CheckCircle2 size={32} className="mx-auto text-[#15803D]" />
+              <h3 className="font-heading font-black text-lg uppercase text-[#141518]">
+                ALL TICKETS CLEARED
+              </h3>
+              <p className="text-xs text-[#52555F]">
+                Kitchen line is ready for upcoming orders. Couriers are in position.
+              </p>
             </div>
+          ) : (
+            <div className="space-y-3">
+              {inPrepOrders.slice(0, 5).map((order) => {
+                const totalItemsCount = order.items.reduce((acc, i) => acc + i.quantity, 0);
 
-            <div className="flex items-center justify-between p-3 bg-[#FAF8F5] border border-[#E2DED4]">
-              <div>
-                <span className="font-bold text-[#141518] block">Wood Hearth 02</span>
-                <span className="text-[10px] text-[#52555F]">480°C Neapolitan</span>
-              </div>
-              <span className="text-xs font-bold text-[#15803D]">3 ACTIVE</span>
-            </div>
+                return (
+                  <div
+                    key={order.id}
+                    className="p-4 sm:p-5 bg-white border border-[#141518] flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all hover:bg-[#FAF8F5]"
+                  >
+                    {/* Order Metadata */}
+                    <div className="space-y-1.5 flex-1">
+                      <div className="flex items-center gap-2">
+                        <span className="font-mono text-xs font-black text-[#141518]">
+                          #{order.orderNumber}
+                        </span>
+                        <FeastoStatus status={order.status} size="sm" />
+                        <span className="font-mono text-[10px] text-[#8A8D98]">
+                          Placed by {order.customerName}
+                        </span>
+                      </div>
 
-            <div className="flex items-center justify-between p-3 bg-[#FAF8F5] border border-[#E2DED4]">
-              <div>
-                <span className="font-bold text-[#141518] block">Cold Larder</span>
-                <span className="text-[10px] text-[#52555F]">Heirloom Salads</span>
-              </div>
-              <span className="text-xs font-bold text-[#8A8D98]">1 PREP</span>
-            </div>
-          </div>
+                      {/* Items Preview */}
+                      <p className="font-sans font-bold text-sm text-[#141518] line-clamp-1">
+                        {order.items.map((i) => `${i.quantity}x ${i.name}`).join(' · ')}
+                      </p>
 
-          {/* Kitchen Summary Counts */}
-          <div className="pt-4 border-t border-[#E2DED4] flex flex-col gap-2 font-mono text-xs">
-            <div className="flex justify-between">
-              <span className="text-[#52555F]">Preparing right now</span>
-              <span className="font-bold text-[#141518]">{liveOps.preparingCount ?? liveOps.preparing ?? 7}</span>
+                      <div className="flex items-center gap-4 font-mono text-[11px] text-[#52555F]">
+                        <span>{totalItemsCount} items</span>
+                        <span>₹{order.totalAmount}</span>
+                        <span className="flex items-center gap-1 text-[#1B3BFF]">
+                          <Clock size={11} />
+                          ETA: {order.estimatedPrepTimeMins}m
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Quick State Update Action */}
+                    <div className="shrink-0 flex items-center gap-2">
+                      {order.status === 'placed' && (
+                        <FeastoButton
+                          variant="acid"
+                          size="sm"
+                          onClick={() => acceptOrder(order.id)}
+                        >
+                          ACCEPT & FIRE →
+                        </FeastoButton>
+                      )}
+                      {order.status === 'confirmed' && (
+                        <FeastoButton
+                          variant="primary"
+                          size="sm"
+                          onClick={() => updateOrderStatus(order.id, 'preparing', 15)}
+                        >
+                          START PREPARING →
+                        </FeastoButton>
+                      )}
+                      {order.status === 'preparing' && (
+                        <FeastoButton
+                          variant="accent"
+                          size="sm"
+                          onClick={() => updateOrderStatus(order.id, 'ready', 0)}
+                        >
+                          MARK READY →
+                        </FeastoButton>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
             </div>
-            <div className="flex justify-between">
-              <span className="text-[#52555F]">Ready for pickup</span>
-              <span className="font-bold text-[#15803D]">{liveOps.readyForPickupCount ?? liveOps.ready ?? 4}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-[#52555F]">Dispatched</span>
-              <span className="font-bold text-[#1B3BFF]">{liveOps.dispatchedCount ?? liveOps.delayed ?? 2}</span>
-            </div>
-          </div>
+          )}
         </div>
 
-        {/* Pane 2: Live Orders Stream (Center: 6 Cols) */}
-        <div className="lg:col-span-6 bg-white border border-[#141518] p-6 flex flex-col gap-6">
-          <div className="pb-2 border-b border-[#E2DED4] flex items-center justify-between">
-            <div>
+        {/* RIGHT: KITCHEN STATIONS & COURIER DISPATCH STREAM (4 COLS) */}
+        <div className="lg:col-span-4 space-y-6">
+          {/* Active Kitchen Stations */}
+          <div className="p-5 bg-[#FAF8F5] border border-[#141518]/20 space-y-4">
+            <div className="border-b border-[#141518]/15 pb-2">
               <span className="font-mono text-[10px] uppercase tracking-widest text-[#8A8D98] block">
-                Direct Dispatch Stream
+                KITCHEN DISPLAY
               </span>
-              <h3 className="font-heading font-bold text-lg text-[#141518]">
-                Live Orders
+              <h3 className="font-heading font-black text-sm uppercase text-[#141518]">
+                Floor Stations
               </h3>
             </div>
-            <button
-              onClick={() => navigate('/restaurant-portal/orders')}
-              className="font-mono text-xs text-[#1B3BFF] font-bold hover:underline"
-            >
-              All Orders ({metrics.ordersToday || 124}) →
-            </button>
-          </div>
 
-          {/* Live Order Tickets */}
-          <div className="flex flex-col gap-3">
-            <div className="p-4 border border-[#141518] bg-[#FAF8F5] flex flex-col gap-3 font-mono text-xs">
-              <div className="flex items-center justify-between pb-2 border-b border-[#E2DED4]">
-                <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-[#D7F04A]" />
-                  <span className="font-bold text-[#141518]">#FST-8821</span>
-                  <span className="text-[#8A8D98]">· 6 mins ago</span>
+            <div className="space-y-2.5 font-mono text-xs">
+              <div className="p-3 bg-white border border-[#E2DED4] flex items-center justify-between">
+                <div>
+                  <span className="font-bold text-[#141518] block">Station 01 · Dum Hearth</span>
+                  <span className="text-[10px] text-[#52555F]">Slow-cooked Deghs</span>
                 </div>
-                <span className="font-bold text-[#141518]">₹760</span>
+                <span className="font-bold text-[#1B3BFF]">3 ACTIVE</span>
               </div>
-              <div className="text-xs font-sans text-[#141518]">
-                2× Special Mutton Dum Biryani, 1× Mirchi Ka Salan, 1× Double Ka Meetha
+
+              <div className="p-3 bg-white border border-[#E2DED4] flex items-center justify-between">
+                <div>
+                  <span className="font-bold text-[#141518] block">Station 02 · Wood Hearth</span>
+                  <span className="text-[10px] text-[#52555F]">480°C Neapolitan</span>
+                </div>
+                <span className="font-bold text-[#15803D]">2 ACTIVE</span>
               </div>
-              <div className="pt-2 flex items-center justify-between">
-                <span className="text-[#8A8D98]">Courier: Assigned (Ranga)</span>
-                <span className="px-2.5 py-1 bg-[#141518] text-[#D7F04A] font-bold uppercase text-[10px]">
-                  Mark Ready →
-                </span>
+
+              <div className="p-3 bg-white border border-[#E2DED4] flex items-center justify-between">
+                <div>
+                  <span className="font-bold text-[#141518] block">Station 03 · Cold Larder</span>
+                  <span className="text-[10px] text-[#52555F]">Heirloom Salads & Mezze</span>
+                </div>
+                <span className="font-bold text-[#8A8D98]">READY</span>
               </div>
             </div>
+          </div>
 
-            <div className="p-4 border border-[#E2DED4] bg-white flex flex-col gap-3 font-mono text-xs">
-              <div className="flex items-center justify-between pb-2 border-b border-[#E2DED4]">
-                <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-[#1B3BFF]" />
-                  <span className="font-bold text-[#141518]">#FST-8820</span>
-                  <span className="text-[#8A8D98]">· 14 mins ago</span>
+          {/* Courier Telemetry Stream */}
+          <div className="p-5 bg-white border border-[#141518] space-y-4">
+            <div className="border-b border-[#141518]/15 pb-2">
+              <span className="font-mono text-[10px] uppercase tracking-widest text-[#8A8D98] block">
+                DISPATCH INTEGRATION
+              </span>
+              <h3 className="font-heading font-black text-sm uppercase text-[#141518]">
+                Couriers En Route
+              </h3>
+            </div>
+
+            <div className="space-y-3 font-mono text-xs">
+              <div className="flex items-start gap-2.5">
+                <Truck size={14} className="text-[#1B3BFF] shrink-0 mt-0.5" />
+                <div className="flex-1">
+                  <div className="flex items-center justify-between font-bold">
+                    <span>Rider #42 · Ranga</span>
+                    <span className="text-[#15803D]">3m AWAY</span>
+                  </div>
+                  <p className="text-[10px] text-[#52555F]">Assigned to Order #1814 (Biryani)</p>
                 </div>
-                <span className="font-bold text-[#141518]">₹420</span>
               </div>
-              <div className="text-xs font-sans text-[#141518]">
-                1× Wood-Fired Margherita Pizza, 1× Artisan Burrata Salad
-              </div>
-              <div className="pt-2 flex items-center justify-between">
-                <span className="text-[#15803D] font-bold">READY AT PACK COUNTER</span>
-                <span className="px-2.5 py-1 bg-[#E2DED4] text-[#141518] font-bold uppercase text-[10px]">
-                  Handoff to Courier →
-                </span>
+
+              <div className="flex items-start gap-2.5">
+                <Truck size={14} className="text-[#8A8D98] shrink-0 mt-0.5" />
+                <div className="flex-1">
+                  <div className="flex items-center justify-between font-bold">
+                    <span>Rider #18 · Vikram</span>
+                    <span className="text-[#8A8D98]">ARRIVED</span>
+                  </div>
+                  <p className="text-[10px] text-[#52555F]">Waiting at pass for Order #1809</p>
+                </div>
               </div>
             </div>
           </div>
         </div>
-
-        {/* Pane 3: Business Signals (Right: 3 Cols) */}
-        <div className="lg:col-span-3 bg-white border border-[#141518] p-6 flex flex-col gap-6">
-          <div className="pb-2 border-b border-[#E2DED4]">
-            <span className="font-mono text-[10px] uppercase tracking-widest text-[#8A8D98] block">
-              Financial Signals
-            </span>
-            <h3 className="font-heading font-bold text-base text-[#141518]">
-              Today's Volume
-            </h3>
-          </div>
-
-          <div className="flex flex-col gap-1">
-            <span className="font-mono text-xs text-[#8A8D98]">Gross Revenue Today</span>
-            <span className="font-mono text-3xl font-bold text-[#141518]">
-              {formattedRevenue}
-            </span>
-            <span className="font-mono text-[11px] text-[#15803D] font-bold">
-              +18.4% vs last week
-            </span>
-          </div>
-
-          <div className="pt-4 border-t border-[#E2DED4] flex flex-col gap-3 font-mono text-xs">
-            <div className="flex justify-between">
-              <span className="text-[#52555F]">Orders Dispatched</span>
-              <span className="font-bold text-[#141518]">{metrics.ordersToday || 124}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-[#52555F]">Average Ticket Size</span>
-              <span className="font-bold text-[#141518]">₹345</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-[#52555F]">Kitchen Rating</span>
-              <span className="font-bold text-[#141518]">4.87 ★</span>
-            </div>
-          </div>
-
-          <div className="pt-4 border-t border-[#E2DED4]">
-            <button
-              onClick={() => navigate('/restaurant-portal/menu')}
-              className="btn-graphic-acid w-full justify-center text-xs py-2.5"
-            >
-              Open Menu Studio →
-            </button>
-          </div>
-        </div>
-
       </div>
     </div>
   );
 };
+
 export default DashboardOverviewTab;

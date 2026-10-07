@@ -1,161 +1,162 @@
 import React from 'react';
-import { ArrowUpRight, ArrowDownRight, TrendingUp, Clock, AlertTriangle, Sparkles, TrendingDown } from 'lucide-react';
-import Card from '../../components/ui/Card';
+import {
+  TrendingUp,
+  Clock,
+  CheckCircle2,
+  AlertTriangle,
+  ArrowUpRight,
+  ArrowDownRight,
+  Flame,
+  Award,
+} from 'lucide-react';
+import {
+  FeastoEditorialHeading,
+  FeastoOperationalStatement,
+  FeastoSectionHeader,
+  FeastoMetric,
+  FeastoButton,
+} from '@/components/design-system';
 
 export const AnalyticsOverview: React.FC = () => {
-  // SVG Sparkline path coordinates
-  const sparklinePoints = '10,90 40,75 70,82 100,55 130,68 160,30 190,45 220,15 250,28 280,10';
+  const sparklinePoints = '10,85 40,70 70,78 100,50 130,62 160,28 190,40 220,12 250,22 280,8';
+
+  const signatureDishes = [
+    { rank: '01', name: 'Dum Mutton Biryani', velocity: '142 orders', rev: '₹48,280', growth: '+24%' },
+    { rank: '02', name: 'Wood-fired Neapolitan Margherita', velocity: '98 orders', rev: '₹37,240', growth: '+12%' },
+    { rank: '03', name: 'Crisp Ghee Roast Dosa', velocity: '86 orders', rev: '₹15,480', growth: '+8%' },
+    { rank: '04', name: 'Tonkotsu 18-hr Ramen', velocity: '64 orders', rev: '₹26,880', growth: '+19%' },
+  ];
 
   return (
-    <div className="space-y-6 text-left select-none">
-      
-      {/* Metrics Row */}
-      <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
-        
-        {/* Net Sales */}
-        <Card className="p-4 space-y-2">
-          <h5 className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider">Net Sales Revenue</h5>
-          <div className="flex items-baseline gap-2">
-            <span className="text-lg font-black text-neutral-800">₹1,84,500</span>
-            <span className="inline-flex items-center gap-0.5 text-[9px] font-black text-emerald-600 bg-emerald-50 px-1 rounded">
-              <ArrowUpRight size={10} /> +14.2%
+    <div className="w-full space-y-8 text-left select-none">
+      {/* ── 01. SECTION HEADER ── */}
+      <FeastoSectionHeader
+        index="07"
+        title="RESTAURANT PERFORMANCE"
+        subtitle="Quiet, editorial telemetry: gross merchandise volume, hearth velocities, and dish turnover."
+        rightElement={
+          <div className="font-mono text-xs flex items-center gap-2">
+            <span className="text-[#8A8D98]">CYCLE:</span>
+            <span className="px-2 py-1 bg-white border border-[#141518]/20 font-bold text-[#141518]">
+              THIS WEEK (OCT 01–07)
             </span>
           </div>
-          <p className="text-[9px] text-neutral-400">vs. last week (WoW)</p>
-        </Card>
+        }
+      />
 
-        {/* Orders */}
-        <Card className="p-4 space-y-2">
-          <h5 className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider">Total Orders</h5>
-          <div className="flex items-baseline gap-2">
-            <span className="text-lg font-black text-neutral-800">1,480</span>
-            <span className="inline-flex items-center gap-0.5 text-[9px] font-black text-emerald-600 bg-emerald-50 px-1 rounded">
-              <ArrowUpRight size={10} /> +8.5%
+      {/* ── 02. MASSIVE TYPOGRAPHIC STATEMENTS ── */}
+      <div className="p-6 sm:p-8 bg-white border border-[#141518] space-y-6">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 border-b border-[#141518]/15">
+          <div>
+            <span className="font-mono text-[10px] uppercase tracking-widest text-[#8A8D98] block">
+              GROSS DISPATCH VOLUME
             </span>
+            <div className="font-heading font-black text-4xl sm:text-6xl text-[#141518] tracking-tight leading-none mt-2">
+              ₹1,84,500
+            </div>
           </div>
-          <p className="text-[9px] text-neutral-400">Completion rate: 98.4%</p>
-        </Card>
 
-        {/* Avg Order Value */}
-        <Card className="p-4 space-y-2">
-          <h5 className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider">Avg Order Value</h5>
-          <div className="flex items-baseline gap-2">
-            <span className="text-lg font-black text-neutral-800">₹1,246</span>
-            <span className="inline-flex items-center gap-0.5 text-[9px] font-black text-red-650 bg-red-50/50 px-1 rounded">
-              <ArrowDownRight size={10} className="text-red-500" /> -2.1%
+          <div className="flex items-center gap-3 font-mono text-xs">
+            <span className="px-2.5 py-1 bg-[#15803D]/10 text-[#15803D] border border-[#15803D]/30 font-bold">
+              ↑ +14.2% THIS WEEK
             </span>
-          </div>
-          <p className="text-[9px] text-neutral-400">Refund rate: 0.4%</p>
-        </Card>
-
-        {/* Prep Speed */}
-        <Card className="p-4 space-y-2">
-          <h5 className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider">Kitchen prep speed</h5>
-          <div className="flex items-baseline gap-2">
-            <span className="text-lg font-black text-neutral-800">7.2 min</span>
-            <span className="inline-flex items-center gap-0.5 text-[9px] font-black text-emerald-600 bg-emerald-50 px-1 rounded">
-              <ArrowUpRight size={10} /> -1.5m
-            </span>
-          </div>
-          <p className="text-[9px] text-neutral-400">Late order rate: 1.2%</p>
-        </Card>
-
-      </div>
-
-      {/* Sales Trend line visualizer */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        
-        {/* Sparkline chart card */}
-        <Card className="lg:col-span-2 space-y-4">
-          <div className="flex items-start justify-between">
-            <div>
-              <h4 className="text-xs font-bold text-neutral-800 uppercase tracking-wider">Revenue Trendline</h4>
-              <p className="text-[10px] text-neutral-400 mt-0.5">Continuous sales volumes mapped over the active date range.</p>
-            </div>
-            
-            <div className="flex items-center gap-1.5 text-xs text-emerald-600 font-bold">
-              <TrendingUp size={14} />
-              <span>Stable Growth</span>
-            </div>
-          </div>
-
-          {/* SVG Line visualization */}
-          <div className="w-full h-44 bg-neutral-50 rounded-xl border border-neutral-100 flex items-center justify-center p-3 relative">
-            <svg className="w-full h-full" viewBox="0 0 300 100" preserveAspectRatio="none">
-              {/* Grid lines */}
-              <line x1="0" y1="20" x2="300" y2="20" stroke="#f1f1f1" strokeWidth="1" />
-              <line x1="0" y1="50" x2="300" y2="50" stroke="#f1f1f1" strokeWidth="1" />
-              <line x1="0" y1="80" x2="300" y2="80" stroke="#f1f1f1" strokeWidth="1" />
-              
-              {/* Path */}
-              <path
-                d={`M ${sparklinePoints}`}
-                fill="none"
-                stroke="#e35205"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              
-              {/* Gradient background */}
-              <path
-                d={`M 10,100 L ${sparklinePoints} L 280,100 Z`}
-                fill="url(#sparkline-grad)"
-                opacity="0.08"
-              />
-              
-              {/* Definitions */}
-              <defs>
-                <linearGradient id="sparkline-grad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#e35205" />
-                  <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
-                </linearGradient>
-              </defs>
-            </svg>
-          </div>
-        </Card>
-
-        {/* AI Recommendations sidebar */}
-        <div className="space-y-6">
-          <Card className="text-left space-y-4">
-            <div className="flex items-center gap-1.5">
-              <Sparkles size={13} className="text-[#e35205]" />
-              <h5 className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider font-heading">
-                AI Executive Analysis
-              </h5>
-            </div>
-
-            <div className="space-y-3">
-              <div className="flex items-start gap-2.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0 mt-1.5" />
-                <p className="text-[10px] text-neutral-500 leading-normal">
-                  <strong>Gross Margin Forecast:</strong> Net profit ratio is expected to peak at <strong>68%</strong> this month.
-                </p>
-              </div>
-
-              <div className="flex items-start gap-2.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0 mt-1.5" />
-                <p className="text-[10px] text-neutral-500 leading-normal">
-                  <strong>Anomaly Detection:</strong> Matcha Latte sales dropped by 18% during afternoon hours compared to last week.
-                </p>
-              </div>
-            </div>
-          </Card>
-
-          {/* SLA Alerts card */}
-          <div className="p-3.5 bg-neutral-50 border border-neutral-200/50 rounded-xl flex items-start gap-2.5">
-            <AlertTriangle size={13} className="text-amber-500 shrink-0 mt-0.5" />
-            <div>
-              <p className="text-[10px] font-black text-neutral-500 uppercase tracking-widest">Peak Load Prediction</p>
-              <p className="text-[9px] text-neutral-400 mt-0.5 leading-relaxed">
-                Saturday evenings (19:00 - 21:00) represent your peak operational bottleneck. Ensure kitchen chef shift schedules have 100% attendance coverage.
-              </p>
-            </div>
+            <span className="text-[#52555F]">1,480 tickets cleared</span>
           </div>
         </div>
 
+        {/* Quiet SVG Volume Curve */}
+        <div className="space-y-2">
+          <div className="flex items-center justify-between font-mono text-[11px] text-[#8A8D98]">
+            <span>HOURLY REVENUE TRAJECTORY</span>
+            <span className="text-[#15803D] font-bold">PEAK: 20:30 (₹24,800/hr)</span>
+          </div>
+
+          <div className="w-full h-40 bg-[#FAF8F5] border border-[#E2DED4] p-4 relative">
+            <svg className="w-full h-full" viewBox="0 0 300 100" preserveAspectRatio="none">
+              <line x1="0" y1="25" x2="300" y2="25" stroke="#E2DED4" strokeWidth="1" strokeDasharray="3 3" />
+              <line x1="0" y1="50" x2="300" y2="50" stroke="#E2DED4" strokeWidth="1" strokeDasharray="3 3" />
+              <line x1="0" y1="75" x2="300" y2="75" stroke="#E2DED4" strokeWidth="1" strokeDasharray="3 3" />
+              <path
+                d={`M ${sparklinePoints}`}
+                fill="none"
+                stroke="#141518"
+                strokeWidth="2.5"
+                strokeLinecap="square"
+              />
+            </svg>
+          </div>
+
+          <div className="flex items-center justify-between font-mono text-[10px] text-[#8A8D98] px-1">
+            <span>MON 10:00</span>
+            <span>WED 14:00</span>
+            <span>FRI 20:00</span>
+            <span>SUN 23:00</span>
+          </div>
+        </div>
       </div>
 
+      {/* ── 03. SUPPORTING OPERATIONAL METRICS ── */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <FeastoMetric
+          index="01"
+          label="AVERAGE TICKET"
+          value="₹1,246"
+          delta={{ value: '+4.1%', positive: true }}
+          subtitle="Customer bag depth: 2.8 items"
+        />
+
+        <FeastoMetric
+          index="02"
+          label="LINE PREP SPEED"
+          value="16.4 min"
+          delta={{ value: '1.2m FASTER', positive: true }}
+          subtitle="98.2% dispatches under 25m SLA"
+        />
+
+        <FeastoMetric
+          index="03"
+          label="GUEST RETENTION"
+          value="64.8%"
+          delta={{ value: '+6.2%', positive: true }}
+          subtitle="Repeat orders within 14 days"
+        />
+      </div>
+
+      {/* ── 04. SIGNATURE DISH VELOCITY ── */}
+      <div className="p-6 bg-[#FAF8F5] border border-[#141518]/20 space-y-4">
+        <div className="pb-3 border-b border-[#141518]/15 flex items-center justify-between">
+          <div>
+            <span className="font-mono text-[10px] uppercase tracking-widest text-[#8A8D98] block">
+              CATALOG EFFICIENCY
+            </span>
+            <h3 className="font-heading font-black text-lg uppercase text-[#141518]">
+              Top Dish Velocities
+            </h3>
+          </div>
+          <span className="font-mono text-xs text-[#52555F]">Ranked by weekly GMV</span>
+        </div>
+
+        <div className="divide-y divide-[#141518]/10 font-mono text-xs">
+          {signatureDishes.map((dish) => (
+            <div key={dish.rank} className="py-3 flex items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <span className="font-bold text-[#1B3BFF] text-sm">{dish.rank}</span>
+                <div>
+                  <span className="font-heading font-bold text-sm text-[#141518] block">
+                    {dish.name}
+                  </span>
+                  <span className="text-[11px] text-[#52555F]">{dish.velocity}</span>
+                </div>
+              </div>
+
+              <div className="text-right">
+                <span className="font-black text-sm text-[#141518] block">{dish.rev}</span>
+                <span className="text-[10px] text-[#15803D] font-bold">{dish.growth} WoW</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 };

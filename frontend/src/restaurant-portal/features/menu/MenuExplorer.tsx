@@ -118,8 +118,8 @@ export const MenuExplorer: React.FC<MenuExplorerProps> = ({ statusFilterPreset }
           </select>
 
           <button
-            onClick={() => navigate('/portal/menu/editor')}
-            className="px-4 py-2 bg-[#141518] text-[#F3F0E8] hover:bg-[#1B3BFF] font-mono text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer flex items-center gap-2"
+            onClick={() => navigate('/restaurant-portal/menu/new')}
+            className="px-4 py-2 bg-[#141518] text-[#F3F0E8] hover:bg-[#D7F04A] hover:text-[#141518] font-mono text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer flex items-center gap-2 border border-[#141518]"
           >
             <Plus size={14} />
             <span>NEW DISH OBJECT +</span>

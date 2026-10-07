@@ -1,97 +1,192 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useState, useEffect } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import {
   Navigation,
   Compass,
-  Zap,
-  PhoneCall,
+  Phone,
+  Radio,
+  MapPin,
+  Clock,
+  CheckCircle2,
+  AlertTriangle,
   Menu,
   X,
-  Radio,
-  Power,
-  LogOut
+  LogOut,
+  ShoppingBag,
+  Wallet,
+  User,
+  History,
+  Shield,
+  Layers,
 } from 'lucide-react';
 import useRiderStore from '../store/useRiderStore';
+import useRiderNavigationStore from '../store/useRiderNavigationStore';
 import { useAuthStore } from '@/store/authStore';
+import { RealLiveMapCanvas } from './navigation/RiderNavigationComponents';
+import {
+  FeastoEditorialHeading,
+  FeastoOperationalStatement,
+  FeastoStatus,
+  FeastoButton,
+  FeastoTimeline,
+  FeastoMetric,
+} from '@/components/design-system';
 
 export const RiderAppShell: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { profile, availability, toggleAvailability, isDrawerOpen, setDrawerOpen } = useRiderStore();
+  const {
+    profile,
+    availability,
+    toggleAvailability,
+    activeOffer,
+    activeDeliveryStep,
+    advanceDeliveryStep,
+    completeActiveDelivery,
+  } = useRiderStore();
   const { logout } = useAuthStore();
 
-  const handleRiderSignOut = async () => {
-    setDrawerOpen(false);
+  const {
+    routeSummary,
+    routePolylineCoords,
+    recenterMap,
+    triggerReroute,
+    toggleTileMode,
+    startLiveGPS,
+    stopLiveGPS,
+    loadRealOSRMRoute,
+  } = useRiderNavigationStore();
+
+  const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
+
+  useEffect(() => {
+    startLiveGPS();
+    if (
+      routeSummary.courierLat &&
+      routeSummary.courierLng &&
+      routeSummary.customerLat &&
+      routeSummary.customerLng
+    ) {
+      loadRealOSRMRoute(
+        routeSummary.courierLat,
+        routeSummary.courierLng,
+        routeSummary.customerLat,
+        routeSummary.customerLng
+      );
+    }
+    return () => {
+      stopLiveGPS();
+    };
+  }, []);
+
+  const handleSignOut = async () => {
+    setMobileDrawerOpen(false);
     await logout();
     navigate('/rider/login');
   };
 
-  const isNavActive = location.pathname.includes('/rider/dashboard') || location.pathname.includes('/rider/active');
-  const isOrdersActive = location.pathname.includes('/rider/orders');
-  const isEarningsActive = location.pathname.includes('/rider/earnings');
+  // Determine if active route is map-dominant workspace
+  const isMapWorkspace =
+    location.pathname === '/rider' ||
+    location.pathname === '/rider/dashboard' ||
+    location.pathname === '/rider/dashboard/home' ||
+    location.pathname === '/rider/active' ||
+    location.pathname.startsWith('/rider/navigation');
+
+  const navLinks = [
+    { label: 'Today', path: '/rider/dashboard', code: '01', icon: <Navigation size={14} /> },
+    { label: 'Trip Offers', path: '/rider/orders', code: '02', icon: <ShoppingBag size={14} /> },
+    { label: 'Your Earnings', path: '/rider/earnings', code: '03', icon: <Wallet size={14} /> },
+    { label: 'Archive', path: '/rider/history', code: '04', icon: <History size={14} /> },
+    { label: 'Profile', path: '/rider/profile', code: '05', icon: <User size={14} /> },
+  ];
+
+  const deliveryStepsTimeline = [
+    {
+      id: 'assigned',
+      label: 'Dispatch Assigned',
+      status: 'completed' as const,
+      timestamp: '16:42',
+      description: `${activeOffer?.restaurantName || 'Restaurant'} dispatched`,
+    },
+    {
+      id: 'pickup',
+      label: 'Arrived at Restaurant',
+      status: ['arrived_at_store', 'picked_up', 'arrived_at_customer', 'delivered'].includes(
+        activeDeliveryStep
+      )
+        ? ('completed' as const)
+        : ('current' as const),
+      description: 'Collect sealed food bag at pass',
+    },
+    {
+      id: 'transit',
+      label: 'On the Way (In Transit)',
+      status: ['picked_up', 'arrived_at_customer', 'delivered'].includes(activeDeliveryStep)
+        ? ('completed' as const)
+        : activeDeliveryStep === 'arrived_at_store'
+        ? ('current' as const)
+        : ('upcoming' as const),
+      description: 'Navigating to customer destination',
+    },
+    {
+      id: 'delivered',
+      label: 'Drop-off & Handover',
+      status: activeDeliveryStep === 'delivered' ? ('completed' as const) : ('upcoming' as const),
+      description: 'Verify customer OTP and complete trip',
+    },
+  ];
 
   return (
     <div className="min-h-screen bg-[#0D0F12] text-[#F3F0E8] font-sans flex flex-col antialiased select-none overflow-x-hidden">
-      {/* Precision Instrument Bezel (Top) */}
-      <header className="h-14 bg-[#14161B] border-b border-[#222630] px-4 md:px-6 flex items-center justify-between z-30 shrink-0">
+      {/* ── TOP TELEMETRY BEZEL (INSTRUMENT HEADER) ── */}
+      <header className="h-16 bg-[#14161B] border-b border-[#222630] px-4 md:px-8 flex items-center justify-between shrink-0 z-40">
         <div className="flex items-center gap-4">
           <button
             onClick={() => navigate('/rider/dashboard')}
-            className="flex items-center gap-2 group cursor-pointer"
+            className="flex items-center gap-3 cursor-pointer text-left"
           >
-            <div className="w-8 h-8 rounded-none bg-[#D7F04A] text-[#141518] flex items-center justify-center font-mono font-black text-xs">
-              FR
+            <div className="w-8 h-8 bg-[#D7F04A] text-[#141518] flex items-center justify-center font-mono font-black text-xs">
+              NV
             </div>
-            <div className="text-left">
+            <div>
               <span className="font-heading font-black text-xs uppercase tracking-widest text-[#F3F0E8] block">
-                FEASTO INSTRUMENT
+                FEASTO NAVIGATION
               </span>
-              <span className="font-mono text-[9px] text-[#A0A2AA] tracking-wider block">
-                VESSEL TELEMETRY v2.6
+              <span className="font-mono text-[9px] uppercase tracking-wider text-[#8E929C] block">
+                VESSEL ID: {profile?.id || 'RIDER-42'} · BANDRA METROPOLE
               </span>
             </div>
           </button>
 
-          {/* Quick Instrument Mode Selectors */}
-          <nav className="hidden sm:flex items-center gap-1 ml-6 border-l border-[#222630] pl-6 font-mono text-[11px] uppercase tracking-wider">
-            <button
-              onClick={() => navigate('/rider/dashboard')}
-              className={`px-3 py-1.5 transition-colors cursor-pointer ${
-                isNavActive
-                  ? 'bg-[#1B3BFF] text-white font-bold'
-                  : 'text-[#8E929C] hover:text-white'
-              }`}
-            >
-              01 NAVIGATION
-            </button>
-            <button
-              onClick={() => navigate('/rider/orders')}
-              className={`px-3 py-1.5 transition-colors cursor-pointer ${
-                isOrdersActive
-                  ? 'bg-[#1B3BFF] text-white font-bold'
-                  : 'text-[#8E929C] hover:text-white'
-              }`}
-            >
-              02 OFFERS
-            </button>
-            <button
-              onClick={() => navigate('/rider/earnings')}
-              className={`px-3 py-1.5 transition-colors cursor-pointer ${
-                isEarningsActive
-                  ? 'bg-[#1B3BFF] text-white font-bold'
-                  : 'text-[#8E929C] hover:text-white'
-              }`}
-            >
-              03 EARNINGS
-            </button>
+          {/* Desktop Navigation Links */}
+          <nav className="hidden lg:flex items-center gap-1 ml-8 border-l border-[#222630] pl-6 font-mono text-xs uppercase tracking-wider">
+            {navLinks.map((link) => {
+              const active = location.pathname.startsWith(link.path);
+              return (
+                <button
+                  key={link.path}
+                  onClick={() => navigate(link.path)}
+                  className={`px-3 py-1.5 transition-colors cursor-pointer flex items-center gap-1.5 ${
+                    active
+                      ? 'bg-[#1B3BFF] text-white font-bold'
+                      : 'text-[#8E929C] hover:text-white'
+                  }`}
+                >
+                  <span className="text-[#D7F04A] font-bold">{link.code}</span>
+                  <span>{link.label}</span>
+                </button>
+              );
+            })}
           </nav>
         </div>
 
-        {/* Right Bezel Status & Duty Switcher */}
-        <div className="flex items-center gap-3">
+        {/* Right Controls: Duty Switcher, GPS Status, Sign Out */}
+        <div className="flex items-center gap-3 font-mono text-xs">
+          {/* Duty Switcher */}
           <button
             onClick={toggleAvailability}
-            className={`flex items-center gap-2 px-3 py-1 font-mono text-[10px] uppercase font-bold tracking-wider cursor-pointer border transition-colors ${
+            className={`flex items-center gap-2 px-3 py-1.5 uppercase font-bold tracking-wider cursor-pointer border transition-colors ${
               availability === 'online'
                 ? 'bg-[#D7F04A] text-[#141518] border-[#D7F04A]'
                 : 'bg-transparent text-[#8E929C] border-[#2E3340] hover:text-white'
@@ -102,132 +197,240 @@ export const RiderAppShell: React.FC = () => {
                 availability === 'online' ? 'bg-[#141518] animate-pulse' : 'bg-[#555A68]'
               }`}
             />
-            {availability === 'online' ? 'ON DUTY' : 'STANDBY'}
+            <span>{availability === 'online' ? 'ON DUTY' : 'STANDBY'}</span>
           </button>
 
-          <div className="hidden lg:flex items-center gap-2 font-mono text-[10px] text-[#A0A2AA] border-l border-[#222630] pl-4">
-            <Radio size={12} className="text-[#D7F04A] animate-pulse" />
-            <span>GPS 5G RTK</span>
+          {/* GPS Status */}
+          <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 bg-[#1D212A] border border-[#2E3340] text-[10px] text-[#D7F04A]">
+            <Radio size={11} className="animate-pulse" />
+            <span>GPS 5G RTK LOCK</span>
           </div>
 
+          {/* Sign Out */}
           <button
-            onClick={handleRiderSignOut}
-            className="flex items-center gap-1.5 px-2.5 py-1 border border-[#661527] text-[#ff738c] hover:bg-[#661527] hover:text-white font-mono text-[10px] uppercase font-bold tracking-wider transition-colors cursor-pointer"
-            title="Sign out of Rider Instrument"
+            onClick={handleSignOut}
+            className="flex items-center gap-1 px-2.5 py-1.5 border border-[#2E3340] hover:border-red-500 hover:text-red-400 text-[#8E929C] transition-colors cursor-pointer text-xs"
+            title="Sign out of Navigation"
           >
             <LogOut size={12} />
-            <span className="hidden sm:inline">SIGN OUT</span>
-          </button>
-
-          <button
-            onClick={() => setDrawerOpen(true)}
-            className="p-2 border border-[#2A2E3B] text-[#A0A2AA] hover:text-white hover:border-white transition-colors cursor-pointer"
-            aria-label="Toggle drawer"
-          >
-            <Menu size={16} />
+            <span className="hidden md:inline">EXIT</span>
           </button>
         </div>
       </header>
 
-      {/* Main Full-Bleed Instrument Viewport */}
-      <main className="flex-1 w-full flex flex-col relative overflow-hidden">
-        <Suspense
-          fallback={
-            <div className="flex-1 flex items-center justify-center font-mono text-xs text-[#D7F04A] animate-pulse">
-              SYNCING SATELLITE INSTRUMENT...
-            </div>
-          }
-        >
-          <Outlet />
-        </Suspense>
-      </main>
+      {/* ── MAIN WORKSPACE VIEWPORT ── */}
+      {isMapWorkspace ? (
+        /* ── DESKTOP: 70% MAP + 30% OPERATIONS PANEL (MAP-FIRST) ── */
+        <div className="flex-1 flex flex-col lg:flex-row relative overflow-hidden min-h-[calc(100vh-64px)]">
+          {/* Dominant Live Map Canvas (70% on desktop, full on mobile) */}
+          <div className="flex-1 lg:w-[68%] h-[55vh] lg:h-full relative overflow-hidden bg-[#14161B]">
+            <RealLiveMapCanvas
+              routeSummary={routeSummary}
+              polylineCoords={routePolylineCoords}
+              onRecenter={recenterMap}
+              onReroute={triggerReroute}
+              onToggleTileMode={toggleTileMode}
+            />
 
-      {/* Drawer Context Sheet */}
-      {isDrawerOpen && (
-        <div className="fixed inset-0 z-[1000] flex justify-end">
-          <div
-            onClick={() => setDrawerOpen(false)}
-            className="fixed inset-0 bg-black/70 backdrop-blur-xs cursor-pointer"
-          />
-          <div className="relative w-full max-w-sm bg-[#14161B] border-l border-[#252934] h-full flex flex-col justify-between p-6 z-10 text-left">
-            <div className="space-y-6">
-              <div className="flex items-center justify-between border-b border-[#252934] pb-4">
-                <div>
-                  <span className="font-mono text-[9px] uppercase tracking-widest text-[#D7F04A] block">
-                    OPERATOR CALLSIGN
-                  </span>
-                  <h3 className="font-heading font-black text-lg text-white">
-                    {profile.fullName || 'Rider-01'}
-                  </h3>
-                  <span className="font-mono text-xs text-[#8E929C]">{profile.phone}</span>
-                </div>
-                <button
-                  onClick={() => setDrawerOpen(false)}
-                  className="p-2 border border-[#2E3340] text-white hover:bg-white hover:text-black cursor-pointer"
-                >
-                  <X size={16} />
-                </button>
+            {/* Floating Top Telemetry HUD Pill */}
+            <div className="absolute top-4 left-4 z-[500] bg-[#14161B]/90 backdrop-blur-md border border-white/10 px-4 py-2 font-mono text-xs flex items-center gap-4 text-white">
+              <div>
+                <span className="text-[9px] uppercase text-[#8E929C] block">TARGET ETA</span>
+                <span className="text-sm font-black text-[#D7F04A]">
+                  {routeSummary.estimatedEtaMins} MINS
+                </span>
               </div>
-
-              <div className="space-y-1 font-mono text-xs uppercase tracking-wider">
-                <button
-                  onClick={() => { setDrawerOpen(false); navigate('/rider/dashboard'); }}
-                  className="w-full text-left p-3 hover:bg-[#1C2028] text-white flex items-center justify-between"
-                >
-                  <span>01 NAVIGATION INSTRUMENT</span>
-                  <span>→</span>
-                </button>
-                <button
-                  onClick={() => { setDrawerOpen(false); navigate('/rider/orders'); }}
-                  className="w-full text-left p-3 hover:bg-[#1C2028] text-white flex items-center justify-between"
-                >
-                  <span>02 DISPATCH OFFERS</span>
-                  <span>→</span>
-                </button>
-                <button
-                  onClick={() => { setDrawerOpen(false); navigate('/rider/earnings'); }}
-                  className="w-full text-left p-3 hover:bg-[#1C2028] text-white flex items-center justify-between"
-                >
-                  <span>03 EARNINGS & PAYOUTS</span>
-                  <span>→</span>
-                </button>
-                <button
-                  onClick={() => { setDrawerOpen(false); navigate('/rider/history'); }}
-                  className="w-full text-left p-3 hover:bg-[#1C2028] text-white flex items-center justify-between"
-                >
-                  <span>04 ROUTE LOG</span>
-                  <span>→</span>
-                </button>
-                <button
-                  onClick={() => { setDrawerOpen(false); navigate('/rider/support'); }}
-                  className="w-full text-left p-3 hover:bg-[#1C2028] text-white flex items-center justify-between"
-                >
-                  <span>05 SOS & DISPATCH COMMS</span>
-                  <span>→</span>
-                </button>
-
-                <div className="pt-4 border-t border-[#252934]">
-                  <button
-                    onClick={handleRiderSignOut}
-                    className="w-full text-left p-3 bg-[#661527]/20 border border-[#661527] text-[#ff738c] hover:bg-[#661527] hover:text-white flex items-center justify-between transition-colors cursor-pointer"
-                  >
-                    <span className="flex items-center gap-2">
-                      <LogOut size={14} />
-                      <span>SIGN OUT OPERATOR</span>
-                    </span>
-                    <span>→</span>
-                  </button>
-                </div>
+              <div className="w-px h-6 bg-white/10" />
+              <div>
+                <span className="text-[9px] uppercase text-[#8E929C] block">DISTANCE</span>
+                <span className="text-sm font-black text-white">
+                  {routeSummary.distanceRemainingKm} KM
+                </span>
               </div>
-            </div>
-
-            <div className="pt-6 border-t border-[#252934] flex items-center justify-between font-mono text-[10px] text-[#8E929C]">
-              <span>FEASTO RIDER ENGINE</span>
-              <span className="text-[#D7F04A]">STANDBY READY</span>
+              <div className="w-px h-6 bg-white/10" />
+              <div>
+                <span className="text-[9px] uppercase text-[#8E929C] block">SPEED</span>
+                <span className="text-sm font-black text-[#15803D]">34 KM/H</span>
+              </div>
             </div>
           </div>
+
+          {/* Operations Panel (32% on desktop, bottom scroll on mobile) */}
+          <div className="lg:w-[32%] shrink-0 border-t lg:border-t-0 lg:border-l border-[#222630] bg-[#14161B] p-5 sm:p-6 overflow-y-auto space-y-6 scrollbar-thin text-left">
+            {activeOffer ? (
+              <>
+                {/* Delivery Header */}
+                <div className="pb-4 border-b border-white/10 flex items-start justify-between">
+                  <div>
+                    <span className="font-mono text-[10px] uppercase tracking-widest text-[#D7F04A] block">
+                      ACTIVE DELIVERY IN MOTION
+                    </span>
+                    <h2 className="font-heading font-black text-2xl uppercase text-white mt-0.5">
+                      DELIVERY #{activeOffer.orderNumber}
+                    </h2>
+                  </div>
+
+                  <span className="font-mono text-xs font-black px-2 py-1 bg-[#D7F04A] text-[#141518]">
+                    ₹{activeOffer.payoutAmount + activeOffer.tipAmount}
+                  </span>
+                </div>
+
+                {/* Spatial Pickup ➔ Dropoff Route Flow */}
+                <div className="p-4 bg-[#1D212A] border border-[#2E3340] space-y-3 font-mono text-xs">
+                  {/* Pickup */}
+                  <div className="flex items-start gap-3">
+                    <span className="w-5 h-5 bg-white text-[#141518] font-black text-[10px] flex items-center justify-center shrink-0">
+                      P
+                    </span>
+                    <div className="flex-1">
+                      <span className="text-[9px] uppercase text-[#8E929C] block">PICKUP</span>
+                      <strong className="text-sm text-white font-heading font-black block">
+                        {activeOffer.restaurantName}
+                      </strong>
+                      <span className="text-[11px] text-[#8E929C]">Waterfield Rd, Bandra West</span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2 pl-2 text-[10px] text-[#1B3BFF]">
+                    <span>↓</span>
+                    <span>ON THE WAY (2.4 KM)</span>
+                  </div>
+
+                  {/* Dropoff */}
+                  <div className="flex items-start gap-3">
+                    <span className="w-5 h-5 bg-[#D7F04A] text-[#141518] font-black text-[10px] flex items-center justify-center shrink-0">
+                      D
+                    </span>
+                    <div className="flex-1">
+                      <span className="text-[9px] uppercase text-[#8E929C] block">DROP-OFF</span>
+                      <strong className="text-sm text-white font-heading font-black block">
+                        {activeOffer.customerName}
+                      </strong>
+                      <span className="text-[11px] text-[#8E929C]">{activeOffer.deliveryAddress}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Customer Contact & Call Trigger */}
+                <div className="flex items-center justify-between p-3 bg-[#181B22] border border-white/5">
+                  <div className="font-mono text-xs">
+                    <span className="text-[10px] text-[#8E929C] block">CONTACT GUEST</span>
+                    <span className="font-bold text-white">{activeOffer.customerPhone}</span>
+                  </div>
+                  <a
+                    href={`tel:${activeOffer.customerPhone}`}
+                    className="p-2 bg-[#1B3BFF] hover:bg-[#1530d9] text-white transition-colors flex items-center gap-1.5 font-mono text-xs font-bold"
+                  >
+                    <Phone size={12} />
+                    <span>CALL</span>
+                  </a>
+                </div>
+
+                {/* Delivery Timeline Progress */}
+                <div className="space-y-3">
+                  <span className="font-mono text-[10px] uppercase tracking-widest text-[#8E929C] block">
+                    DELIVERY PROGRESSION
+                  </span>
+                  <FeastoTimeline steps={deliveryStepsTimeline} dark />
+                </div>
+
+                {/* One-Touch Action Progression Button */}
+                <div className="pt-2">
+                  {activeDeliveryStep === 'assigned' && (
+                    <FeastoButton
+                      variant="acid"
+                      size="lg"
+                      fullWidth
+                      onClick={advanceDeliveryStep}
+                    >
+                      ARRIVED AT RESTAURANT →
+                    </FeastoButton>
+                  )}
+                  {activeDeliveryStep === 'arrived_at_store' && (
+                    <FeastoButton
+                      variant="acid"
+                      size="lg"
+                      fullWidth
+                      onClick={advanceDeliveryStep}
+                    >
+                      CONFIRM BAG PICKED UP →
+                    </FeastoButton>
+                  )}
+                  {activeDeliveryStep === 'picked_up' && (
+                    <FeastoButton
+                      variant="accent"
+                      size="lg"
+                      fullWidth
+                      onClick={advanceDeliveryStep}
+                    >
+                      ARRIVED AT CUSTOMER LOCATION →
+                    </FeastoButton>
+                  )}
+                  {activeDeliveryStep === 'arrived_at_customer' && (
+                    <FeastoButton
+                      variant="acid"
+                      size="lg"
+                      fullWidth
+                      onClick={completeActiveDelivery}
+                    >
+                      VERIFY OTP & COMPLETE TRIP ✓
+                    </FeastoButton>
+                  )}
+                </div>
+              </>
+            ) : (
+              <div className="p-8 border border-white/10 text-center font-mono space-y-3">
+                <CheckCircle2 size={32} className="mx-auto text-[#D7F04A]" />
+                <h3 className="font-heading font-black text-lg uppercase text-white">
+                  STANDING BY FOR ORDERS
+                </h3>
+                <p className="text-xs text-[#8E929C]">
+                  Keep vessel GPS active. System is dispatching high-demand orders near your zone.
+                </p>
+                <FeastoButton
+                  variant="acid"
+                  size="md"
+                  onClick={() => navigate('/rider/orders')}
+                >
+                  VIEW AVAILABLE OFFERS →
+                </FeastoButton>
+              </div>
+            )}
+          </div>
         </div>
+      ) : (
+        /* ── SPECIALIZED EDITORIAL WORKSPACE VIEW (EARNINGS, ARCHIVE, PROFILE) ── */
+        <main className="flex-1 w-full p-4 sm:p-6 lg:p-10 max-w-7xl mx-auto">
+          <Suspense
+            fallback={
+              <div className="flex-1 flex items-center justify-center font-mono text-xs text-[#D7F04A] animate-pulse py-20">
+                SYNCING SATELLITE INSTRUMENT...
+              </div>
+            }
+          >
+            <Outlet />
+          </Suspense>
+        </main>
       )}
+
+      {/* ── MOBILE INDEPENDENT BOTTOM NAVIGATION ── */}
+      <nav className="lg:hidden h-14 bg-[#14161B] border-t border-[#222630] grid grid-cols-5 z-40 font-mono text-[9px] uppercase tracking-wider">
+        {navLinks.map((link) => {
+          const active = location.pathname.startsWith(link.path);
+          return (
+            <button
+              key={link.path}
+              onClick={() => navigate(link.path)}
+              className={`flex flex-col items-center justify-center gap-1 transition-colors ${
+                active ? 'text-[#D7F04A] font-bold' : 'text-[#8E929C]'
+              }`}
+            >
+              <span>{link.icon}</span>
+              <span>{link.label}</span>
+            </button>
+          );
+        })}
+      </nav>
     </div>
   );
 };

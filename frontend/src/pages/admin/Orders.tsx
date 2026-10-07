@@ -1,269 +1,321 @@
 import React, { useState } from 'react';
+import {
+  Clock,
+  ShieldAlert,
+  CheckCircle,
+  Truck,
+  XCircle,
+  ArrowRight,
+  Search,
+  Filter,
+  DollarSign,
+  Phone,
+  User,
+  Store,
+} from 'lucide-react';
 import { useAdminStore } from '../../store/admin/adminStore';
-import { SmartTable, TableColumn } from '../../components/admin/SmartTable';
-import { StatusBadge } from '../../components/admin/StatusBadge';
 import { AdminOrder } from '../../types/admin';
-import { Button } from '@/components/ui/Button';
-import { Clock, ShieldAlert, CheckCircle, Truck, XCircle, ArrowRight } from 'lucide-react';
+import {
+  FeastoEditorialHeading,
+  FeastoOperationalStatement,
+  FeastoSectionHeader,
+  FeastoStatus,
+  FeastoButton,
+  FeastoTimeline,
+  FeastoDetailPanel,
+  FeastoDataTable,
+  FeastoColumn,
+} from '@/components/design-system';
 
 export const Orders: React.FC = () => {
   const { orders, updateOrderStatus } = useAdminStore();
   const [selectedOrder, setSelectedOrder] = useState<AdminOrder | null>(null);
+  const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [search, setSearch] = useState<string>('');
 
-  const columns: TableColumn<AdminOrder>[] = [
+  const filteredOrders = orders.filter((o) => {
+    const matchesStatus = statusFilter === 'all' || o.status === statusFilter;
+    const matchesSearch =
+      o.id.toLowerCase().includes(search.toLowerCase()) ||
+      o.customerName.toLowerCase().includes(search.toLowerCase()) ||
+      o.restaurantName.toLowerCase().includes(search.toLowerCase());
+    return matchesStatus && matchesSearch;
+  });
+
+  const columns: FeastoColumn<AdminOrder>[] = [
     {
       key: 'id',
-      label: 'Order ID',
-      sortable: true,
+      header: 'ORDER REF',
       render: (item) => (
         <button
           onClick={() => setSelectedOrder(item)}
-          className="font-mono font-bold text-brand-orange hover:underline text-left cursor-pointer"
+          className="font-mono font-bold text-white hover:text-[#D7F04A] transition-colors cursor-pointer text-left"
         >
           {item.id}
         </button>
       ),
     },
     {
-      key: 'customerName',
-      label: 'Customer Name',
-      sortable: true,
-    },
-    {
-      key: 'restaurantName',
-      label: 'Restaurant',
-      sortable: true,
-    },
-    {
-      key: 'placedAt',
-      label: 'Placed At',
-      sortable: true,
+      key: 'customer',
+      header: 'CUSTOMER',
       render: (item) => (
-        <div className="text-left font-mono">
-          {new Date(item.placedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+        <div>
+          <strong className="text-white font-bold block">{item.customerName}</strong>
+          <span className="font-mono text-[10px] text-[#8E929C]">Direct Order</span>
         </div>
       ),
     },
     {
-      key: 'type',
-      label: 'Schedule Type',
-      sortable: true,
+      key: 'restaurant',
+      header: 'MERCHANT',
       render: (item) => (
-        <span className="inline-flex items-center gap-1.5 font-medium">
-          <Clock size={11} className="text-text-muted" />
-          <span className="capitalize">{item.type}</span>
+        <span className="font-mono text-xs text-[#8E929C]">{item.restaurantName}</span>
+      ),
+    },
+    {
+      key: 'time',
+      header: 'PLACED AT',
+      render: (item) => (
+        <span className="font-mono text-xs text-[#8E929C]">
+          {new Date(item.placedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
         </span>
       ),
     },
     {
       key: 'total',
-      label: 'Order Total',
-      sortable: true,
-      render: (item) => <span className="font-bold">₹{item.total.toLocaleString()}</span>,
-    },
-    {
-      key: 'fraudAlert',
-      label: 'Fraud Flag',
-      sortable: true,
-      render: (item) =>
-        item.fraudAlert ? (
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg border border-error-main/20 bg-error-main/5 text-error-main text-[10px] font-black uppercase">
-            <ShieldAlert size={10} /> Flagged
-          </span>
-        ) : (
-          <span className="text-[10px] text-text-muted font-bold">—</span>
-        ),
+      header: 'TOTAL VALUE',
+      align: 'right',
+      render: (item) => (
+        <span className="font-mono font-bold text-white text-sm">
+          ₹{item.total.toLocaleString()}
+        </span>
+      ),
     },
     {
       key: 'status',
-      label: 'Order Status',
-      sortable: true,
-      render: (item) => <StatusBadge value={item.status} />,
+      header: 'STATUS',
+      render: (item) => <FeastoStatus status={item.status} size="sm" />,
     },
     {
       key: 'actions',
-      label: 'Dispatch Actions',
+      header: 'DISPATCH CONTROL',
+      align: 'right',
       render: (item) => (
-        <div className="flex gap-1.5 justify-start">
+        <div className="flex gap-1 justify-end font-mono">
           {item.status === 'placed' && (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => updateOrderStatus(item.id, 'preparing')}
-              className="h-7 text-[10px] font-bold py-1 px-2 rounded-lg"
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                updateOrderStatus(item.id, 'preparing');
+              }}
+              className="px-2 py-1 bg-white/10 hover:bg-[#D7F04A] hover:text-[#141518] text-white text-[10px] font-bold uppercase transition-colors cursor-pointer border border-white/20"
             >
-              Start Prep
-            </Button>
+              Fire
+            </button>
           )}
           {item.status === 'preparing' && (
-            <Button
-              variant="primary"
-              size="sm"
-              onClick={() => updateOrderStatus(item.id, 'dispatched')}
-              className="h-7 text-[10px] font-bold py-1 px-2 rounded-lg"
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                updateOrderStatus(item.id, 'dispatched');
+              }}
+              className="px-2 py-1 bg-[#1B3BFF] hover:bg-[#1530d9] text-white text-[10px] font-bold uppercase transition-colors cursor-pointer"
             >
-              <Truck size={12} /> Dispatch Rider
-            </Button>
+              Dispatch Rider
+            </button>
           )}
           {item.status === 'dispatched' && (
-            <Button
-              variant="success"
-              size="sm"
-              onClick={() => updateOrderStatus(item.id, 'delivered')}
-              className="h-7 text-[10px] font-bold py-1 px-2 rounded-lg"
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                updateOrderStatus(item.id, 'delivered');
+              }}
+              className="px-2 py-1 bg-[#15803D] hover:bg-[#126b33] text-white text-[10px] font-bold uppercase transition-colors cursor-pointer"
             >
-              Complete Order
-            </Button>
+              Complete
+            </button>
           )}
         </div>
       ),
     },
   ];
 
-  const bulkActions = [
-    {
-      label: 'Cancel Selected',
-      onClick: (selected: AdminOrder[]) => {
-        selected.forEach((o) => updateOrderStatus(o.id, 'cancelled'));
-      },
-      variant: 'danger' as const,
-    },
-    {
-      label: 'Mark Prepared',
-      onClick: (selected: AdminOrder[]) => {
-        selected.forEach((o) => updateOrderStatus(o.id, 'dispatched'));
-      },
-      variant: 'outline' as const,
-    },
-  ];
+  const orderTimeline = selectedOrder
+    ? [
+        {
+          id: 'placed',
+          label: 'Order Validated',
+          timestamp: new Date(selectedOrder.placedAt).toLocaleTimeString(),
+          status: 'completed' as const,
+          description: `Gateway authorized via ${selectedOrder.paymentMethod.toUpperCase()}`,
+        },
+        {
+          id: 'preparing',
+          label: 'Kitchen Preparation',
+          status: ['preparing', 'dispatched', 'delivered'].includes(selectedOrder.status)
+            ? ('completed' as const)
+            : selectedOrder.status === 'placed'
+            ? ('current' as const)
+            : ('upcoming' as const),
+          description: 'Hearth firing at merchant station',
+        },
+        {
+          id: 'dispatched',
+          label: 'Courier Dispatched',
+          status: ['dispatched', 'delivered'].includes(selectedOrder.status)
+            ? ('completed' as const)
+            : selectedOrder.status === 'preparing'
+            ? ('current' as const)
+            : ('upcoming' as const),
+          description: 'Rider GPS lock active on delivery vector',
+        },
+        {
+          id: 'delivered',
+          label: 'Customer Handover',
+          status: selectedOrder.status === 'delivered' ? ('completed' as const) : ('upcoming' as const),
+          description: 'OTP confirmation signed off',
+        },
+      ]
+    : [];
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 select-none">
-        <div className="text-left">
-          <h2 className="text-lg font-extrabold text-text-primary tracking-tight font-heading">
-            Live Order Logistics Console
-          </h2>
-          <p className="text-xs text-text-secondary mt-1">
-            Monitor real-time customer order queues, dispatch contracted logistics riders, and review system risk flags.
-          </p>
+    <div className="w-full space-y-6 text-left select-none text-[#F3F0E8]">
+      {/* ── SECTION HEADER ── */}
+      <FeastoSectionHeader
+        index="03"
+        title="LIVE ORDER LOGISTICS CONSOLE"
+        subtitle="Global platform order dispatches, merchant preparation states, and delivery telemetry."
+        dark
+      />
+
+      {/* ── FILTER & SEARCH HUD ── */}
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 p-3 bg-[#14161B] border border-white/10 font-mono text-xs">
+        {/* Status Filters */}
+        <div className="flex gap-1 overflow-x-auto scrollbar-none">
+          {['all', 'placed', 'preparing', 'dispatched', 'delivered', 'cancelled'].map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setStatusFilter(tab)}
+              className={`px-3 py-1.5 uppercase font-bold tracking-wider transition-colors cursor-pointer border ${
+                statusFilter === tab
+                  ? 'bg-[#1B3BFF] text-white border-[#1B3BFF]'
+                  : 'bg-[#1D212A] text-[#8E929C] border-white/10 hover:text-white'
+              }`}
+            >
+              {tab}
+            </button>
+          ))}
+        </div>
+
+        {/* Search */}
+        <div className="relative min-w-[260px]">
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8E929C]" />
+          <input
+            type="text"
+            placeholder="Search Order ID, guest, restaurant..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="w-full pl-9 pr-3 py-1.5 bg-[#1D212A] border border-white/10 focus:border-[#1B3BFF] focus:outline-none text-xs font-mono text-white placeholder:text-[#8E929C]"
+          />
         </div>
       </div>
 
+      {/* ── MAIN WORKSPACE: SPLIT TABLE + DETAIL PANEL ── */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        {/* Left Column: Data Grid list */}
+        {/* Orders Table */}
         <div className={selectedOrder ? 'lg:col-span-8' : 'lg:col-span-12'}>
-          <SmartTable
-            data={orders}
+          <FeastoDataTable
             columns={columns}
-            searchPlaceholder="Search orders by ID or customer..."
-            searchFields={['id', 'customerName', 'restaurantName']}
-            filterField="status"
-            filterOptions={[
-              { value: 'placed', label: 'Placed Requests' },
-              { value: 'preparing', label: 'In Preparation' },
-              { value: 'dispatched', label: 'Dispatched (With Rider)' },
-              { value: 'delivered', label: 'Completed Deliveries' },
-              { value: 'cancelled', label: 'Cancelled Audits' },
-            ]}
-            bulkActions={bulkActions}
+            data={filteredOrders}
+            keyExtractor={(item) => item.id}
+            onRowClick={(item) => setSelectedOrder(item)}
+            selectedId={selectedOrder?.id}
+            dark
           />
         </div>
 
-        {/* Right Column: Selected Order Details Pane */}
+        {/* Selected Order Inspector Panel */}
         {selectedOrder && (
-          <div className="lg:col-span-4 bg-primary-bg border border-border-main rounded-xl p-5 shadow-xs text-left animate-fade-in sticky top-20">
-            <div className="flex items-center justify-between gap-4 border-b border-border-main/50 pb-4 mb-4">
-              <div>
-                <span className="text-[10px] font-bold text-text-muted uppercase">Selected Receipt</span>
-                <h3 className="text-sm font-extrabold text-brand-orange font-heading tracking-tight mt-0.5">
-                  {selectedOrder.id}
-                </h3>
-              </div>
-              <button
-                onClick={() => setSelectedOrder(null)}
-                className="p-1 rounded-full text-text-muted hover:text-text-primary hover:bg-surface-bg transition-main cursor-pointer"
-              >
-                <XCircle size={16} />
-              </button>
-            </div>
+          <div className="lg:col-span-4 sticky top-20">
+            <FeastoDetailPanel
+              title={`ORDER ${selectedOrder.id}`}
+              subtitle={`Placed at ${new Date(selectedOrder.placedAt).toLocaleTimeString()}`}
+              index="03"
+              onClose={() => setSelectedOrder(null)}
+              dark
+              actions={
+                <div className="flex items-center justify-between gap-2">
+                  <FeastoButton
+                    variant="danger"
+                    size="sm"
+                    onClick={() => updateOrderStatus(selectedOrder.id, 'cancelled')}
+                  >
+                    EMERGENCY CANCEL
+                  </FeastoButton>
 
-            {/* Receipt details */}
-            <div className="space-y-4 text-xs">
-              <div className="flex justify-between">
-                <span className="text-text-secondary">Customer</span>
-                <span className="font-semibold text-text-primary">{selectedOrder.customerName}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-text-secondary">Merchant Restaurant</span>
-                <span className="font-semibold text-text-primary">{selectedOrder.restaurantName}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-text-secondary">Payment Method</span>
-                <span className="font-bold text-text-primary uppercase">{selectedOrder.paymentMethod}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-text-secondary">Total Value</span>
-                <span className="font-extrabold text-text-primary">₹{selectedOrder.total}</span>
-              </div>
-
-              {/* Order Tracking Timeline visual */}
-              <div className="border-t border-border-main/50 pt-5 mt-4">
-                <h4 className="text-[10px] font-bold text-text-muted uppercase tracking-wider mb-4">
-                  Logistics Tracking Timeline
-                </h4>
-                <div className="space-y-5 relative pl-4 border-l border-border-main/80 ml-2">
-                  
-                  {/* Step 1: Placed */}
-                  <div className="relative text-left">
-                    <div className={`absolute -left-[21px] top-0 w-3.5 h-3.5 rounded-full border-2 flex items-center justify-center bg-primary-bg ${
-                      ['placed', 'preparing', 'dispatched', 'delivered'].includes(selectedOrder.status)
-                        ? 'border-success-main text-success-main'
-                        : 'border-border-main text-text-muted'
-                    }`}>
-                      <CheckCircle size={10} className="fill-current bg-primary-bg rounded-full" />
-                    </div>
-                    <p className="text-[11px] font-bold text-text-primary">Order Placed & Validated</p>
-                    <p className="text-[9px] text-text-muted mt-0.5">
-                      Accepted via {selectedOrder.paymentMethod.toUpperCase()} gateway.
-                    </p>
-                  </div>
-
-                  {/* Step 2: Preparing */}
-                  <div className="relative text-left">
-                    <div className={`absolute -left-[21px] top-0 w-3.5 h-3.5 rounded-full border-2 flex items-center justify-center bg-primary-bg ${
-                      ['preparing', 'dispatched', 'delivered'].includes(selectedOrder.status)
-                        ? 'border-success-main text-success-main'
-                        : 'border-border-main text-text-muted'
-                    }`}>
-                      <ArrowRight size={8} />
-                    </div>
-                    <p className="text-[11px] font-bold text-text-primary">Kitchen Preparing Items</p>
-                    <p className="text-[9px] text-text-muted mt-0.5">
-                      Dishes are currently being cooked.
-                    </p>
-                  </div>
-
-                  {/* Step 3: Dispatched */}
-                  <div className="relative text-left">
-                    <div className={`absolute -left-[21px] top-0 w-3.5 h-3.5 rounded-full border-2 flex items-center justify-center bg-primary-bg ${
-                      ['dispatched', 'delivered'].includes(selectedOrder.status)
-                        ? 'border-success-main text-success-main'
-                        : 'border-border-main text-text-muted'
-                    }`}>
-                      <Truck size={10} />
-                    </div>
-                    <p className="text-[11px] font-bold text-text-primary">Dispatched (Rider GPS Active)</p>
-                    <p className="text-[9px] text-text-muted mt-0.5">
-                      Logistics rider is en route to gate.
-                    </p>
-                  </div>
+                  {selectedOrder.status === 'placed' && (
+                    <FeastoButton
+                      variant="acid"
+                      size="sm"
+                      onClick={() => updateOrderStatus(selectedOrder.id, 'preparing')}
+                    >
+                      FIRE TO KITCHEN →
+                    </FeastoButton>
+                  )}
+                  {selectedOrder.status === 'preparing' && (
+                    <FeastoButton
+                      variant="accent"
+                      size="sm"
+                      onClick={() => updateOrderStatus(selectedOrder.id, 'dispatched')}
+                    >
+                      ASSIGN RIDER →
+                    </FeastoButton>
+                  )}
+                  {selectedOrder.status === 'dispatched' && (
+                    <FeastoButton
+                      variant="acid"
+                      size="sm"
+                      onClick={() => updateOrderStatus(selectedOrder.id, 'delivered')}
+                    >
+                      COMPLETE DROP ✓
+                    </FeastoButton>
+                  )}
+                </div>
+              }
+            >
+              {/* Receipt Dossier */}
+              <div className="p-4 bg-[#1D212A] border border-white/10 space-y-3 font-mono text-xs">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] text-[#8E929C] uppercase">GUEST</span>
+                  <strong className="text-white">{selectedOrder.customerName}</strong>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] text-[#8E929C] uppercase">MERCHANT</span>
+                  <strong className="text-white">{selectedOrder.restaurantName}</strong>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] text-[#8E929C] uppercase">PAYMENT GATEWAY</span>
+                  <strong className="text-[#D7F04A]">{selectedOrder.paymentMethod.toUpperCase()}</strong>
+                </div>
+                <div className="flex items-center justify-between pt-2 border-t border-white/10">
+                  <span className="text-[10px] text-[#8E929C] uppercase font-bold">TOTAL GMV</span>
+                  <strong className="text-base font-black text-white">₹{selectedOrder.total}</strong>
                 </div>
               </div>
-            </div>
+
+              {/* Status Milestone Timeline */}
+              <div className="space-y-3">
+                <span className="font-mono text-[10px] uppercase tracking-widest text-[#8E929C] block">
+                  DISPATCH MILESTONES
+                </span>
+                <FeastoTimeline steps={orderTimeline} dark />
+              </div>
+            </FeastoDetailPanel>
           </div>
         )}
       </div>
     </div>
   );
 };
+
+export default Orders;

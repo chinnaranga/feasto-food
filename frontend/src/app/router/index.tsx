@@ -132,6 +132,10 @@ const LivePreviewTab = lazy(() => import('@/restaurant-portal/features/profile/L
 const AdminLayout = lazy(() => import('@/pages/admin/layout/AdminLayout').then(m => ({ default: m.AdminLayout })));
 const AdminDashboard = lazy(() => import('@/pages/admin/Dashboard').then(m => ({ default: m.AdminDashboard })));
 const AdminRestaurants = lazy(() => import('@/pages/admin/Restaurants').then(m => ({ default: m.AdminRestaurants })));
+const AdminOrders = lazy(() => import('@/pages/admin/Orders').then(m => ({ default: m.Orders })));
+const AdminDelivery = lazy(() => import('@/pages/admin/Delivery').then(m => ({ default: m.Delivery })));
+const AdminAnalytics = lazy(() => import('@/pages/admin/Analytics').then(m => ({ default: m.Analytics })));
+const AdminPayments = lazy(() => import('@/pages/admin/Payments').then(m => ({ default: m.Payments })));
 const RestaurantDetailPanel = lazy(() => import('@/pages/admin/RestaurantDetailPanel').then(m => ({ default: m.RestaurantDetailPanel })));
 const AdminUsers = lazy(() => import('@/pages/admin/Users').then(m => ({ default: m.AdminUsers })));
 const UserDetailPanel = lazy(() => import('@/pages/admin/UserDetailPanel').then(m => ({ default: m.UserDetailPanel })));
@@ -493,6 +497,26 @@ export const router = createBrowserRouter([
       {
         path: 'dashboard',
         element: <AdminDashboard />,
+      },
+      {
+        path: 'orders',
+        element: <AdminOrders />,
+      },
+      {
+        path: 'delivery',
+        element: <AdminDelivery />,
+      },
+      {
+        path: 'riders',
+        element: <AdminDelivery />,
+      },
+      {
+        path: 'analytics',
+        element: <AdminAnalytics />,
+      },
+      {
+        path: 'payments',
+        element: <AdminPayments />,
       },
       {
         path: 'restaurants',

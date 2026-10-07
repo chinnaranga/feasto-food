@@ -14,6 +14,9 @@ import {
   Activity,
   ShieldCheck,
   LogOut,
+  ShoppingBag,
+  Truck,
+  CreditCard,
 } from 'lucide-react';
 import useAdminStore, { AdminRole } from '../../../store/admin/adminStore';
 import { useAuthStore } from '../../../store/authStore';
@@ -26,13 +29,16 @@ export const AdminLayout: React.FC = () => {
 
   const navItems = [
     { label: 'Operations Room', path: '/admin/dashboard', icon: <LayoutDashboard size={14} /> },
+    { label: 'Live Orders', path: '/admin/orders', icon: <ShoppingBag size={14} /> },
     { label: 'Restaurant Oversight', path: '/admin/restaurants', icon: <Building2 size={14} /> },
+    { label: 'Fleet Telemetry', path: '/admin/delivery', icon: <Truck size={14} /> },
+    { label: 'Signals & Intelligence', path: '/admin/analytics', icon: <Activity size={14} /> },
+    { label: 'Financial Settlements', path: '/admin/payments', icon: <CreditCard size={14} /> },
     { label: 'User Governance & RBAC', path: '/admin/users', icon: <Users size={14} /> },
     { label: 'Trust & Safety Queue', path: '/admin/trust-safety', icon: <ShieldAlert size={14} /> },
     { label: 'Support Operations', path: '/admin/support', icon: <HelpCircle size={14} /> },
     { label: 'Feature Flags & Rollouts', path: '/admin/flags', icon: <ToggleLeft size={14} /> },
     { label: 'Audit & Compliance Logs', path: '/admin/audit-logs', icon: <FileText size={14} /> },
-    { label: 'Platform Content', path: '/admin/content', icon: <Megaphone size={14} /> },
     { label: 'System Settings', path: '/admin/settings', icon: <Settings size={14} /> },
     { label: 'System Health', path: '/admin/health', icon: <Activity size={14} /> },
   ];

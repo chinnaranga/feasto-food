@@ -68,21 +68,19 @@ export const PortalDashboardView: React.FC = () => {
   );
 };
 
-// ─── Orders View Placeholder ─────────────────────────────────────────────────
+// ─── Orders View & Kitchen Display System ──────────────────────────────────
+import { useLocation } from 'react-router-dom';
+import { LiveOrdersHub } from './features/orders/LiveOrdersHub';
+import { KitchenDisplayView } from './features/orders/KitchenDisplayView';
+
 export const PortalOrdersView: React.FC = () => {
-  return (
-    <PageContainer>
-      <PortalPageHeader
-        title="Live Orders Hub"
-        description="Monitor, update, and manage incoming operations tickets."
-      />
-      <PortalEmptyState
-        title="No active incoming orders"
-        description="We will notify you here once customers place order tickets for this branch location."
-      />
-    </PageContainer>
-  );
+  const location = useLocation();
+  if (location.pathname.includes('/kitchen')) {
+    return <KitchenDisplayView />;
+  }
+  return <LiveOrdersHub />;
 };
+
 
 // ─── Menu View Placeholder ───────────────────────────────────────────────────
 export const PortalMenuView: React.FC = () => {

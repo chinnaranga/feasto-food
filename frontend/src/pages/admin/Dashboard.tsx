@@ -81,6 +81,40 @@ export const AdminDashboard: React.FC = () => {
         </div>
       </div>
 
+      {/* ── MASSIVE OPERATIONAL STATEMENT: 2,481 ORDERS IN MOTION ── */}
+      <div className="p-6 sm:p-8 bg-[#14161B] border border-[#252830] flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div>
+          <span className="font-mono text-[10px] uppercase tracking-widest text-[#D7F04A] block">
+            LIVE NOW · PLATFORM IN MOTION
+          </span>
+          <div className="font-heading font-black text-4xl sm:text-7xl text-white tracking-tight leading-none mt-2">
+            2,481
+          </div>
+          <span className="font-heading font-black text-lg sm:text-xl text-[#8E929C] uppercase tracking-wider block mt-1">
+            ORDERS IN MOTION
+          </span>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 font-mono text-xs">
+          <div className="p-3 bg-[#1D212A] border border-[#2D3342]">
+            <span className="text-[10px] text-[#8E929C] uppercase block">ACTIVE FLEET</span>
+            <span className="text-sm font-bold text-white mt-0.5 block">48 Couriers</span>
+          </div>
+          <div className="p-3 bg-[#1D212A] border border-[#2D3342]">
+            <span className="text-[10px] text-[#8E929C] uppercase block">HEARTH STATIONS</span>
+            <span className="text-sm font-bold text-[#D7F04A] mt-0.5 block">38 Firing</span>
+          </div>
+          <div className="p-3 bg-[#1D212A] border border-[#2D3342]">
+            <span className="text-[10px] text-[#8E929C] uppercase block">PROCESSED GMV</span>
+            <span className="text-sm font-bold text-white mt-0.5 block">₹1,84,200</span>
+          </div>
+          <div className="p-3 bg-[#1D212A] border border-[#2D3342]">
+            <span className="text-[10px] text-[#8E929C] uppercase block">SATELLITE SYNC</span>
+            <span className="text-sm font-bold text-[#15803D] mt-0.5 block">99.98%</span>
+          </div>
+        </div>
+      </div>
+
       {/* ── CORE OPERATIONS ROOM GRID: MAP + LIVE STREAMS ── */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         

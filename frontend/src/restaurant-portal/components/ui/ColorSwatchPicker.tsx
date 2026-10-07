@@ -2,14 +2,14 @@ import React, { useId } from 'react';
 import { Check } from 'lucide-react';
 
 const PRESET_COLORS = [
-  { label: 'Feasto Orange', value: '#e35205' },
-  { label: 'Crimson Red',   value: '#dc2626' },
-  { label: 'Forest Green',  value: '#16a34a' },
-  { label: 'Ocean Blue',    value: '#2563eb' },
-  { label: 'Violet',        value: '#7c3aed' },
-  { label: 'Amber Gold',    value: '#d97706' },
-  { label: 'Slate',         value: '#475569' },
-  { label: 'Rose',          value: '#e11d48' },
+  { label: 'Feasto Cobalt', value: '#1B3BFF' },
+  { label: 'Acid Lime',    value: '#D7F04A' },
+  { label: 'Tactile Ink',   value: '#141518' },
+  { label: 'Crimson Red',   value: '#DC2626' },
+  { label: 'Forest Green',  value: '#16A34A' },
+  { label: 'Amber Gold',    value: '#D97706' },
+  { label: 'Slate Gray',    value: '#475569' },
+  { label: 'Warm Sand',     value: '#F3F0E8' },
 ];
 
 interface ColorSwatchPickerProps {
@@ -20,14 +20,14 @@ interface ColorSwatchPickerProps {
 export const ColorSwatchPicker: React.FC<ColorSwatchPickerProps> = ({ value, onChange }) => {
   const hexId = useId();
 
-  const isPreset = PRESET_COLORS.some((c) => c.value === value);
+  const isPreset = PRESET_COLORS.some((c) => c.value.toLowerCase() === value.toLowerCase());
 
   return (
     <div className="space-y-3">
       {/* Preset swatches */}
       <div className="flex flex-wrap gap-2">
         {PRESET_COLORS.map((preset) => {
-          const isActive = value === preset.value;
+          const isActive = value.toLowerCase() === preset.value.toLowerCase();
           return (
             <button
               key={preset.value}
@@ -35,14 +35,20 @@ export const ColorSwatchPicker: React.FC<ColorSwatchPickerProps> = ({ value, onC
               title={preset.label}
               aria-label={`Select ${preset.label}`}
               onClick={() => onChange(preset.value)}
-              className={`w-7 h-7 rounded-full border-2 transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 cursor-pointer flex items-center justify-center shrink-0 ${
+              className={`w-7 h-7 border border-[#141518]/30 transition-all duration-150 focus:outline-none cursor-pointer flex items-center justify-center shrink-0 ${
                 isActive
-                  ? 'border-neutral-800 scale-110 shadow-md'
-                  : 'border-transparent hover:scale-105 hover:border-neutral-300'
+                  ? 'ring-2 ring-[#141518] scale-110 shadow-[2px_2px_0px_#141518]'
+                  : 'hover:scale-105 hover:border-[#141518]'
               }`}
               style={{ backgroundColor: preset.value }}
             >
-              {isActive && <Check size={11} className="text-white drop-shadow-sm" strokeWidth={3} />}
+              {isActive && (
+                <Check
+                  size={12}
+                  className={preset.value === '#D7F04A' || preset.value === '#F3F0E8' ? 'text-[#141518]' : 'text-white'}
+                  strokeWidth={3}
+                />
+              )}
             </button>
           );
         })}
@@ -51,11 +57,11 @@ export const ColorSwatchPicker: React.FC<ColorSwatchPickerProps> = ({ value, onC
       {/* Custom hex input */}
       <div className="flex items-center gap-2">
         <div
-          className="w-7 h-7 rounded-lg border border-neutral-200 shrink-0 shadow-inner"
+          className="w-7 h-7 border border-[#141518]/30 shrink-0 shadow-inner"
           style={{ backgroundColor: value }}
         />
         <div className="flex flex-col gap-0.5 flex-1">
-          <label htmlFor={hexId} className="text-[9px] font-bold text-neutral-400 uppercase tracking-wider">
+          <label htmlFor={hexId} className="font-mono text-[9px] font-bold text-[#52555F] uppercase tracking-wider">
             Custom Hex
           </label>
           <input
@@ -67,9 +73,9 @@ export const ColorSwatchPicker: React.FC<ColorSwatchPickerProps> = ({ value, onC
               if (/^#[0-9a-fA-F]{0,6}$/.test(v)) onChange(v);
             }}
             maxLength={7}
-            placeholder="#e35205"
-            className={`w-36 px-2.5 py-1.5 bg-white border text-[11px] font-mono font-semibold text-neutral-800 rounded-lg transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-[#e35205]/20 ${
-              isPreset ? 'border-neutral-200' : 'border-[#e35205] ring-1 ring-[#e35205]/20'
+            placeholder="#1B3BFF"
+            className={`w-36 px-2.5 py-1.5 bg-[#FAF8F5] border text-[11px] font-mono font-semibold text-[#141518] transition-all duration-150 focus:outline-none focus:ring-1 focus:ring-[#141518] ${
+              isPreset ? 'border-[#141518]/20' : 'border-[#141518] ring-1 ring-[#141518]'
             }`}
           />
         </div>

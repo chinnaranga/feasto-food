@@ -21,8 +21,8 @@ export const TrendChartCard: React.FC<TrendChartCardProps> = ({
   if (loading) {
     return (
       <Card className="text-left animate-pulse flex flex-col gap-4 min-h-[220px]">
-        <div className="h-3 w-32 bg-neutral-100 rounded-full" />
-        <div className="flex-1 bg-neutral-50/50 rounded-xl" />
+        <div className="h-3 w-32 bg-[#141518]/10" />
+        <div className="flex-1 bg-[#141518]/5" />
       </Card>
     );
   }
@@ -42,7 +42,6 @@ export const TrendChartCard: React.FC<TrendChartCardProps> = ({
   // Calculate coordinates
   const points = data.map((val, idx) => {
     const x = padding + (idx / (data.length - 1)) * chartWidth;
-    // Invert y axis for SVG coordinates
     const y = padding + chartHeight - ((val - minVal) / range) * chartHeight;
     return { x, y };
   });
@@ -55,22 +54,22 @@ export const TrendChartCard: React.FC<TrendChartCardProps> = ({
       return (
         <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-full overflow-visible">
           <defs>
-            <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#e35205" stopOpacity="0.12" />
-              <stop offset="100%" stopColor="#e35205" stopOpacity="0.00" />
+            <linearGradient id="chartGradientCobalt" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#1B3BFF" stopOpacity="0.18" />
+              <stop offset="100%" stopColor="#1B3BFF" stopOpacity="0.00" />
             </linearGradient>
           </defs>
 
           {/* Grid lines */}
-          <line x1={padding} y1={padding} x2={width - padding} y2={padding} stroke="#f5f5f5" strokeWidth={1} />
-          <line x1={padding} y1={padding + chartHeight / 2} x2={width - padding} y2={padding + chartHeight / 2} stroke="#f5f5f5" strokeWidth={1} />
-          <line x1={padding} y1={height - padding} x2={width - padding} y2={height - padding} stroke="#ebebeb" strokeWidth={1} />
+          <line x1={padding} y1={padding} x2={width - padding} y2={padding} stroke="#141518" strokeOpacity="0.08" strokeWidth={1} />
+          <line x1={padding} y1={padding + chartHeight / 2} x2={width - padding} y2={padding + chartHeight / 2} stroke="#141518" strokeOpacity="0.08" strokeWidth={1} />
+          <line x1={padding} y1={height - padding} x2={width - padding} y2={height - padding} stroke="#141518" strokeOpacity="0.15" strokeWidth={1} />
 
           {/* Area fill */}
-          <path d={fillD} fill="url(#chartGradient)" />
+          <path d={fillD} fill="url(#chartGradientCobalt)" />
 
           {/* Trend line */}
-          <path d={pathD} fill="none" stroke="#e35205" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
+          <path d={pathD} fill="none" stroke="#1B3BFF" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
 
           {/* Data point dots */}
           {points.map((p, idx) => (
@@ -79,9 +78,8 @@ export const TrendChartCard: React.FC<TrendChartCardProps> = ({
                 cx={p.x}
                 cy={p.y}
                 r={4}
-                className="fill-[#e35205] stroke-white stroke-2 transition-all duration-150 group-hover/dot:r-5 group-hover/dot:stroke-neutral-800"
+                className="fill-[#1B3BFF] stroke-[#FAF8F5] stroke-2 transition-all duration-150 group-hover/dot:r-5 group-hover/dot:stroke-[#141518]"
               />
-              {/* Tooltip trigger */}
               <title>{`${labels[idx]}: ${yAxisLabel || ''}${data[idx]}`}</title>
             </g>
           ))}
@@ -96,9 +94,9 @@ export const TrendChartCard: React.FC<TrendChartCardProps> = ({
     return (
       <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-full overflow-visible">
         {/* Grid lines */}
-        <line x1={padding} y1={padding} x2={width - padding} y2={padding} stroke="#f5f5f5" strokeWidth={1} />
-        <line x1={padding} y1={padding + chartHeight / 2} x2={width - padding} y2={padding + chartHeight / 2} stroke="#f5f5f5" strokeWidth={1} />
-        <line x1={padding} y1={height - padding} x2={width - padding} y2={height - padding} stroke="#ebebeb" strokeWidth={1} />
+        <line x1={padding} y1={padding} x2={width - padding} y2={padding} stroke="#141518" strokeOpacity="0.08" strokeWidth={1} />
+        <line x1={padding} y1={padding + chartHeight / 2} x2={width - padding} y2={padding + chartHeight / 2} stroke="#141518" strokeOpacity="0.08" strokeWidth={1} />
+        <line x1={padding} y1={height - padding} x2={width - padding} y2={height - padding} stroke="#141518" strokeOpacity="0.15" strokeWidth={1} />
 
         {data.map((val, idx) => {
           const barHeight = ((val - minVal) / range) * chartHeight;
@@ -112,8 +110,7 @@ export const TrendChartCard: React.FC<TrendChartCardProps> = ({
                 y={y}
                 width={barWidth}
                 height={Math.max(barHeight, 2)}
-                rx={Math.min(barWidth / 2, 4)}
-                className="fill-neutral-200 hover:fill-[#e35205] transition-colors duration-150"
+                className="fill-[#141518]/25 hover:fill-[#1B3BFF] transition-colors duration-150"
               />
               <title>{`${labels[idx]}: ${data[idx]} orders`}</title>
             </g>
@@ -126,14 +123,14 @@ export const TrendChartCard: React.FC<TrendChartCardProps> = ({
   return (
     <Card className="text-left select-none flex flex-col gap-4 h-full min-h-[220px]">
       <div>
-        <h4 className="text-xs font-bold text-neutral-800 uppercase tracking-wider">{title}</h4>
+        <h4 className="font-heading font-black text-xs uppercase tracking-tight text-[#141518]">{title}</h4>
       </div>
 
       {/* Chart wrapper */}
       <div className="flex-1 w-full relative">{renderChart()}</div>
 
       {/* Footer labels */}
-      <div className="flex justify-between items-center px-5 border-t border-neutral-100/60 pt-3 text-[9px] font-bold text-neutral-400 uppercase tracking-widest shrink-0">
+      <div className="flex justify-between items-center px-4 border-t border-[#141518]/10 pt-3 font-mono text-[9px] font-bold text-[#52555F] uppercase tracking-wider shrink-0">
         <span>{labels[0]}</span>
         <span>{labels[labels.length - 1]}</span>
       </div>

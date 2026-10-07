@@ -19,7 +19,13 @@ import {
   TrendingUp,
   Award,
 } from 'lucide-react';
-import type { RiderDutyState, DailyOperationalSummary, OperationalAlert, TodayShiftSchedule, RiderActivityItem } from '../../types/dashboard';
+import type {
+  RiderDutyState,
+  DailyOperationalSummary,
+  OperationalAlert,
+  TodayShiftSchedule,
+  RiderActivityItem,
+} from '../../types/dashboard';
 import { RiderButton } from '../RiderUIComponents';
 
 // ─── DashboardTopBar ─────────────────────────────────────────────────────────
@@ -33,64 +39,72 @@ export const DashboardTopBar: React.FC<{
   const navigate = useNavigate();
 
   return (
-    <header className="sticky top-0 w-full bg-white/95 backdrop-blur-md border-b border-neutral-200/80 z-[400] px-4 py-3 select-none">
-      <div className="max-w-lg mx-auto flex items-center justify-between gap-3">
+    <header className="sticky top-0 w-full bg-[#FAF8F5] border-b border-[#141518] z-[400] px-4 py-3 select-none">
+      <div className="max-w-xl mx-auto flex items-center justify-between gap-3">
         {/* Left: Brand & Menu Trigger */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2.5">
           <button
             onClick={onOpenDrawer}
-            className="p-2 rounded-xl text-neutral-700 hover:bg-neutral-100 transition-colors cursor-pointer active:scale-95"
+            className="p-1.5 bg-[#FAF8F5] border border-[#141518] text-[#141518] hover:bg-[#F3F0E8] shadow-[2px_2px_0px_#141518] cursor-pointer"
             aria-label="Open drawer"
           >
-            <span className="text-lg">☰</span>
+            <span className="text-base font-mono">☰</span>
           </button>
 
-          <div className="flex items-center gap-1.5 cursor-pointer" onClick={() => navigate('/rider/dashboard')}>
-            <span className="text-sm font-black text-neutral-900 tracking-tight font-heading">
-              Feasto<span className="text-[#e35205]">Rider</span>
+          <div
+            className="flex items-center gap-2 cursor-pointer"
+            onClick={() => navigate('/rider/dashboard')}
+          >
+            <div className="w-6 h-6 bg-[#141518] text-[#D7F04A] border border-[#141518] flex items-center justify-center font-mono font-black text-[10px]">
+              FC
+            </div>
+            <span className="text-xs font-mono font-black uppercase tracking-wider text-[#141518]">
+              FEASTO RIDER
             </span>
-            <span className="text-[9px] font-mono font-black uppercase px-1.5 py-0.2 rounded bg-neutral-100 text-neutral-600 border border-neutral-200">
+            <span className="text-[9px] font-mono font-bold uppercase px-1.5 py-0.2 bg-[#F3F0E8] text-[#141518] border border-[#141518]">
               RDR-8802
             </span>
           </div>
         </div>
 
         {/* Right: Duty Switcher & Alerts Bell */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 font-mono">
           <button
             onClick={onToggleDuty}
-            className={`px-3 py-1.5 rounded-full text-xs font-black uppercase tracking-wider transition-all cursor-pointer shadow-3xs flex items-center gap-1.5 ${
+            className={`px-3 py-1.5 text-xs font-mono font-black uppercase tracking-wider transition-all cursor-pointer border border-[#141518] flex items-center gap-1.5 shadow-[2px_2px_0px_#141518] ${
               dutyState === 'online'
-                ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
+                ? 'bg-[#D7F04A] text-[#141518]'
                 : dutyState === 'break_mode'
-                ? 'bg-amber-500 text-white'
-                : 'bg-neutral-200 hover:bg-neutral-300 text-neutral-700'
+                ? 'bg-[#FEF08A] text-[#141518]'
+                : 'bg-[#F3F0E8] text-[#55565B]'
             }`}
           >
-            <Power size={13} />
-            <span>{dutyState === 'online' ? 'On Duty' : dutyState === 'break_mode' ? 'Paused' : 'Off Duty'}</span>
+            <Power size={12} />
+            <span>{dutyState === 'online' ? 'ON DUTY' : dutyState === 'break_mode' ? 'PAUSED' : 'STANDBY'}</span>
           </button>
 
           <button
             onClick={() => navigate('/rider/alerts')}
-            className="p-2 rounded-xl text-neutral-600 hover:bg-neutral-100 relative transition-colors cursor-pointer"
+            className="p-1.5 bg-[#FAF8F5] border border-[#141518] text-[#141518] hover:bg-[#F3F0E8] relative shadow-[2px_2px_0px_#141518] cursor-pointer"
             aria-label="Alerts"
           >
-            <Bell size={18} />
+            <Bell size={16} />
             {unreadAlertsCount > 0 && (
-              <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-[#e35205]" />
+              <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-[#D7F04A] border border-[#141518]" />
             )}
           </button>
         </div>
       </div>
 
       {/* Zone Sub-Banner */}
-      <div className="max-w-lg mx-auto pt-2 flex items-center justify-between text-[11px] text-neutral-500 font-medium">
+      <div className="max-w-xl mx-auto pt-2 flex items-center justify-between text-[11px] text-[#55565B] font-mono">
         <div className="flex items-center gap-1">
-          <MapPin size={12} className="text-[#e35205]" />
-          <span>Zone: <strong className="text-neutral-800">{assignedZone}</strong></span>
+          <MapPin size={12} className="text-[#141518]" />
+          <span>
+            SECTOR: <strong className="text-[#141518] uppercase">{assignedZone}</strong>
+          </span>
         </div>
-        <span className="text-emerald-700 font-mono font-bold">★ 4.92 Rating</span>
+        <span className="text-[#141518] font-mono font-bold">★ 4.92 SLA</span>
       </div>
     </header>
   );
@@ -99,26 +113,26 @@ export const DashboardTopBar: React.FC<{
 // ─── DashboardSubNavTabBar ───────────────────────────────────────────────────
 export const DashboardSubNavTabBar: React.FC = () => {
   const tabs = [
-    { label: 'Home', path: '/rider/dashboard' },
-    { label: 'Today Shift', path: '/rider/today' },
-    { label: 'Alerts', path: '/rider/alerts' },
-    { label: 'Summary', path: '/rider/summary' },
-    { label: 'Overview', path: '/rider/overview' },
+    { label: 'CONTROL', path: '/rider/dashboard' },
+    { label: 'SHIFT', path: '/rider/today' },
+    { label: 'ALERTS', path: '/rider/alerts' },
+    { label: 'SUMMARY', path: '/rider/summary' },
+    { label: 'OVERVIEW', path: '/rider/overview' },
   ];
 
   return (
-    <div className="w-full bg-white border-y border-neutral-200/80 px-2 py-2 overflow-x-auto scrollbar-none text-left select-none">
-      <div className="flex items-center gap-1 min-w-max">
+    <div className="w-full bg-[#FAF8F5] border-y border-[#141518] px-2 py-2 overflow-x-auto scrollbar-none text-left select-none font-mono">
+      <div className="flex items-center gap-1.5 min-w-max">
         {tabs.map((tab) => (
           <NavLink
             key={tab.path}
             to={tab.path}
             end={tab.path === '/rider/dashboard'}
             className={({ isActive }) =>
-              `px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
+              `px-3.5 py-1.5 text-xs font-mono font-bold uppercase tracking-wider border transition-all ${
                 isActive
-                  ? 'bg-neutral-900 text-white shadow-3xs'
-                  : 'text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100'
+                  ? 'bg-[#D7F04A] text-[#141518] border-[#141518] shadow-[2px_2px_0px_#141518]'
+                  : 'bg-[#FAF8F5] border-transparent text-[#55565B] hover:text-[#141518] hover:bg-[#F3F0E8] hover:border-[#141518]/20'
               }`
             }
           >
@@ -138,48 +152,50 @@ export const StatusToggleCard: React.FC<{
   onToggleBreak: () => void;
 }> = ({ dutyState, assignedZone, onToggle, onToggleBreak }) => {
   return (
-    <div className="p-5 rounded-2xl bg-white border border-neutral-200/90 shadow-2xs space-y-4 text-left">
+    <div className="p-5 bg-[#FAF8F5] border border-[#141518] shadow-[4px_4px_0px_#141518] space-y-4 text-left">
       <div className="flex items-center justify-between">
         <div className="space-y-0.5">
-          <span className="text-[10px] font-mono font-bold text-neutral-400 uppercase">Current Operational Duty</span>
-          <h3 className="text-base font-black text-neutral-900 font-heading">
+          <span className="text-[10px] font-mono font-bold text-[#55565B] uppercase tracking-wider">
+            OPERATIONAL READINESS
+          </span>
+          <h3 className="text-base font-heading font-black text-[#141518] uppercase tracking-tight">
             {dutyState === 'online'
-              ? 'You are On Duty'
+              ? 'ACTIVE ON DUTY'
               : dutyState === 'break_mode'
-              ? 'Shift Paused (Break Mode)'
-              : 'You are Off Duty'}
+              ? 'SHIFT PAUSED (BREAK)'
+              : 'VESSEL STANDBY (OFF)'}
           </h3>
         </div>
 
         <span
-          className={`text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-full border ${
+          className={`text-[9px] font-mono font-bold uppercase tracking-wider px-2.5 py-1 border shadow-[1px_1px_0px_#141518] ${
             dutyState === 'online'
-              ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+              ? 'bg-[#D7F04A] text-[#141518] border-[#141518]'
               : dutyState === 'break_mode'
-              ? 'bg-amber-50 text-amber-700 border-amber-200'
-              : 'bg-neutral-100 text-neutral-600 border-neutral-250'
+              ? 'bg-[#FEF08A] text-[#141518] border-[#141518]'
+              : 'bg-[#F3F0E8] text-[#55565B] border-[#141518]/30'
           }`}
         >
-          {dutyState === 'online' ? '● ON DUTY' : dutyState === 'break_mode' ? '⏸ PAUSED' : 'OFF DUTY'}
+          {dutyState === 'online' ? '● ON DUTY' : dutyState === 'break_mode' ? '⏸ PAUSED' : '○ STANDBY'}
         </span>
       </div>
 
-      <p className="text-xs text-neutral-600 leading-relaxed">
+      <p className="text-xs text-[#55565B] leading-relaxed font-sans">
         {dutyState === 'online'
-          ? `Receiving instant order dispatches near ${assignedZone}.`
+          ? `Radar GPS active. Receiving priority delivery dispatches in ${assignedZone}.`
           : dutyState === 'break_mode'
-          ? 'Deliveries are temporarily paused. Resume anytime.'
-          : 'Turn On Duty to start receiving delivery offers in your zone.'}
+          ? 'Dispatch queue paused. Tap resume when ready to accept orders.'
+          : 'Turn On Duty to begin receiving high-ticket delivery offers in your zone.'}
       </p>
 
-      <div className="grid grid-cols-2 gap-2">
+      <div className="grid grid-cols-2 gap-2.5">
         <RiderButton
           variant={dutyState === 'online' ? 'outline' : 'primary'}
           size="md"
           fullWidth
           onClick={onToggle}
         >
-          {dutyState === 'online' ? 'Go Off Duty' : 'Go On Duty Now'}
+          {dutyState === 'online' ? 'GO OFF DUTY' : 'GO ON DUTY NOW'}
         </RiderButton>
 
         <RiderButton
@@ -188,7 +204,7 @@ export const StatusToggleCard: React.FC<{
           fullWidth
           onClick={onToggleBreak}
         >
-          {dutyState === 'break_mode' ? 'Resume Deliveries' : 'Pause (Break Mode)'}
+          {dutyState === 'break_mode' ? 'RESUME DELIVERIES' : 'BREAK (PAUSE)'}
         </RiderButton>
       </div>
     </div>
@@ -198,66 +214,66 @@ export const StatusToggleCard: React.FC<{
 // ─── DailySummaryCard ────────────────────────────────────────────────────────
 export const DailySummaryCard: React.FC<{ summary: DailyOperationalSummary }> = ({ summary }) => {
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 text-left">
-      <div className="p-4 rounded-2xl bg-white border border-neutral-200/90 shadow-2xs space-y-2">
-        <div className="flex items-center justify-between text-neutral-400">
-          <span className="text-[10px] font-black uppercase tracking-wider font-heading">Today's Earnings</span>
-          <div className="p-1.5 rounded-lg bg-[#e35205]/10 text-[#e35205]">
-            <Wallet size={16} />
+    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-left">
+      <div className="p-4 bg-[#FAF8F5] border border-[#141518] shadow-[3px_3px_0px_#141518] space-y-2">
+        <div className="flex items-center justify-between text-[#55565B]">
+          <span className="text-[10px] font-mono font-bold uppercase tracking-wider">TODAY REVENUE</span>
+          <div className="p-1 bg-[#D7F04A] border border-[#141518] text-[#141518]">
+            <Wallet size={14} />
           </div>
         </div>
         <div>
-          <h4 className="text-xl sm:text-2xl font-black text-neutral-900 font-mono leading-none">
+          <h4 className="text-xl sm:text-2xl font-black text-[#141518] font-mono leading-none">
             ₹{summary.todayEarnings.toFixed(0)}
           </h4>
-          <span className="text-[11px] text-neutral-500 block mt-1">₹{summary.todayTips} tips included</span>
+          <span className="text-[11px] text-[#55565B] block font-mono mt-1">₹{summary.todayTips} tips</span>
         </div>
       </div>
 
-      <div className="p-4 rounded-2xl bg-white border border-neutral-200/90 shadow-2xs space-y-2">
-        <div className="flex items-center justify-between text-neutral-400">
-          <span className="text-[10px] font-black uppercase tracking-wider font-heading">Trips Completed</span>
-          <div className="p-1.5 rounded-lg bg-emerald-50 text-emerald-600">
-            <TrendingUp size={16} />
+      <div className="p-4 bg-[#FAF8F5] border border-[#141518] shadow-[3px_3px_0px_#141518] space-y-2">
+        <div className="flex items-center justify-between text-[#55565B]">
+          <span className="text-[10px] font-mono font-bold uppercase tracking-wider">ORDERS COMPLETED</span>
+          <div className="p-1 bg-[#F3F0E8] border border-[#141518] text-[#141518]">
+            <TrendingUp size={14} />
           </div>
         </div>
         <div>
-          <h4 className="text-xl sm:text-2xl font-black text-neutral-900 font-mono leading-none">
-            {summary.todayTrips} Orders
+          <h4 className="text-xl sm:text-2xl font-black text-[#141518] font-mono leading-none">
+            {summary.todayTrips} DROPS
           </h4>
-          <span className="text-[11px] text-emerald-700 font-bold block mt-1">
-            {summary.acceptanceRatePct}% Acceptance SLA
+          <span className="text-[11px] text-[#141518] font-mono font-bold block mt-1">
+            {summary.acceptanceRatePct}% SLA
           </span>
         </div>
       </div>
 
-      <div className="p-4 rounded-2xl bg-white border border-neutral-200/90 shadow-2xs space-y-2">
-        <div className="flex items-center justify-between text-neutral-400">
-          <span className="text-[10px] font-black uppercase tracking-wider font-heading">Active Shift Time</span>
-          <div className="p-1.5 rounded-lg bg-blue-50 text-blue-600">
-            <Clock size={16} />
+      <div className="p-4 bg-[#FAF8F5] border border-[#141518] shadow-[3px_3px_0px_#141518] space-y-2">
+        <div className="flex items-center justify-between text-[#55565B]">
+          <span className="text-[10px] font-mono font-bold uppercase tracking-wider">ACTIVE SHIFT</span>
+          <div className="p-1 bg-[#F3F0E8] border border-[#141518] text-[#141518]">
+            <Clock size={14} />
           </div>
         </div>
         <div>
-          <h4 className="text-xl sm:text-2xl font-black text-neutral-900 font-mono leading-none">
-            5.8 Hrs
+          <h4 className="text-xl sm:text-2xl font-black text-[#141518] font-mono leading-none">
+            5.8 HRS
           </h4>
-          <span className="text-[11px] text-neutral-500 block mt-1">94% On-Time SLA</span>
+          <span className="text-[11px] text-[#55565B] font-mono block mt-1">94% ON-TIME</span>
         </div>
       </div>
 
-      <div className="p-4 rounded-2xl bg-white border border-neutral-200/90 shadow-2xs space-y-2">
-        <div className="flex items-center justify-between text-neutral-400">
-          <span className="text-[10px] font-black uppercase tracking-wider font-heading">Partner Rating</span>
-          <div className="p-1.5 rounded-lg bg-amber-50 text-amber-600">
-            <Award size={16} />
+      <div className="p-4 bg-[#FAF8F5] border border-[#141518] shadow-[3px_3px_0px_#141518] space-y-2">
+        <div className="flex items-center justify-between text-[#55565B]">
+          <span className="text-[10px] font-mono font-bold uppercase tracking-wider">PARTNER SLA</span>
+          <div className="p-1 bg-[#D7F04A] border border-[#141518] text-[#141518]">
+            <Award size={14} />
           </div>
         </div>
         <div>
-          <h4 className="text-xl sm:text-2xl font-black text-neutral-900 font-mono leading-none">
+          <h4 className="text-xl sm:text-2xl font-black text-[#141518] font-mono leading-none">
             ★ 4.92
           </h4>
-          <span className="text-[11px] text-emerald-700 font-bold block mt-1">Top 5% Partner</span>
+          <span className="text-[11px] text-[#141518] font-mono font-bold block mt-1">TOP 5% FLEET</span>
         </div>
       </div>
     </div>
@@ -269,32 +285,34 @@ export const QuickActionGrid: React.FC = () => {
   const navigate = useNavigate();
 
   const actions = [
-    { label: 'Offers Feed', path: '/rider/orders', icon: <ShoppingBag size={20} />, badge: '2 New' },
-    { label: 'Active Task', path: '/rider/active', icon: <Navigation size={20} />, badge: '#1809' },
-    { label: 'Rider Wallet', path: '/rider/earnings', icon: <Wallet size={20} /> },
-    { label: 'Alerts', path: '/rider/alerts', icon: <Bell size={20} /> },
-    { label: 'SOS Help', path: '/rider/support', icon: <HelpCircle size={20} /> },
-    { label: 'Profile Hub', path: '/rider/profile', icon: <User size={20} /> },
-    { label: 'Today Shift', path: '/rider/today', icon: <Clock size={20} /> },
-    { label: 'App Settings', path: '/rider/settings', icon: <Settings size={20} /> },
+    { label: 'OFFERS FEED', path: '/rider/orders', icon: <ShoppingBag size={18} />, badge: '2 NEW' },
+    { label: 'ACTIVE TASK', path: '/rider/active', icon: <Navigation size={18} />, badge: '#1809' },
+    { label: 'WALLET HUB', path: '/rider/earnings', icon: <Wallet size={18} /> },
+    { label: 'ALERTS', path: '/rider/alerts', icon: <Bell size={18} /> },
+    { label: 'SOS EMERGENCY', path: '/rider/support', icon: <HelpCircle size={18} /> },
+    { label: 'COURIER DOSSIER', path: '/rider/profile', icon: <User size={18} /> },
+    { label: 'TODAY SHIFT', path: '/rider/today', icon: <Clock size={18} /> },
+    { label: 'CONFIG', path: '/rider/settings', icon: <Settings size={18} /> },
   ];
 
   return (
-    <div className="p-4 sm:p-5 rounded-2xl bg-white border border-neutral-200/90 shadow-2xs space-y-3 text-left">
-      <h4 className="text-xs font-black uppercase text-neutral-900 font-heading">Operational Quick Actions</h4>
-      <div className="grid grid-cols-4 gap-2 sm:gap-2.5">
+    <div className="p-4 sm:p-5 bg-[#FAF8F5] border border-[#141518] shadow-[4px_4px_0px_#141518] space-y-3 text-left">
+      <h4 className="text-xs font-mono font-black uppercase text-[#141518] tracking-wider">
+        OPERATIONAL DISPATCH ACTIONS
+      </h4>
+      <div className="grid grid-cols-4 gap-2 sm:gap-2.5 font-mono">
         {actions.map((act) => (
           <button
             key={act.path}
             onClick={() => navigate(act.path)}
-            className="p-2.5 sm:p-3 rounded-xl bg-neutral-50 hover:bg-neutral-100/90 border border-neutral-200/80 flex flex-col items-center justify-center gap-1.5 transition-all cursor-pointer relative active:scale-95 shadow-3xs"
+            className="p-2.5 sm:p-3 bg-[#FAF8F5] hover:bg-[#D7F04A]/25 border border-[#141518] shadow-[2px_2px_0px_#141518] flex flex-col items-center justify-center gap-1.5 transition-all cursor-pointer relative active:translate-x-[1px] active:translate-y-[1px]"
           >
-            <div className="text-[#e35205]">{act.icon}</div>
-            <span className="text-[10px] font-bold text-neutral-800 text-center leading-snug truncate w-full">
+            <div className="text-[#141518]">{act.icon}</div>
+            <span className="text-[9px] font-bold text-[#141518] text-center uppercase tracking-wider truncate w-full">
               {act.label}
             </span>
             {act.badge && (
-              <span className="absolute -top-1.5 -right-1 text-[8px] font-black px-1.5 py-0.2 rounded-full bg-[#e35205] text-white shadow-3xs">
+              <span className="absolute -top-1.5 -right-1 text-[8px] font-mono font-black px-1.5 py-0.2 bg-[#141518] text-[#D7F04A] border border-[#141518]">
                 {act.badge}
               </span>
             )}
@@ -313,29 +331,33 @@ export const AlertCard: React.FC<{ alert: OperationalAlert; onDismiss: (id: stri
   const navigate = useNavigate();
 
   const severityStyles = {
-    critical: 'bg-red-50 border-red-200 text-red-900',
-    warning: 'bg-amber-50 border-amber-200 text-amber-900',
-    info: 'bg-blue-50 border-blue-200 text-blue-900',
+    critical: 'bg-[#FEE2E2] border-[#141518] text-[#991B1B]',
+    warning: 'bg-[#FEF08A] border-[#141518] text-[#854D0E]',
+    info: 'bg-[#E0E7FF] border-[#141518] text-[#3730A3]',
   };
 
   return (
-    <div className={`p-4 rounded-2xl border ${severityStyles[alert.severity]} text-left space-y-2 relative`}>
+    <div
+      className={`p-4 border ${severityStyles[alert.severity]} shadow-[3px_3px_0px_#141518] text-left space-y-2 relative font-mono`}
+    >
       <div className="flex items-start justify-between">
-        <strong className="text-xs font-bold block pr-6">{alert.title}</strong>
+        <strong className="text-xs font-black uppercase block pr-6 text-[#141518]">
+          {alert.title}
+        </strong>
         <button
           onClick={() => onDismiss(alert.id)}
-          className="p-1 rounded-full hover:bg-black/5 text-neutral-400 cursor-pointer absolute top-3 right-3"
+          className="p-1 border border-[#141518] bg-[#FAF8F5] text-[#141518] hover:bg-[#F3F0E8] cursor-pointer absolute top-3 right-3 shadow-[1px_1px_0px_#141518]"
         >
-          <X size={14} />
+          <X size={12} />
         </button>
       </div>
 
-      <p className="text-xs text-neutral-700 leading-relaxed">{alert.message}</p>
+      <p className="text-xs text-[#141518] leading-relaxed font-sans">{alert.message}</p>
 
       {alert.actionPath && alert.actionLabel && (
         <button
           onClick={() => navigate(alert.actionPath!)}
-          className="text-xs font-bold text-[#e35205] hover:underline block pt-1 cursor-pointer"
+          className="text-xs font-mono font-bold text-[#141518] underline underline-offset-4 decoration-[#141518] hover:text-[#1B3BFF] block pt-1 cursor-pointer uppercase"
         >
           {alert.actionLabel} →
         </button>

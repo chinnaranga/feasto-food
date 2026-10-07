@@ -14,24 +14,27 @@ export const RiderResetPasswordPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#f8f9fa] flex items-center justify-center p-4 text-left">
-      <div className="w-full max-w-sm bg-white p-6 rounded-3xl border border-neutral-200 shadow-modal space-y-4">
-        <RiderPageHeader title="Set New Password" subtitle="Choose a strong password for your Rider partner account." />
+    <div className="min-h-screen bg-[#F3F0E8] flex items-center justify-center p-4 sm:p-6 text-left selection:bg-[#D7F04A] selection:text-[#141518]">
+      <div className="w-full max-w-md bg-[#FAF8F5] p-6 sm:p-8 border border-[#141518] shadow-[6px_6px_0px_#141518] space-y-5">
+        <RiderPageHeader
+          title="Set New Courier Password"
+          subtitle="Define an alphanumeric password to protect your rider wallet and duty assignments."
+        />
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <RiderInput
-            label="New Password"
+            label="New Secret Password"
             type="password"
             required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder="••••••••"
+            placeholder="••••••••••••"
           />
 
           <PasswordStrength password={password} />
 
           <RiderButton variant="primary" size="lg" fullWidth type="submit">
-            Save New Password & Login →
+            COMMIT CREDENTIAL & LOGIN →
           </RiderButton>
         </form>
       </div>

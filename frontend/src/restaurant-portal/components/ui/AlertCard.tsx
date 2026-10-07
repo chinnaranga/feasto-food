@@ -51,7 +51,7 @@ export const AlertCard: React.FC<AlertCardProps> = ({ alert, onDismiss }) => {
 
   return (
     <div
-      className={`border rounded-xl p-4 flex items-start gap-3 relative transition-all duration-200 hover:shadow-xs text-left ${config.bg}`}
+      className={`border p-4 flex items-start gap-3 relative transition-all text-left bg-white border-[#141518]/20 ${config.bg}`}
       role="alert"
     >
       {/* Icon */}
@@ -59,16 +59,18 @@ export const AlertCard: React.FC<AlertCardProps> = ({ alert, onDismiss }) => {
 
       {/* Message block */}
       <div className="flex-1 pr-6 space-y-1">
-        <div className="flex flex-wrap items-center gap-1.5">
-          <span className={`text-[11px] font-bold ${config.text}`}>{alert.title}</span>
-          <span className="px-1.5 py-0.5 rounded bg-white/70 border border-neutral-200/40 text-[8px] font-black uppercase tracking-wider text-neutral-500 shadow-3xs">
+        <div className="flex flex-wrap items-center gap-2">
+          <span className={`text-xs font-heading font-black uppercase tracking-tight ${config.text}`}>
+            {alert.title}
+          </span>
+          <span className="px-1.5 py-0.5 border border-[#141518]/20 bg-[#FAF8F5] text-[9px] font-mono font-bold uppercase tracking-wider text-[#141518]">
             {getSourceBadge()}
           </span>
-          <span className="text-[9px] text-neutral-400 font-medium">
+          <span className="text-[10px] font-mono text-[#8A8D98]">
             {getElapsedTime(alert.timestamp)}
           </span>
         </div>
-        <p className={`text-[10px] leading-relaxed font-medium ${config.subtext}`}>
+        <p className={`text-xs leading-relaxed font-sans ${config.subtext}`}>
           {alert.description}
         </p>
       </div>
@@ -78,10 +80,10 @@ export const AlertCard: React.FC<AlertCardProps> = ({ alert, onDismiss }) => {
         <button
           type="button"
           onClick={() => onDismiss(alert.id)}
-          className="absolute right-3 top-3 p-1 rounded-lg hover:bg-black/5 text-neutral-400 hover:text-neutral-600 transition-colors cursor-pointer"
+          className="absolute right-3 top-3 p-1 hover:bg-[#141518]/5 text-[#8A8D98] hover:text-[#141518] transition-colors cursor-pointer"
           aria-label="Dismiss alert"
         >
-          <X size={11} />
+          <X size={13} />
         </button>
       )}
     </div>

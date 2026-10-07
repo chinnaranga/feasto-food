@@ -1,29 +1,42 @@
 import React, { useState } from 'react';
-import { ShieldCheck, CheckCircle2, Clock, AlertTriangle, Upload, Camera, Lock, Smartphone, ChevronRight } from 'lucide-react';
+import {
+  ShieldCheck,
+  CheckCircle2,
+  Clock,
+  AlertTriangle,
+  Upload,
+  Camera,
+  Lock,
+  Smartphone,
+  ChevronRight,
+  FileCheck,
+} from 'lucide-react';
 import type { VerificationStatus, OnboardingStep } from '../../types/auth';
 
 // ─── VerificationBadge ───────────────────────────────────────────────────────
 export const VerificationBadge: React.FC<{ status: VerificationStatus }> = ({ status }) => {
   const styles: Record<VerificationStatus, string> = {
-    approved: 'bg-emerald-50 text-emerald-700 border-emerald-200',
-    under_review: 'bg-amber-50 text-amber-700 border-amber-200',
-    submitted: 'bg-blue-50 text-blue-700 border-blue-200',
-    pending: 'bg-neutral-100 text-neutral-600 border-neutral-200',
-    rejected: 'bg-red-50 text-red-700 border-red-200',
-    expired: 'bg-purple-50 text-purple-700 border-purple-200',
+    approved: 'bg-[#D7F04A] text-[#141518] border-[#141518]',
+    under_review: 'bg-[#FEF08A] text-[#141518] border-[#141518]',
+    submitted: 'bg-[#BFDBFE] text-[#141518] border-[#141518]',
+    pending: 'bg-[#F3F0E8] text-[#55565B] border-[#141518]/30',
+    rejected: 'bg-[#FEE2E2] text-[#991B1B] border-[#141518]',
+    expired: 'bg-[#E9D5FF] text-[#581C87] border-[#141518]',
   };
 
   const labels: Record<VerificationStatus, string> = {
-    approved: '● Verified',
-    under_review: '⏳ Under Review',
-    submitted: '✓ Submitted',
-    pending: 'Pending',
-    rejected: '✖ Action Needed',
-    expired: '⚠️ Expired',
+    approved: '● VERIFIED',
+    under_review: '⏳ IN REVIEW',
+    submitted: '✓ SUBMITTED',
+    pending: '○ PENDING',
+    rejected: '✖ ACTION REQ',
+    expired: '⚠️ EXPIRED',
   };
 
   return (
-    <span className={`text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full border ${styles[status]}`}>
+    <span
+      className={`text-[9px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 border shadow-[1px_1px_0px_#141518] ${styles[status]}`}
+    >
       {labels[status]}
     </span>
   );
@@ -31,48 +44,62 @@ export const VerificationBadge: React.FC<{ status: VerificationStatus }> = ({ st
 
 // ─── VerificationStepper ─────────────────────────────────────────────────────
 export const VerificationStepper: React.FC<{ currentStep: OnboardingStep }> = ({ currentStep }) => {
-  const steps: { id: OnboardingStep; label: string }[] = [
-    { id: 'register', label: 'Register' },
-    { id: 'otp', label: 'Phone OTP' },
-    { id: 'identity', label: 'Gov ID' },
-    { id: 'documents', label: 'License' },
-    { id: 'vehicle', label: 'Vehicle' },
-    { id: 'review', label: 'Review' },
+  const steps: { id: OnboardingStep; label: string; code: string }[] = [
+    { id: 'register', label: 'Identity', code: '01' },
+    { id: 'otp', label: 'Phone 2FA', code: '02' },
+    { id: 'identity', label: 'Gov KYC', code: '03' },
+    { id: 'documents', label: 'DL Permit', code: '04' },
+    { id: 'vehicle', label: 'Fleet RC', code: '05' },
+    { id: 'review', label: 'Verification', code: '06' },
   ];
 
-  const stepOrder: OnboardingStep[] = ['welcome', 'register', 'otp', 'email_verify', 'identity', 'documents', 'vehicle', 'review', 'approved'];
+  const stepOrder: OnboardingStep[] = [
+    'welcome',
+    'register',
+    'otp',
+    'email_verify',
+    'identity',
+    'documents',
+    'vehicle',
+    'review',
+    'approved',
+  ];
   const currentIndex = stepOrder.indexOf(currentStep);
 
   return (
-    <div className="w-full bg-white border-b border-neutral-200/80 px-4 py-2.5 overflow-x-auto scrollbar-none text-left select-none">
-      <div className="flex items-center gap-2 min-w-max">
+    <div className="w-full bg-[#FAF8F5] border-b border-[#141518] px-4 py-3 overflow-x-auto scrollbar-none text-left select-none">
+      <div className="flex items-center gap-3 min-w-max">
         {steps.map((s, idx) => {
           const sIndex = stepOrder.indexOf(s.id);
           const isDone = currentIndex > sIndex;
           const isCurrent = currentStep === s.id;
           return (
             <React.Fragment key={s.id}>
-              <div className="flex items-center gap-1.5">
+              <div className="flex items-center gap-2">
                 <span
-                  className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold ${
+                  className={`w-5 h-5 flex items-center justify-center text-[10px] font-mono font-bold border border-[#141518] ${
                     isDone
-                      ? 'bg-emerald-600 text-white'
+                      ? 'bg-[#141518] text-[#FAF8F5]'
                       : isCurrent
-                      ? 'bg-[#e35205] text-white shadow-3xs'
-                      : 'bg-neutral-100 text-neutral-400 border border-neutral-200'
+                      ? 'bg-[#D7F04A] text-[#141518] shadow-[2px_2px_0px_#141518]'
+                      : 'bg-[#F3F0E8] text-[#55565B]'
                   }`}
                 >
-                  {isDone ? '✓' : idx + 1}
+                  {isDone ? '✓' : s.code}
                 </span>
                 <span
-                  className={`text-xs font-bold ${
-                    isCurrent ? 'text-neutral-900 font-heading' : isDone ? 'text-emerald-700' : 'text-neutral-400'
+                  className={`text-[11px] font-mono uppercase tracking-wider ${
+                    isCurrent
+                      ? 'text-[#141518] font-black underline underline-offset-4 decoration-[#D7F04A] decoration-2'
+                      : isDone
+                      ? 'text-[#141518] font-bold'
+                      : 'text-[#55565B]'
                   }`}
                 >
                   {s.label}
                 </span>
               </div>
-              {idx < steps.length - 1 && <span className="text-neutral-300 text-xs">/</span>}
+              {idx < steps.length - 1 && <span className="text-[#141518]/30 text-xs font-mono">→</span>}
             </React.Fragment>
           );
         })}
@@ -96,7 +123,7 @@ export const OTPInput: React.FC<{ value: string; onChange: (val: string) => void
   };
 
   return (
-    <div className="flex items-center justify-center gap-2 py-2">
+    <div className="flex items-center justify-center gap-2.5 py-3">
       {[0, 1, 2, 3, 4, 5].map((idx) => (
         <input
           key={idx}
@@ -104,7 +131,7 @@ export const OTPInput: React.FC<{ value: string; onChange: (val: string) => void
           maxLength={1}
           value={value[idx] || ''}
           onChange={(e) => handleChange(e, idx)}
-          className="w-11 h-12 text-center text-lg font-mono font-black border border-neutral-200 rounded-xl bg-neutral-50 focus:outline-none focus:border-[#e35205] focus:bg-white transition-all shadow-2xs"
+          className="w-12 h-14 text-center text-xl font-mono font-black border border-[#141518] bg-[#FAF8F5] text-[#141518] shadow-[3px_3px_0px_#141518] focus:outline-none focus:bg-[#D7F04A]/20 focus:border-[#141518] transition-all"
         />
       ))}
     </div>
@@ -119,22 +146,28 @@ export const DocumentUploader: React.FC<{
   onUpload: () => void;
 }> = ({ title, subtitle, status, onUpload }) => {
   return (
-    <div className="p-4 rounded-2xl bg-white border border-neutral-200/90 shadow-2xs space-y-3 text-left">
+    <div className="p-4 bg-[#FAF8F5] border border-[#141518] shadow-[3px_3px_0px_#141518] space-y-3 text-left">
       <div className="flex items-start justify-between">
         <div>
-          <h4 className="text-xs font-black text-neutral-900 font-heading">{title}</h4>
-          <span className="text-[11px] text-neutral-500 block">{subtitle}</span>
+          <h4 className="text-xs font-heading font-black uppercase text-[#141518] tracking-wider">{title}</h4>
+          <span className="text-[11px] text-[#55565B] block font-sans mt-0.5">{subtitle}</span>
         </div>
         <VerificationBadge status={status} />
       </div>
 
       <div
         onClick={onUpload}
-        className="p-4 rounded-xl border border-dashed border-neutral-300 hover:border-neutral-400 bg-neutral-50 text-center cursor-pointer transition-colors space-y-1.5"
+        className="p-4 border border-dashed border-[#141518] bg-[#F3F0E8] hover:bg-[#eae6dd] text-center cursor-pointer transition-colors space-y-1.5"
       >
-        <Camera size={20} className="text-neutral-400 mx-auto" />
-        <span className="text-xs font-bold text-neutral-800 block">Tap to Capture or Upload Document Photo</span>
-        <span className="text-[10px] text-neutral-400 block font-mono">PNG, JPG, PDF (Max 10MB) • Quality Analyzer Ready</span>
+        <div className="w-8 h-8 bg-[#141518] text-[#FAF8F5] flex items-center justify-center mx-auto">
+          <Camera size={16} />
+        </div>
+        <span className="text-xs font-mono font-bold uppercase text-[#141518] block">
+          TAP TO CAPTURE OR UPLOAD DOCUMENT
+        </span>
+        <span className="text-[10px] text-[#55565B] block font-mono">
+          PNG, JPG, PDF (MAX 10MB) • HIGH RESOLUTION PHOTO OCR
+        </span>
       </div>
     </div>
   );
@@ -153,21 +186,23 @@ export const PasswordStrength: React.FC<{ password?: string }> = ({ password = '
   };
 
   const score = getScore(password);
-  const labels = ['Weak', 'Fair', 'Good', 'Strong', 'Enterprise Grade'];
-  const colors = ['bg-red-500', 'bg-amber-500', 'bg-blue-500', 'bg-emerald-500', 'bg-emerald-600'];
+  const labels = ['WEAK', 'FAIR', 'SOLID', 'STRONG', 'ENTERPRISE'];
+  const colors = ['bg-[#EF4444]', 'bg-[#F59E0B]', 'bg-[#1B3BFF]', 'bg-[#10B981]', 'bg-[#D7F04A]'];
 
   return (
-    <div className="space-y-1 text-left">
-      <div className="flex gap-1 h-1.5">
+    <div className="space-y-1.5 text-left">
+      <div className="flex gap-1 h-2">
         {[1, 2, 3, 4].map((i) => (
           <div
             key={i}
-            className={`flex-1 rounded-full transition-all ${i <= score ? colors[score] : 'bg-neutral-200'}`}
+            className={`flex-1 border border-[#141518] transition-all ${
+              i <= score ? colors[score] : 'bg-[#E8E4DA]'
+            }`}
           />
         ))}
       </div>
-      <span className="text-[10px] font-bold text-neutral-500">
-        Password Strength: {password ? labels[score] : 'Required'}
+      <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#55565B]">
+        SECURITY RATING: {password ? labels[score] : 'REQUIRED'}
       </span>
     </div>
   );
@@ -180,24 +215,28 @@ export const AccountStatusCard: React.FC<{
   notes?: string;
 }> = ({ readinessPct, approvalHours, notes }) => {
   return (
-    <div className="p-5 rounded-2xl bg-white border border-neutral-200/90 shadow-2xs space-y-3 text-left">
-      <div className="flex items-center justify-between border-b border-neutral-100 pb-3">
+    <div className="p-5 bg-[#FAF8F5] border border-[#141518] shadow-[4px_4px_0px_#141518] space-y-3.5 text-left">
+      <div className="flex items-center justify-between border-b border-[#141518]/15 pb-3">
         <div className="flex items-center gap-2">
-          <Clock size={16} className="text-[#e35205]" />
-          <h4 className="text-xs font-black text-neutral-900 font-heading uppercase">
-            Onboarding Verification Status
+          <Clock size={16} className="text-[#141518]" />
+          <h4 className="text-xs font-heading font-black text-[#141518] uppercase tracking-wider">
+            ONBOARDING VERIFICATION AUDIT
           </h4>
         </div>
-        <span className="text-xs font-mono font-bold text-emerald-700">{readinessPct}% Complete</span>
+        <span className="text-xs font-mono font-black px-2 py-0.5 bg-[#D7F04A] text-[#141518] border border-[#141518]">
+          {readinessPct}% READY
+        </span>
       </div>
 
-      <p className="text-xs text-neutral-600 leading-relaxed">
-        Estimated approval time: <strong className="text-neutral-900">~{approvalHours} hours</strong>. Our partner onboarding team is reviewing your identity and vehicle documents.
+      <p className="text-xs text-[#55565B] leading-relaxed font-sans">
+        Estimated approval turnaround:{' '}
+        <strong className="text-[#141518] font-mono">~{approvalHours} HOURS</strong>. Partner dispatch
+        compliance team is inspecting your KYC credentials and vehicle permit.
       </p>
 
       {notes && (
-        <div className="p-3 rounded-xl bg-neutral-50 border border-neutral-150 text-[11px] text-neutral-700">
-          <strong>Reviewer Note:</strong> {notes}
+        <div className="p-3 bg-[#F3F0E8] border border-[#141518] text-[11px] font-mono text-[#141518]">
+          <strong className="uppercase">COMPLIANCE OFFICER NOTE:</strong> {notes}
         </div>
       )}
     </div>

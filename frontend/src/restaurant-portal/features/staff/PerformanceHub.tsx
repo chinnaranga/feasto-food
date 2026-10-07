@@ -25,46 +25,46 @@ export const PerformanceHub: React.FC = () => {
       {topPerformer && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {/* Top Performer Award card */}
-          <Card className="md:col-span-2 bg-[#e35205] border-transparent text-white p-5 flex flex-col justify-between min-h-36">
+          <Card className="md:col-span-2 bg-[#141518] border border-[#141518] text-[#FAF8F5] p-5 flex flex-col justify-between min-h-36 shadow-[4px_4px_0px_#141518] font-mono">
             <div className="flex items-start justify-between gap-3">
               <div>
-                <span className="inline-flex items-center gap-1 bg-white/20 px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider">
+                <span className="inline-flex items-center gap-1 bg-[#D7F04A] text-[#141518] px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider">
                   <Award size={10} />
                   Top Contributor
                 </span>
-                <h4 className="text-sm font-black mt-2.5">{topPerformer.name}</h4>
-                <p className="text-[10px] text-white/80 mt-0.5">
-                  Allocated to {topPerformer.branch} as a <span className="uppercase font-bold">{topPerformer.role}</span>.
+                <h4 className="font-heading font-black text-sm uppercase tracking-tight mt-2.5 text-[#FAF8F5]">{topPerformer.name}</h4>
+                <p className="text-[10px] text-[#FAF8F5]/70 mt-0.5">
+                  Allocated to {topPerformer.branch} as a <span className="uppercase font-bold text-[#D7F04A]">{topPerformer.role}</span>.
                 </p>
               </div>
               
-              <Zap size={22} className="text-orange-200 shrink-0" />
+              <Zap size={22} className="text-[#D7F04A] shrink-0" />
             </div>
 
-            <div className="flex items-center gap-6 mt-6 border-t border-white/10 pt-3">
+            <div className="flex items-center gap-6 mt-6 border-t border-[#FAF8F5]/10 pt-3">
               <div>
-                <p className="text-[9px] text-white/70 uppercase font-semibold">Orders Handled</p>
-                <p className="text-sm font-black">{topPerformer.performance.ordersHandled} orders</p>
+                <p className="text-[9px] text-[#FAF8F5]/60 uppercase font-semibold">Orders Handled</p>
+                <p className="text-sm font-black text-[#FAF8F5]">{topPerformer.performance.ordersHandled} orders</p>
               </div>
               <div>
-                <p className="text-[9px] text-white/70 uppercase font-semibold">Kitchen Throughput</p>
-                <p className="text-sm font-black">{topPerformer.performance.kitchenThroughputPct}% rate</p>
+                <p className="text-[9px] text-[#FAF8F5]/60 uppercase font-semibold">Kitchen Throughput</p>
+                <p className="text-sm font-black text-[#D7F04A]">{topPerformer.performance.kitchenThroughputPct}% rate</p>
               </div>
               <div>
-                <p className="text-[9px] text-white/70 uppercase font-semibold">Shift Reliability</p>
-                <p className="text-sm font-black">{topPerformer.performance.shiftReliabilityPct}% score</p>
+                <p className="text-[9px] text-[#FAF8F5]/60 uppercase font-semibold">Shift Reliability</p>
+                <p className="text-sm font-black text-[#FAF8F5]">{topPerformer.performance.shiftReliabilityPct}% score</p>
               </div>
             </div>
           </Card>
 
           {/* AI Optimizer insights */}
-          <Card className="text-left space-y-3.5 justify-between flex flex-col">
+          <Card className="text-left space-y-3.5 justify-between flex flex-col font-mono">
             <div className="space-y-2">
               <div className="flex items-center gap-1">
-                <Sparkles size={12} className="text-[#e35205]" />
-                <h5 className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider">AI Operations Suggestion</h5>
+                <Sparkles size={12} className="text-[#1B3BFF]" />
+                <h5 className="text-[10px] font-bold text-[#52555F] uppercase tracking-wider">AI Operations Suggestion</h5>
               </div>
-              <p className="text-[9px] text-neutral-500 leading-relaxed">
+              <p className="text-[10px] text-[#52555F] leading-relaxed">
                 Tanaka Yoshi has handled <strong>1,200 orders</strong> with a kitchen throughput contribution rate of <strong>92%</strong>. We suggest cloning his kitchen schedule model for other cloud kitchen lines.
               </p>
             </div>
@@ -99,7 +99,7 @@ export const PerformanceHub: React.FC = () => {
                 </td>
                 <td className="p-4 text-xs font-bold text-neutral-700 text-left">{m.performance.tasksCompleted}</td>
                 <td className="p-4 text-xs font-bold text-neutral-700 text-left">{m.performance.ordersHandled}</td>
-                <td className="p-4 text-xs font-black text-[#e35205] text-left">{m.performance.avgResponseTimeMin} min</td>
+                <td className="p-4 text-xs font-mono font-bold text-[#1B3BFF] text-left">{m.performance.avgResponseTimeMin} min</td>
                 <td className="p-4 text-left">
                   <span className="text-xs font-bold text-emerald-600 bg-emerald-50 border border-emerald-100 px-1.5 py-0.5 rounded">
                     {m.performance.shiftReliabilityPct}%

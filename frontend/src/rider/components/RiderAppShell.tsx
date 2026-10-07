@@ -112,9 +112,13 @@ export const RiderAppShell: React.FC = () => {
     {
       id: 'pickup',
       label: 'Arrived at Restaurant',
-      status: ['arrived_at_store', 'picked_up', 'arrived_at_customer', 'delivered'].includes(
-        activeDeliveryStep
-      )
+      status: [
+        'arrived_at_store',
+        'picked_up',
+        'navigating_to_diner',
+        'arrived_at_diner',
+        'delivered',
+      ].includes(activeDeliveryStep)
         ? ('completed' as const)
         : ('current' as const),
       description: 'Collect sealed food bag at pass',
@@ -122,7 +126,12 @@ export const RiderAppShell: React.FC = () => {
     {
       id: 'transit',
       label: 'On the Way (In Transit)',
-      status: ['picked_up', 'arrived_at_customer', 'delivered'].includes(activeDeliveryStep)
+      status: [
+        'picked_up',
+        'navigating_to_diner',
+        'arrived_at_diner',
+        'delivered',
+      ].includes(activeDeliveryStep)
         ? ('completed' as const)
         : activeDeliveryStep === 'arrived_at_store'
         ? ('current' as const)
@@ -306,7 +315,7 @@ export const RiderAppShell: React.FC = () => {
                       <strong className="text-sm text-white font-heading font-black block">
                         {activeOffer.customerName}
                       </strong>
-                      <span className="text-[11px] text-[#8E929C]">{activeOffer.deliveryAddress}</span>
+                      <span className="text-[11px] text-[#8E929C]">{activeOffer.dropoffAddress || activeOffer.deliveryAddress}</span>
                     </div>
                   </div>
                 </div>
@@ -336,7 +345,7 @@ export const RiderAppShell: React.FC = () => {
 
                 {/* One-Touch Action Progression Button */}
                 <div className="pt-2">
-                  {activeDeliveryStep === 'assigned' && (
+                  {(activeDeliveryStep === 'assigned' || activeDeliveryStep === 'navigating_to_store') && (
                     <FeastoButton
                       variant="acid"
                       size="lg"
@@ -356,7 +365,7 @@ export const RiderAppShell: React.FC = () => {
                       CONFIRM BAG PICKED UP →
                     </FeastoButton>
                   )}
-                  {activeDeliveryStep === 'picked_up' && (
+                  {(activeDeliveryStep === 'picked_up' || activeDeliveryStep === 'navigating_to_diner') && (
                     <FeastoButton
                       variant="accent"
                       size="lg"
@@ -366,7 +375,7 @@ export const RiderAppShell: React.FC = () => {
                       ARRIVED AT CUSTOMER LOCATION →
                     </FeastoButton>
                   )}
-                  {activeDeliveryStep === 'arrived_at_customer' && (
+                  {activeDeliveryStep === 'arrived_at_diner' && (
                     <FeastoButton
                       variant="acid"
                       size="lg"

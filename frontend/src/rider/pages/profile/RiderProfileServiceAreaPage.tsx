@@ -19,50 +19,64 @@ export const RiderProfileServiceAreaPage: React.FC = () => {
   };
 
   return (
-    <div className="space-y-4 text-left">
-      <RiderPageHeader title="Service Area Preferences" subtitle="Select delivery operational zones and trip distance limits." />
+    <div className="space-y-4 text-left font-mono">
+      <RiderPageHeader
+        title="SERVICE AREA & DISPATCH RADIUS"
+        subtitle="Configure primary operational sectors and radial limit preferences."
+      />
 
-      <form onSubmit={handleSubmit} className="p-5 rounded-2xl bg-white border border-neutral-200/90 shadow-2xs space-y-4">
-        <div className="space-y-1 text-xs">
-          <label className="font-bold text-neutral-700 block">Primary Delivery Operational Zone</label>
+      <form
+        onSubmit={handleSubmit}
+        className="p-5 bg-[#FAF8F5] border border-[#141518] shadow-[4px_4px_0px_#141518] space-y-4 font-mono"
+      >
+        <div className="space-y-1.5 text-xs">
+          <label className="font-bold uppercase tracking-wider text-[#141518] block text-[11px]">
+            PRIMARY DISPATCH SECTOR
+          </label>
           <select
             value={primaryZone}
             onChange={(e) => setPrimaryZone(e.target.value)}
-            className="w-full px-3 py-2.5 bg-neutral-50 border border-neutral-200 rounded-xl font-bold text-neutral-900 focus:outline-none"
+            className="w-full px-3.5 py-2.5 bg-[#FAF8F5] border border-[#141518] text-xs font-mono font-bold text-[#141518] focus:outline-none shadow-[2px_2px_0px_#141518]"
           >
-            <option value="Bandra West & Khar Zone">Bandra West & Khar Zone (Mumbai)</option>
-            <option value="Juhu & Vile Parle">Juhu & Vile Parle (Mumbai)</option>
-            <option value="Indiranagar & Koramangala">Indiranagar & Koramangala (Bengaluru)</option>
-            <option value="Connaught Place & CP">Connaught Place & CP (New Delhi)</option>
+            <option value="Bandra West & Khar Zone">Bandra West & Khar Zone (Mumbai Metro)</option>
+            <option value="Juhu & Vile Parle">Juhu & Vile Parle (Mumbai Metro)</option>
+            <option value="Indiranagar & Koramangala">Indiranagar & Koramangala (Bengaluru Metro)</option>
+            <option value="Connaught Place & CP">Connaught Place & CP (New Delhi Metro)</option>
           </select>
         </div>
 
-        <div className="flex items-center justify-between py-2 border-y border-neutral-100 text-xs">
+        <div className="flex items-center justify-between py-3 border-y border-[#141518]/15 text-xs">
           <div>
-            <strong className="font-bold text-neutral-800 block">Prefer Near-Home Deliveries</strong>
-            <span className="text-[11px] text-neutral-500 block">Prioritize trip offers that end close to your residential area.</span>
+            <strong className="font-bold text-[#141518] uppercase block">PREFER HOMEWARD TRIPS</strong>
+            <span className="text-[11px] text-[#55565B] block font-sans">
+              Prioritize final shift dispatches ending near your base residence.
+            </span>
           </div>
           <input
             type="checkbox"
             checked={preferNearHome}
             onChange={(e) => setPreferNearHome(e.target.checked)}
-            className="w-4 h-4 text-[#e35205] cursor-pointer"
+            className="w-4 h-4 accent-[#141518] cursor-pointer"
           />
         </div>
 
-        <div className="space-y-1 text-xs">
-          <label className="font-bold text-neutral-700 block">Max Delivery Radius (Km)</label>
+        <div className="space-y-1.5 text-xs">
+          <label className="font-bold uppercase tracking-wider text-[#141518] block text-[11px]">
+            MAX RADIAL DELIVERY DISTANCE (KM)
+          </label>
           <input
             type="number"
             value={radiusKm}
             onChange={(e) => setRadiusKm(Number(e.target.value))}
-            className="w-full px-3.5 py-2.5 bg-neutral-50 border border-neutral-200 rounded-xl text-xs text-neutral-900 font-mono font-bold focus:outline-none"
+            className="w-full px-3.5 py-2.5 bg-[#FAF8F5] border border-[#141518] text-xs font-mono font-bold text-[#141518] focus:outline-none shadow-[2px_2px_0px_#141518]"
           />
         </div>
 
-        <RiderButton variant="primary" type="submit" fullWidth>
-          Save Service Area Preferences
-        </RiderButton>
+        <div className="pt-2">
+          <RiderButton variant="primary" type="submit" fullWidth>
+            COMMIT SERVICE AREA CONFIGURATION →
+          </RiderButton>
+        </div>
       </form>
     </div>
   );

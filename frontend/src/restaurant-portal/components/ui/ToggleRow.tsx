@@ -18,16 +18,16 @@ export const ToggleRow: React.FC<ToggleRowProps> = ({
   const id = useId();
 
   return (
-    <div className={`flex items-center justify-between gap-4 py-3.5 ${disabled ? 'opacity-50' : ''}`}>
+    <div className={`flex items-center justify-between gap-4 py-3.5 border-b border-[#141518]/10 text-left ${disabled ? 'opacity-50' : ''}`}>
       <div className="flex flex-col gap-0.5">
         <label
           htmlFor={id}
-          className="text-xs font-semibold text-neutral-800 cursor-pointer select-none"
+          className="text-xs font-mono font-bold text-[#141518] cursor-pointer select-none"
         >
           {label}
         </label>
         {description && (
-          <p className="text-[10px] text-neutral-400 leading-relaxed">{description}</p>
+          <p className="text-[11px] font-sans text-[#52555F] leading-relaxed">{description}</p>
         )}
       </div>
 
@@ -38,13 +38,13 @@ export const ToggleRow: React.FC<ToggleRowProps> = ({
         aria-checked={checked}
         disabled={disabled}
         onClick={() => onChange(!checked)}
-        className={`relative inline-flex w-9 h-5 shrink-0 rounded-full p-0.5 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#e35205]/30 cursor-pointer ${
-          checked ? 'bg-[#e35205]' : 'bg-neutral-200'
+        className={`relative inline-flex w-10 h-5 shrink-0 rounded-full p-0.5 transition-colors duration-150 focus:outline-none cursor-pointer ${
+          checked ? 'bg-[#141518] border border-[#141518]' : 'bg-[#E2DED4] border border-[#141518]/20'
         } ${disabled ? 'cursor-not-allowed' : ''}`}
       >
         <span
-          className={`w-4 h-4 rounded-full bg-white shadow-sm transform transition-transform duration-200 ${
-            checked ? 'translate-x-4' : 'translate-x-0'
+          className={`w-3.5 h-3.5 rounded-full bg-white shadow-sm transform transition-transform duration-150 ${
+            checked ? 'translate-x-5 bg-[#D7F04A]' : 'translate-x-0'
           }`}
         />
       </button>

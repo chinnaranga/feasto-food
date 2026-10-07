@@ -16,9 +16,12 @@ export const RiderForgotPasswordPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#f8f9fa] flex items-center justify-center p-4 text-left">
-      <div className="w-full max-w-sm bg-white p-6 rounded-3xl border border-neutral-200 shadow-modal space-y-4">
-        <RiderPageHeader title="Forgot Account Password" subtitle="Enter your registered mobile number to receive a password reset link." />
+    <div className="min-h-screen bg-[#F3F0E8] flex items-center justify-center p-4 sm:p-6 text-left selection:bg-[#D7F04A] selection:text-[#141518]">
+      <div className="w-full max-w-md bg-[#FAF8F5] p-6 sm:p-8 border border-[#141518] shadow-[6px_6px_0px_#141518] space-y-5">
+        <RiderPageHeader
+          title="Account Security Recovery"
+          subtitle="Provide your registered courier phone number to generate an emergency reset authorization code."
+        />
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <RiderInput
@@ -31,10 +34,14 @@ export const RiderForgotPasswordPage: React.FC = () => {
           />
 
           <RiderButton variant="primary" size="lg" fullWidth type="submit">
-            Send Password Reset Link
+            DISPATCH PASSWORD RESET LINK →
           </RiderButton>
 
-          {sent && <span className="text-xs text-emerald-600 font-bold block text-center">✓ Reset link dispatched! Redirecting...</span>}
+          {sent && (
+            <div className="p-3 bg-[#D7F04A]/20 border border-[#141518] text-xs font-mono font-bold text-[#141518] text-center">
+              ✓ RECOVERY LINK DISPATCHED VIA SMS. REDIRECTING...
+            </div>
+          )}
         </form>
       </div>
     </div>

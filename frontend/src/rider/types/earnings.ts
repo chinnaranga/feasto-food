@@ -27,6 +27,10 @@ export interface TripEarningsBreakdown {
   tipAmount: number;
   deductionsAmount: number;
   netPay: number;
+  distanceKm?: number;
+  durationMinutes?: number;
+  customerArea?: string;
+  payoutAmount?: number;
 }
 
 export interface RiderWalletState {

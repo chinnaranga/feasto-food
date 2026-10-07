@@ -15,19 +15,19 @@ export const SearchInput: React.FC<SearchInputProps> = ({
 }) => {
   return (
     <div className={`relative w-full ${className}`}>
-      <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" />
+      <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8A8D98]" />
       <input
         type="text"
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full pl-9 pr-8 py-2 bg-[#f7f8fa] hover:bg-neutral-100/70 border border-neutral-200 focus:border-[#e35205] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#e35205]/10 rounded-lg text-xs text-neutral-800 transition-all duration-200 placeholder:text-neutral-400"
+        className="w-full pl-9 pr-8 py-2.5 bg-white border border-[#141518]/20 focus:border-[#141518] focus:outline-none focus:ring-1 focus:ring-[#141518] text-xs font-mono font-medium text-[#141518] transition-all duration-150 placeholder:text-[#8A8D98]"
         {...props}
       />
       {value && (
         <button
           onClick={() => onChange('')}
-          className="absolute right-2.5 top-1/2 -translate-y-1/2 p-0.5 rounded text-neutral-400 hover:text-neutral-600 transition-main cursor-pointer"
+          className="absolute right-2.5 top-1/2 -translate-y-1/2 p-0.5 text-[#8A8D98] hover:text-[#141518] transition-colors cursor-pointer"
         >
           <X size={12} />
         </button>

@@ -38,58 +38,58 @@ export const FinanceCard: React.FC<FinanceCardProps> = ({
   const getBadgeStyle = (variant: string = 'neutral') => {
     switch (variant) {
       case 'success':
-        return 'bg-emerald-50 text-emerald-700 border-emerald-200';
+        return 'bg-emerald-50 text-emerald-800 border-emerald-300';
       case 'warning':
-        return 'bg-amber-50 text-amber-700 border-amber-200';
+        return 'bg-amber-50 text-amber-800 border-amber-300';
       case 'danger':
-        return 'bg-red-50 text-red-700 border-red-200';
+        return 'bg-red-50 text-red-800 border-red-300';
       case 'brand':
-        return 'bg-orange-50 text-[#e35205] border-orange-200';
+        return 'bg-[#1B3BFF]/10 text-[#1B3BFF] border-[#1B3BFF]/30';
       default:
-        return 'bg-neutral-100 text-neutral-600 border-neutral-200';
+        return 'bg-[#141518]/5 text-[#52555F] border-[#141518]/15';
     }
   };
 
   return (
     <div
-      className={`p-5 rounded-2xl bg-white border border-neutral-200/80 shadow-2xs hover:shadow-xs transition-all duration-200 text-left relative flex flex-col justify-between ${className}`}
+      className={`p-5 bg-[#FAF8F5] border border-[#141518]/20 shadow-[4px_4px_0px_#141518] transition-all duration-200 text-left relative flex flex-col justify-between ${className}`}
     >
       <div>
         {/* Header row */}
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-1.5 min-w-0">
-            <span className="text-[11px] font-bold text-neutral-500 uppercase tracking-wider truncate font-heading">
+            <span className="font-mono text-[10px] font-bold text-[#52555F] uppercase tracking-wider truncate">
               {title}
             </span>
             {tooltip && (
-              <span className="text-neutral-300 hover:text-neutral-500 cursor-help transition-colors" title={tooltip}>
+              <span className="text-[#52555F]/60 hover:text-[#141518] cursor-help transition-colors" title={tooltip}>
                 <HelpCircle size={12} />
               </span>
             )}
           </div>
           {badge && (
             <span
-              className={`text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full border ${getBadgeStyle(
+              className={`font-mono text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 border ${getBadgeStyle(
                 badge.variant
               )}`}
             >
               {badge.text}
             </span>
           )}
-          {icon && <div className="p-2 rounded-xl bg-neutral-50 text-neutral-600 border border-neutral-100">{icon}</div>}
+          {icon && <div className="p-1.5 bg-[#F3F0E8] text-[#141518] border border-[#141518]/15">{icon}</div>}
         </div>
 
         {/* Amount */}
         <div className="mt-3 flex items-baseline gap-2">
-          <h3 className="text-2xl font-black text-neutral-900 tracking-tight">{amount}</h3>
+          <h3 className="font-heading font-black text-2xl text-[#141518] tracking-tight">{amount}</h3>
           {trend && (
             <div
-              className={`inline-flex items-center gap-0.5 text-xs font-bold ${
+              className={`inline-flex items-center gap-0.5 font-mono text-xs font-bold ${
                 trend.isPositive
-                  ? 'text-emerald-600'
+                  ? 'text-emerald-700'
                   : trend.isNegative
-                  ? 'text-red-600'
-                  : 'text-neutral-500'
+                  ? 'text-red-700'
+                  : 'text-[#52555F]'
               }`}
             >
               {trend.isPositive && <ArrowUpRight size={14} />}
@@ -102,7 +102,7 @@ export const FinanceCard: React.FC<FinanceCardProps> = ({
 
         {/* Subtitle or trend label */}
         {(subtitle || trend?.label) && (
-          <p className="mt-1 text-[11px] font-semibold text-neutral-400">
+          <p className="mt-1 font-mono text-[10px] font-bold text-[#52555F]">
             {subtitle || trend?.label}
           </p>
         )}
@@ -110,10 +110,10 @@ export const FinanceCard: React.FC<FinanceCardProps> = ({
 
       {/* Optional action footer */}
       {action && (
-        <div className="mt-4 pt-3 border-t border-neutral-100 flex justify-end">
+        <div className="mt-4 pt-3 border-t border-[#141518]/10 flex justify-end">
           <button
             onClick={action.onClick}
-            className="text-[11px] font-bold text-[#e35205] hover:text-[#c94804] transition-colors cursor-pointer"
+            className="font-mono text-[11px] font-bold text-[#1B3BFF] hover:text-[#141518] transition-colors cursor-pointer uppercase tracking-wider"
           >
             {action.label} →
           </button>

@@ -95,32 +95,32 @@ export const HierarchyPanel: React.FC = () => {
 
         {/* Right Side: Health card */}
         <div className="space-y-6">
-          <Card className="text-left space-y-4">
+          <Card className="text-left space-y-4 font-mono">
             <div className="flex items-center gap-1.5">
-              <ShieldAlert size={14} className="text-[#e35205]" />
-              <h5 className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider">
+              <ShieldAlert size={14} className="text-[#1B3BFF]" />
+              <h5 className="text-[10px] font-bold text-[#52555F] uppercase tracking-wider">
                 Category Health Summary
               </h5>
             </div>
 
-            <div className="space-y-3">
+            <div className="space-y-3 font-mono">
               <div className="flex justify-between items-center text-xs">
-                <span className="font-semibold text-neutral-500">Subcategory Depth</span>
-                <span className="font-bold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded text-[10px]">Optimal (1/3)</span>
+                <span className="font-semibold text-[#52555F]">Subcategory Depth</span>
+                <span className="font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 text-[10px]">Optimal (1/3)</span>
               </div>
               <div className="flex justify-between items-center text-xs">
-                <span className="font-semibold text-neutral-500">Empty Collections</span>
-                <span className="font-bold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded text-[10px]">None</span>
+                <span className="font-semibold text-[#52555F]">Empty Collections</span>
+                <span className="font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 text-[10px]">None</span>
               </div>
             </div>
           </Card>
 
           {/* AI Optimizer Placeholder banner */}
-          <div className="p-3.5 bg-neutral-50 border border-neutral-200/50 rounded-xl flex items-start gap-2.5">
-            <Sparkles size={13} className="text-[#e35205] shrink-0 mt-0.5" />
+          <div className="p-3.5 bg-[#FAF8F5] border border-[#141518]/20 shadow-[3px_3px_0px_#141518] flex items-start gap-2.5 font-mono">
+            <Sparkles size={13} className="text-[#1B3BFF] shrink-0 mt-0.5" />
             <div>
-              <p className="text-[10px] font-black text-neutral-500 uppercase tracking-widest font-heading">AI Hierarchy Optimizer</p>
-              <p className="text-[9px] text-neutral-400 mt-0.5 leading-relaxed">
+              <p className="text-[10px] font-black text-[#141518] uppercase tracking-widest font-heading">AI Hierarchy Optimizer</p>
+              <p className="text-[10px] text-[#52555F] mt-0.5 leading-relaxed">
                 Placing "Mains & Platters" at priority slot 1 has driven 28% higher clicks on client apps during lunch peak hours. Keep this sequencer order.
               </p>
             </div>

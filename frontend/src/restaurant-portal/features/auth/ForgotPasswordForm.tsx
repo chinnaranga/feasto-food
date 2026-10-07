@@ -42,16 +42,19 @@ export const ForgotPasswordForm: React.FC = () => {
     return (
       <div className="space-y-6 text-left">
         <div>
-          <h2 className="text-xl font-black text-neutral-900 tracking-tight">
-            Reset Link Dispatched
+          <span className="font-mono text-[10px] uppercase font-bold tracking-widest text-[#15803D] block">
+            ✓ RECOVERY DISPATCHED
+          </span>
+          <h2 className="font-heading font-black text-2xl uppercase tracking-tight text-[#141518] mt-1">
+            CHECK YOUR INBOX
           </h2>
-          <p className="text-xs text-neutral-500 mt-1">
-            We sent a secure password reset link to your email. Please check your inbox or spam folder.
+          <p className="font-sans text-xs text-[#52555F] mt-1">
+            We sent an authenticated recovery link to your merchant email. Please verify within 15 minutes.
           </p>
         </div>
-        <Link to="/restaurant-portal/login">
-          <Button variant="outline" className="w-full mt-4">
-            Back to Sign In
+        <Link to="/restaurant-portal/login" className="block mt-4">
+          <Button variant="outline" className="w-full">
+            RETURN TO SIGN IN →
           </Button>
         </Link>
       </div>
@@ -61,20 +64,23 @@ export const ForgotPasswordForm: React.FC = () => {
   return (
     <div className="space-y-6 text-left">
       <div>
-        <h2 className="text-xl font-black text-neutral-900 tracking-tight">
-          Forgot Password
+        <span className="font-mono text-[10px] uppercase font-bold tracking-widest text-[#8A8D98] block">
+          [03 / RECOVERY]
+        </span>
+        <h2 className="font-heading font-black text-2xl uppercase tracking-tight text-[#141518] mt-1">
+          RECOVER TERMINAL ACCESS
         </h2>
-        <p className="text-xs text-neutral-500 mt-1">
-          Enter your email and we'll dispatch a link to reset your password.
+        <p className="font-sans text-xs text-[#52555F] mt-1">
+          Enter your registered merchant email to receive secure recovery instructions.
         </p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <FormField
-          label="Email address"
+          label="Merchant Email address"
           id="email"
           type="email"
-          placeholder="name@restaurant.com"
+          placeholder="chef@restaurant.com"
           error={errors.email?.message}
           disabled={isLoading}
           {...register('email')}
@@ -86,16 +92,16 @@ export const ForgotPasswordForm: React.FC = () => {
           className="w-full mt-2"
           isLoading={isLoading}
         >
-          Send Reset Link
+          DISPATCH RECOVERY LINK →
         </Button>
       </form>
 
-      <div className="text-center pt-2">
+      <div className="text-center pt-3 border-t border-[#141518]/10">
         <Link
           to="/restaurant-portal/login"
-          className="text-xs font-bold text-[#e35205] hover:text-[#c94804]"
+          className="font-mono text-xs font-bold text-[#141518] underline hover:text-[#1B3BFF]"
         >
-          Back to Sign In
+          ← Return to merchant sign in
         </Link>
       </div>
     </div>

@@ -172,7 +172,7 @@ export const InventoryExplorer: React.FC<InventoryExplorerProps> = ({ statusFilt
           </div>
           <button
             onClick={() => navigate('/restaurant-portal/inventory/low-stock')}
-            className="px-3.5 py-2 bg-[#e35205] hover:bg-[#c94804] text-white text-[10px] font-black uppercase tracking-wider rounded-xl transition-colors cursor-pointer self-start sm:self-center"
+            className="px-3.5 py-2 bg-[#141518] hover:bg-[#D7F04A] text-[#FAF8F5] hover:text-[#141518] text-[10px] font-mono font-bold uppercase tracking-wider border border-[#141518] shadow-[2px_2px_0px_#141518] transition-colors cursor-pointer self-start sm:self-center"
           >
             Review Reorders
           </button>
@@ -182,24 +182,24 @@ export const InventoryExplorer: React.FC<InventoryExplorerProps> = ({ statusFilt
       {/* Explorer filter controls */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         {/* Search */}
-        <div className="relative w-full sm:w-64">
-          <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" />
+        <div className="relative w-full sm:w-64 font-mono">
+          <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#52555F]" />
           <input
             type="text"
             placeholder="Search stock by name..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-8 pr-3 py-2 bg-white border border-neutral-200 focus:border-[#e35205] focus:ring-2 focus:ring-[#e35205]/20 focus:outline-none rounded-xl text-xs font-semibold text-neutral-800 transition-all placeholder:text-neutral-400"
+            className="w-full pl-8 pr-3 py-2 bg-[#FAF8F5] border border-[#141518]/20 focus:border-[#141518] focus:outline-none text-xs font-semibold text-[#141518] transition-all placeholder:text-[#52555F]/60"
           />
         </div>
 
         {/* Filters */}
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2 font-mono">
           {/* Category */}
           <select
             value={filters.category}
             onChange={(e) => setFilter('category', e.target.value)}
-            className="px-2.5 py-1.5 bg-white border border-neutral-200 focus:border-[#e35205] focus:outline-none rounded-xl text-[10px] font-black uppercase tracking-wider text-neutral-600 cursor-pointer"
+            className="px-2.5 py-1.5 bg-[#FAF8F5] border border-[#141518]/20 focus:border-[#141518] focus:outline-none text-[10px] font-bold uppercase tracking-wider text-[#141518] cursor-pointer"
           >
             <option value="all">All Stock Types</option>
             <option value="ingredients">Ingredients</option>
@@ -212,7 +212,7 @@ export const InventoryExplorer: React.FC<InventoryExplorerProps> = ({ statusFilt
           <select
             value={filters.location}
             onChange={(e) => setFilter('location', e.target.value)}
-            className="px-2.5 py-1.5 bg-white border border-neutral-200 focus:border-[#e35205] focus:outline-none rounded-xl text-[10px] font-black uppercase tracking-wider text-neutral-600 cursor-pointer"
+            className="px-2.5 py-1.5 bg-[#FAF8F5] border border-[#141518]/20 focus:border-[#141518] focus:outline-none text-[10px] font-bold uppercase tracking-wider text-[#141518] cursor-pointer"
           >
             <option value="all">All Storage Areas</option>
             <option value="kitchen">Kitchen</option>
@@ -227,7 +227,7 @@ export const InventoryExplorer: React.FC<InventoryExplorerProps> = ({ statusFilt
           <select
             value={filters.expiryAlert}
             onChange={(e) => setFilter('expiryAlert', e.target.value)}
-            className="px-2.5 py-1.5 bg-white border border-neutral-200 focus:border-[#e35205] focus:outline-none rounded-xl text-[10px] font-black uppercase tracking-wider text-neutral-600 cursor-pointer"
+            className="px-2.5 py-1.5 bg-[#FAF8F5] border border-[#141518]/20 focus:border-[#141518] focus:outline-none text-[10px] font-bold uppercase tracking-wider text-[#141518] cursor-pointer"
           >
             <option value="all">All Expiries</option>
             <option value="expired">Expired</option>
@@ -257,48 +257,48 @@ export const InventoryExplorer: React.FC<InventoryExplorerProps> = ({ statusFilt
                 <tr key={item.id} className="hover:bg-neutral-50/30 transition-colors">
                   <td className="p-4">
                     <div className="flex flex-col text-left gap-0.5">
-                      <span className="text-xs font-bold text-neutral-800">{item.name}</span>
+                      <span className="text-xs font-bold text-[#141518]">{item.name}</span>
                       {item.recipeMenuIds.length > 0 && (
-                        <span className="inline-flex text-[8px] font-bold text-[#e35205] bg-orange-50 px-1 py-0.5 rounded border border-orange-100 self-start">
+                        <span className="inline-flex text-[8px] font-bold text-[#1B3BFF] bg-[#1B3BFF]/10 px-1 py-0.5 border border-[#1B3BFF]/30 self-start">
                           Recipe Linked ({item.recipeMenuIds.length})
                         </span>
                       )}
                     </div>
                   </td>
-                  <td className="p-4 text-xs text-neutral-500 font-semibold uppercase text-left">{item.category}</td>
+                  <td className="p-4 text-xs text-[#52555F] font-semibold uppercase text-left">{item.category}</td>
                   <td className="p-4">
                     <VisualStockMeter item={item} />
                   </td>
                   <td className="p-4">
-                    <span className="text-[9px] font-bold text-neutral-600 bg-neutral-100 px-2 py-0.5 rounded-full uppercase tracking-wider">
+                    <span className="text-[9px] font-bold text-[#141518] bg-[#141518]/10 px-2 py-0.5 uppercase tracking-wider">
                       {item.location}
                     </span>
                   </td>
                   <td className="p-4 text-left">{getExpiryBadge(item)}</td>
-                  <td className="p-4 text-xs text-neutral-500 font-semibold text-left">{item.supplier.name}</td>
+                  <td className="p-4 text-xs text-[#52555F] font-semibold text-left">{item.supplier.name}</td>
                   <td className="p-4">
                     {/* Inline stock adjustment widget overlay */}
-                    <div className="flex items-center justify-end gap-1.5">
+                    <div className="flex items-center justify-end gap-1.5 font-mono">
                       {activeAdjustId === item.id ? (
-                        <div className="flex items-center gap-1 bg-neutral-50 border border-neutral-200 rounded-lg p-0.5 animate-slide-up">
+                        <div className="flex items-center gap-1 bg-[#FAF8F5] border border-[#141518]/20 p-0.5">
                           <button
                             onClick={() => setAdjustValue(adjustValue - 1)}
-                            className="p-1 text-neutral-500 hover:text-[#e35205]"
+                            className="p-1 text-[#52555F] hover:text-[#141518]"
                           >
                             <Minus size={10} />
                           </button>
-                          <span className="text-[10px] font-black text-neutral-800 min-w-8 text-center px-1">
+                          <span className="text-[10px] font-bold text-[#141518] min-w-8 text-center px-1">
                             {adjustValue >= 0 ? `+${adjustValue}` : adjustValue}
                           </span>
                           <button
                             onClick={() => setAdjustValue(adjustValue + 1)}
-                            className="p-1 text-neutral-500 hover:text-[#e35205]"
+                            className="p-1 text-[#52555F] hover:text-[#141518]"
                           >
                             <Plus size={10} />
                           </button>
                           <button
                             onClick={() => handleSaveAdjustment(item.id)}
-                            className="px-2 py-1 bg-neutral-800 text-white text-[9px] font-black uppercase rounded-md hover:bg-neutral-900"
+                            className="px-2 py-1 bg-[#141518] text-[#D7F04A] text-[9px] font-bold uppercase hover:bg-black"
                           >
                             Save
                           </button>
@@ -354,11 +354,11 @@ export const InventoryExplorer: React.FC<InventoryExplorerProps> = ({ statusFilt
       )}
 
       {/* Expiry Risk Alert footer info */}
-      <div className="flex items-start gap-2.5 p-3.5 bg-neutral-50 border border-neutral-200/50 rounded-xl">
-        <Sparkles size={13} className="text-[#e35205] shrink-0 mt-0.5" />
+      <div className="flex items-start gap-2.5 p-3.5 bg-[#FAF8F5] border border-[#141518]/20 shadow-[3px_3px_0px_#141518] font-mono">
+        <Sparkles size={14} className="text-[#1B3BFF] shrink-0 mt-0.5" />
         <div>
-          <p className="text-[10px] font-black text-neutral-500 uppercase tracking-widest font-heading">AI Supply Optimizer</p>
-          <p className="text-[9px] text-neutral-400 mt-0.5 leading-relaxed">
+          <p className="text-[10px] font-black text-[#141518] uppercase tracking-widest font-heading">AI Supply Optimizer</p>
+          <p className="text-[10px] text-[#52555F] mt-0.5 leading-relaxed">
             AI predicts that oolong milk tea consumption will surge by 15% this weekend due to local forecast patterns. We suggest keeping "Matcha Powder" reorders above safety thresholds.
           </p>
         </div>

@@ -23,23 +23,23 @@ import { RiderButton } from '../RiderUIComponents';
 export const PriorityBadge: React.FC<{ level: DeliveryOfferItem['priorityLevel'] }> = ({ level }) => {
   if (level === 'high_surge') {
     return (
-      <span className="text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded bg-amber-50 text-amber-800 border border-amber-200 flex items-center gap-1 font-mono">
-        <Zap size={11} className="text-amber-600 fill-amber-500" />
-        <span>1.5x Surge Bonus</span>
+      <span className="text-[9px] font-mono font-black uppercase tracking-wider px-2 py-0.5 bg-[#D7F04A] text-[#141518] border border-[#141518] flex items-center gap-1 shadow-[1px_1px_0px_#141518]">
+        <Zap size={11} className="fill-[#141518]" />
+        <span>1.5X SURGE</span>
       </span>
     );
   }
   if (level === 'scheduled') {
     return (
-      <span className="text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded bg-blue-50 text-blue-800 border border-blue-200 flex items-center gap-1 font-mono">
-        <Clock size={11} className="text-blue-600" />
-        <span>Scheduled Catering</span>
+      <span className="text-[9px] font-mono font-black uppercase tracking-wider px-2 py-0.5 bg-[#BFDBFE] text-[#141518] border border-[#141518] flex items-center gap-1 shadow-[1px_1px_0px_#141518]">
+        <Clock size={11} />
+        <span>SCHEDULED</span>
       </span>
     );
   }
   return (
-    <span className="text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded bg-neutral-100 text-neutral-600 border border-neutral-200 font-mono">
-      Standard Delivery
+    <span className="text-[9px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 bg-[#F3F0E8] text-[#55565B] border border-[#141518]/30">
+      STANDARD
     </span>
   );
 };
@@ -55,9 +55,9 @@ export const ExpiryTimer: React.FC<{ initialSeconds: number }> = ({ initialSecon
   }, [seconds]);
 
   return (
-    <div className="flex items-center gap-1 text-[11px] font-mono font-black text-amber-700">
+    <div className="flex items-center gap-1 text-[11px] font-mono font-black text-[#141518]">
       <Clock size={12} className="animate-pulse" />
-      <span>{seconds > 0 ? `${seconds}s remaining` : 'Offer Expired'}</span>
+      <span>{seconds > 0 ? `${seconds}S REMAINING` : 'EXPIRED'}</span>
     </div>
   );
 };
@@ -65,26 +65,26 @@ export const ExpiryTimer: React.FC<{ initialSeconds: number }> = ({ initialSecon
 // ─── OrdersSubNavTabBar ──────────────────────────────────────────────────────
 export const OrdersSubNavTabBar: React.FC = () => {
   const tabs = [
-    { label: 'Available Offers', path: '/rider/orders/available' },
-    { label: '🔥 Priority Surge', path: '/rider/orders/priority' },
-    { label: 'Scheduled', path: '/rider/orders/scheduled' },
-    { label: 'Assigned', path: '/rider/orders/assigned' },
-    { label: 'Offer History', path: '/rider/orders/history' },
+    { label: 'AVAILABLE', path: '/rider/orders/available' },
+    { label: '🔥 SURGE OFFERS', path: '/rider/orders/priority' },
+    { label: 'SCHEDULED', path: '/rider/orders/scheduled' },
+    { label: 'ASSIGNED', path: '/rider/orders/assigned' },
+    { label: 'HISTORY', path: '/rider/orders/history' },
   ];
 
   return (
-    <div className="w-full bg-white border-y border-neutral-200/80 px-2 py-2 overflow-x-auto scrollbar-none text-left select-none">
-      <div className="flex items-center gap-1 min-w-max">
+    <div className="w-full bg-[#FAF8F5] border-y border-[#141518] px-2 py-2 overflow-x-auto scrollbar-none text-left select-none font-mono">
+      <div className="flex items-center gap-1.5 min-w-max">
         {tabs.map((tab) => (
           <NavLink
             key={tab.path}
             to={tab.path}
             end={tab.path === '/rider/orders/available' || tab.path === '/rider/orders'}
             className={({ isActive }) =>
-              `px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
+              `px-3.5 py-1.5 text-xs font-mono font-bold uppercase tracking-wider border transition-all ${
                 isActive
-                  ? 'bg-neutral-900 text-white shadow-3xs'
-                  : 'text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100'
+                  ? 'bg-[#D7F04A] text-[#141518] border-[#141518] shadow-[2px_2px_0px_#141518]'
+                  : 'bg-[#FAF8F5] border-transparent text-[#55565B] hover:text-[#141518] hover:bg-[#F3F0E8] hover:border-[#141518]/20'
               }`
             }
           >
@@ -106,68 +106,72 @@ export const OrderOfferCard: React.FC<{
   const totalPayout = offer.payoutAmount + offer.tipAmount + offer.surgeBonusAmount;
 
   return (
-    <div className="p-5 rounded-2xl bg-white border border-neutral-200/90 shadow-2xs space-y-4 text-left">
+    <div className="p-5 bg-[#FAF8F5] border border-[#141518] shadow-[4px_4px_0px_#141518] space-y-4 text-left font-mono">
       {/* Header Info */}
-      <div className="flex items-center justify-between border-b border-neutral-100 pb-3">
+      <div className="flex items-center justify-between border-b border-[#141518]/15 pb-3">
         <div className="space-y-0.5">
           <div className="flex items-center gap-2">
-            <span className="text-[10px] font-mono font-bold text-neutral-400 uppercase">{offer.orderNumber}</span>
+            <span className="text-[10px] font-mono font-black text-[#55565B] uppercase">
+              {offer.orderNumber}
+            </span>
             <PriorityBadge level={offer.priorityLevel} />
           </div>
-          <h4 className="text-sm font-black text-neutral-900 font-heading">{offer.restaurantName}</h4>
+          <h4 className="text-sm font-heading font-black text-[#141518] uppercase tracking-tight">
+            {offer.restaurantName}
+          </h4>
         </div>
 
         <div className="text-right">
-          <span className="text-lg font-black text-emerald-700 font-mono block leading-none">
+          <span className="text-lg font-black text-[#141518] font-mono block leading-none px-2 py-1 bg-[#D7F04A] border border-[#141518]">
             ₹{totalPayout.toFixed(0)}
           </span>
-          <span className="text-[10px] text-neutral-400 font-mono block mt-1">
-            (Includes ₹{offer.tipAmount} tip)
+          <span className="text-[10px] text-[#55565B] font-mono block mt-1 uppercase">
+            (+₹{offer.tipAmount} TIP)
           </span>
         </div>
       </div>
 
       {/* Addresses & Distance Telemetry */}
-      <div className="space-y-2 text-xs text-neutral-600">
+      <div className="space-y-2 text-xs text-[#141518]">
         <div className="flex items-start gap-2">
-          <MapPin size={14} className="text-[#e35205] shrink-0 mt-0.5" />
+          <MapPin size={14} className="text-[#141518] shrink-0 mt-0.5" />
           <div>
-            <span className="text-[10px] font-bold text-neutral-400 uppercase block">Pickup Location</span>
-            <strong className="text-neutral-900 block">{offer.restaurantAddress}</strong>
+            <span className="text-[10px] font-bold text-[#55565B] uppercase block">PICKUP (KITCHEN)</span>
+            <strong className="block text-[#141518]">{offer.restaurantAddress}</strong>
           </div>
         </div>
 
         <div className="flex items-start gap-2">
-          <MapPin size={14} className="text-neutral-400 shrink-0 mt-0.5" />
+          <MapPin size={14} className="text-[#55565B] shrink-0 mt-0.5" />
           <div>
-            <span className="text-[10px] font-bold text-neutral-400 uppercase block">Deliver to Customer</span>
-            <strong className="text-neutral-900 block">{offer.customerName} ({offer.dropoffAddress})</strong>
+            <span className="text-[10px] font-bold text-[#55565B] uppercase block">DROP-OFF (CUSTOMER)</span>
+            <strong className="block text-[#141518]">{offer.customerName} ({offer.dropoffAddress})</strong>
           </div>
         </div>
 
-        <div className="flex items-center justify-between pt-2 border-t border-neutral-100 text-[11px] font-mono text-neutral-500">
-          <span>Distance: <strong className="text-neutral-800">{offer.totalDistanceKm} km</strong></span>
-          <span>Est: <strong className="text-neutral-800">{offer.estimatedTimeMins} mins</strong></span>
-          <span>Items: <strong className="text-neutral-800">{offer.itemCount} items</strong></span>
+        <div className="flex items-center justify-between pt-2 border-t border-[#141518]/15 text-[11px] font-mono text-[#55565B]">
+          <span>DISTANCE: <strong className="text-[#141518]">{offer.totalDistanceKm} KM</strong></span>
+          <span>EST: <strong className="text-[#141518]">{offer.estimatedTimeMins} MIN</strong></span>
+          <span>BAG: <strong className="text-[#141518]">{offer.itemCount} ITEMS</strong></span>
         </div>
       </div>
 
       {/* Countdown Timer */}
-      <div className="flex items-center justify-between bg-neutral-50 p-2.5 rounded-xl border border-neutral-150">
-        <span className="text-[11px] text-neutral-600 font-medium">Acceptance SLA Window</span>
+      <div className="flex items-center justify-between bg-[#F3F0E8] p-2.5 border border-[#141518]">
+        <span className="text-[10px] font-mono uppercase tracking-wider text-[#55565B]">ACCEPTANCE WINDOW</span>
         <ExpiryTimer initialSeconds={offer.expirySeconds} />
       </div>
 
       {/* Actions Grid */}
-      <div className="grid grid-cols-3 gap-2">
-        <RiderButton variant="outline" size="md" onClick={() => onDecline(offer.id)}>
-          Decline
+      <div className="grid grid-cols-3 gap-2 pt-1">
+        <RiderButton variant="outline" size="sm" onClick={() => onDecline(offer.id)}>
+          DECLINE
         </RiderButton>
-        <RiderButton variant="ghost" size="md" onClick={() => onViewDetails(offer.id)}>
-          Specs
+        <RiderButton variant="ghost" size="sm" onClick={() => onViewDetails(offer.id)}>
+          SPECS
         </RiderButton>
-        <RiderButton variant="primary" size="md" onClick={() => onAccept(offer.id)}>
-          Accept Job
+        <RiderButton variant="primary" size="sm" onClick={() => onAccept(offer.id)}>
+          ACCEPT JOB →
         </RiderButton>
       </div>
     </div>
@@ -185,26 +189,31 @@ export const DeclineReasonModal: React.FC<{
   if (!isOpen) return null;
 
   const reasons: { id: DeclineReason; label: string }[] = [
-    { id: 'distance_too_far', label: 'Trip distance is too far' },
-    { id: 'payout_too_low', label: 'Payout amount is too low for this route' },
-    { id: 'vehicle_unsuitable', label: 'Order size exceeds vehicle bag capacity' },
-    { id: 'taking_break', label: 'Taking a shift break / Going off duty' },
-    { id: 'other', label: 'Other operational reason' },
+    { id: 'distance_too_far', label: 'Trip distance exceeds zone radius' },
+    { id: 'payout_too_low', label: 'Payout rate insufficient for traffic route' },
+    { id: 'vehicle_unsuitable', label: 'Order parcel exceeds vessel cargo capacity' },
+    { id: 'taking_break', label: 'Taking an operational rest break' },
+    { id: 'other', label: 'Other dispatch constraint' },
   ];
 
   return (
     <div className="fixed inset-0 z-[1000] flex items-center justify-center p-4">
-      <div onClick={onClose} className="fixed inset-0 bg-black/40 backdrop-blur-xs cursor-pointer" />
-      <div className="relative w-full max-w-sm bg-white rounded-3xl p-6 shadow-modal space-y-4 text-left z-10">
-        <div className="flex items-center justify-between border-b border-neutral-100 pb-3">
-          <h3 className="text-sm font-black text-neutral-900 font-heading">Decline Delivery Offer</h3>
-          <button onClick={onClose} className="p-1.5 rounded-full hover:bg-neutral-100 text-neutral-400">
-            <X size={16} />
+      <div onClick={onClose} className="fixed inset-0 bg-black/60 backdrop-blur-xs cursor-pointer" />
+      <div className="relative w-full max-w-sm bg-[#FAF8F5] border border-[#141518] p-6 shadow-[6px_6px_0px_#141518] space-y-4 text-left z-10 font-mono">
+        <div className="flex items-center justify-between border-b border-[#141518]/15 pb-3">
+          <h3 className="text-sm font-heading font-black text-[#141518] uppercase">
+            DECLINE DISPATCH OFFER
+          </h3>
+          <button
+            onClick={onClose}
+            className="p-1 border border-[#141518] bg-[#FAF8F5] hover:bg-[#F3F0E8] text-[#141518]"
+          >
+            <X size={14} />
           </button>
         </div>
 
-        <p className="text-xs text-neutral-600 leading-relaxed">
-          Please select a reason for declining this delivery offer. This helps optimize future order matching.
+        <p className="text-xs text-[#55565B] leading-relaxed font-sans">
+          Select reason for declining. Feasto dispatch AI recalibrates nearby vessels.
         </p>
 
         <div className="space-y-2">
@@ -212,24 +221,29 @@ export const DeclineReasonModal: React.FC<{
             <label
               key={r.id}
               onClick={() => setSelectedReason(r.id)}
-              className={`p-3 rounded-xl border flex items-center justify-between text-xs font-bold cursor-pointer transition-colors ${
+              className={`p-3 border flex items-center justify-between text-xs font-mono font-bold cursor-pointer transition-all ${
                 selectedReason === r.id
-                  ? 'bg-[#e35205]/5 border-[#e35205] text-[#e35205]'
-                  : 'bg-neutral-50 border-neutral-200 text-neutral-800 hover:bg-neutral-100'
+                  ? 'bg-[#D7F04A] border-[#141518] text-[#141518] shadow-[2px_2px_0px_#141518]'
+                  : 'bg-[#F3F0E8] border-[#141518]/30 text-[#141518] hover:border-[#141518]'
               }`}
             >
               <span>{r.label}</span>
-              <input type="radio" checked={selectedReason === r.id} onChange={() => {}} className="accent-[#e35205]" />
+              <input
+                type="radio"
+                checked={selectedReason === r.id}
+                onChange={() => {}}
+                className="accent-[#141518]"
+              />
             </label>
           ))}
         </div>
 
         <div className="pt-2 flex items-center gap-2">
           <RiderButton variant="outline" fullWidth onClick={onClose}>
-            Cancel
+            CANCEL
           </RiderButton>
           <RiderButton variant="danger" fullWidth onClick={() => onConfirmDecline(selectedReason)}>
-            Confirm Decline
+            CONFIRM DECLINE
           </RiderButton>
         </div>
       </div>

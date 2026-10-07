@@ -20,32 +20,34 @@ export const RiderOrdersAvailablePage: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6 text-left">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-neutral-200/60">
+    <div className="space-y-6 text-left font-mono">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-[#141518]/15">
         <div>
-          <h1 className="text-xl sm:text-2xl font-black text-neutral-900 font-heading tracking-tight">
-            Available Dispatch Queue
+          <h1 className="text-xl sm:text-2xl font-heading font-black text-[#141518] uppercase tracking-tight">
+            AVAILABLE DISPATCH QUEUE
           </h1>
-          <p className="text-xs text-neutral-500 font-mono mt-0.5">
-            {availableOffers.length} real-time delivery offers near Bandra West & Khar Zone.
+          <p className="text-xs text-[#55565B] font-mono mt-0.5">
+            {availableOffers.length} real-time mission offers near Bandra West & Khar Zone.
           </p>
         </div>
 
-        <span className="text-xs font-mono font-bold px-3 py-1.5 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200/80 w-fit">
-          ● Auto-Dispatch Active
+        <span className="text-xs font-mono font-black px-3 py-1.5 bg-[#D7F04A] text-[#141518] border border-[#141518] shadow-[2px_2px_0px_#141518] w-fit">
+          ● RADAR RADIAL SCAN ACTIVE
         </span>
       </div>
 
       {availableOffers.length > 0 ? (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-          {/* Left Column: Order Offers List (5 cols on lg) */}
+          {/* Left Column: Order Offers List */}
           <div className="lg:col-span-5 space-y-3">
             {availableOffers.map((offer) => (
               <div
                 key={offer.id}
                 onClick={() => setSelectedOfferId(offer.id)}
-                className={`transition-all cursor-pointer rounded-2xl ${
-                  activeOffer?.id === offer.id ? 'ring-2 ring-[#e35205] shadow-md' : ''
+                className={`transition-all cursor-pointer ${
+                  activeOffer?.id === offer.id
+                    ? 'border-2 border-[#141518] shadow-[5px_5px_0px_#141518]'
+                    : ''
                 }`}
               >
                 <OrderOfferCard
@@ -58,75 +60,75 @@ export const RiderOrdersAvailablePage: React.FC = () => {
             ))}
           </div>
 
-          {/* Right Column: Selected Order Detail Workspace Pane (7 cols on lg) */}
+          {/* Right Column: Selected Order Detail Workspace Pane */}
           {activeOffer && (
-            <div className="lg:col-span-7 bg-white p-6 sm:p-8 rounded-3xl border border-neutral-200/90 shadow-2xs space-y-6 lg:sticky lg:top-24">
-              <div className="flex items-center justify-between border-b border-neutral-100 pb-4">
+            <div className="lg:col-span-7 bg-[#FAF8F5] p-6 sm:p-8 border border-[#141518] shadow-[6px_6px_0px_#141518] space-y-6 lg:sticky lg:top-24">
+              <div className="flex items-center justify-between border-b border-[#141518]/15 pb-4">
                 <div className="space-y-1">
-                  <span className="text-[10px] font-mono font-bold text-[#e35205] uppercase">
-                    Order Dispatch Summary • {activeOffer.orderNumber}
+                  <span className="text-[10px] font-mono font-bold text-[#55565B] uppercase tracking-widest">
+                    MISSION DOSSIER • {activeOffer.orderNumber}
                   </span>
-                  <h2 className="text-lg font-black text-neutral-900 font-heading">
+                  <h2 className="text-xl font-heading font-black text-[#141518] uppercase tracking-tight">
                     {activeOffer.restaurantName}
                   </h2>
-                  <span className="text-xs text-neutral-500 font-mono block">
-                    Pickup: {activeOffer.restaurantAddress}
+                  <span className="text-xs text-[#55565B] font-mono block">
+                    PICKUP: {activeOffer.restaurantAddress}
                   </span>
                 </div>
 
                 <div className="text-right">
-                  <span className="text-2xl font-black text-emerald-700 font-mono block">
+                  <span className="text-2xl font-black text-[#141518] font-mono block px-2.5 py-1 bg-[#D7F04A] border border-[#141518]">
                     ₹{(activeOffer.payoutAmount + activeOffer.tipAmount + activeOffer.surgeBonusAmount).toFixed(0)}
                   </span>
-                  <span className="text-[10px] text-neutral-400 font-mono block">
-                    Incl. ₹{activeOffer.tipAmount} Tip + ₹{activeOffer.surgeBonusAmount} Surge
+                  <span className="text-[10px] text-[#55565B] font-mono block mt-1 uppercase">
+                    INCL. ₹{activeOffer.tipAmount} TIP + ₹{activeOffer.surgeBonusAmount} SURGE
                   </span>
                 </div>
               </div>
 
               {/* Delivery SLA & Route Distance Metrics */}
               <div className="grid grid-cols-3 gap-3 font-mono text-xs text-center">
-                <div className="p-3 rounded-xl bg-neutral-50 border border-neutral-200/80 space-y-0.5">
-                  <span className="text-[10px] text-neutral-400 uppercase block">Distance</span>
-                  <strong className="text-neutral-900 text-sm block">{activeOffer.totalDistanceKm} KM</strong>
+                <div className="p-3 bg-[#F3F0E8] border border-[#141518] space-y-0.5">
+                  <span className="text-[10px] text-[#55565B] uppercase block">DISTANCE</span>
+                  <strong className="text-[#141518] text-sm block font-black">{activeOffer.totalDistanceKm} KM</strong>
                 </div>
 
-                <div className="p-3 rounded-xl bg-neutral-50 border border-neutral-200/80 space-y-0.5">
-                  <span className="text-[10px] text-neutral-400 uppercase block">Est Time</span>
-                  <strong className="text-neutral-900 text-sm block">{activeOffer.estimatedTimeMins} Mins</strong>
+                <div className="p-3 bg-[#F3F0E8] border border-[#141518] space-y-0.5">
+                  <span className="text-[10px] text-[#55565B] uppercase block">EST TIME</span>
+                  <strong className="text-[#141518] text-sm block font-black">{activeOffer.estimatedTimeMins} MIN</strong>
                 </div>
 
-                <div className="p-3 rounded-xl bg-neutral-50 border border-neutral-200/80 space-y-0.5">
-                  <span className="text-[10px] text-neutral-400 uppercase block">Accept SLA</span>
-                  <strong className="text-amber-700 text-sm block">{activeOffer.expirySeconds}s Left</strong>
+                <div className="p-3 bg-[#F3F0E8] border border-[#141518] space-y-0.5">
+                  <span className="text-[10px] text-[#55565B] uppercase block">ACCEPT SLA</span>
+                  <strong className="text-[#141518] text-sm block font-black">{activeOffer.expirySeconds}S LEFT</strong>
                 </div>
               </div>
 
               {/* Itemized Order Package Items List */}
               <div className="space-y-2 text-xs">
-                <span className="font-bold text-neutral-800 uppercase text-[10px] tracking-wider font-heading block">
-                  Package Contents & Handling ({activeOffer.itemCount} Items)
+                <span className="font-bold text-[#141518] uppercase text-[10px] tracking-wider font-mono block">
+                  PACKAGE SPECIFICATIONS ({activeOffer.itemCount} ITEMS)
                 </span>
-                <div className="p-4 rounded-xl bg-neutral-50 border border-neutral-200/80 space-y-1.5 font-mono">
+                <div className="p-4 bg-[#F3F0E8] border border-[#141518] space-y-1.5 font-mono">
                   {activeOffer.itemsList.map((itemStr: string, idx: number) => (
-                    <div key={idx} className="flex justify-between text-neutral-700">
+                    <div key={idx} className="flex justify-between text-[#141518]">
                       <span>• {itemStr}</span>
-                      <span className="text-emerald-700 font-bold">✓ Prepared</span>
+                      <span className="font-bold uppercase">✓ READY AT PASS</span>
                     </div>
                   ))}
                 </div>
               </div>
 
               {/* Customer Dropoff Location */}
-              <div className="p-4 rounded-xl bg-neutral-50 border border-neutral-200/80 space-y-1 text-xs">
-                <div className="flex items-center gap-1.5 text-neutral-900 font-bold">
-                  <MapPin size={14} className="text-[#e35205]" />
-                  <span>Customer Handoff Address</span>
+              <div className="p-4 bg-[#F3F0E8] border border-[#141518] space-y-1 text-xs">
+                <div className="flex items-center gap-1.5 text-[#141518] font-bold uppercase font-mono">
+                  <MapPin size={14} className="text-[#141518]" />
+                  <span>CUSTOMER DROP-OFF WAYPOINT</span>
                 </div>
-                <p className="text-neutral-600 font-mono">{activeOffer.dropoffAddress}</p>
+                <p className="text-[#141518] font-mono">{activeOffer.dropoffAddress}</p>
                 {activeOffer.specialInstructions && (
-                  <span className="text-[11px] text-neutral-500 font-mono block pt-1">
-                    Note: "{activeOffer.specialInstructions}"
+                  <span className="text-[11px] text-[#55565B] font-mono block pt-1">
+                    NOTE: "{activeOffer.specialInstructions}"
                   </span>
                 )}
               </div>
@@ -139,7 +141,7 @@ export const RiderOrdersAvailablePage: React.FC = () => {
                   fullWidth
                   onClick={() => openDeclineModal(activeOffer.id)}
                 >
-                  Decline Offer
+                  DECLINE OFFER
                 </RiderButton>
 
                 <RiderButton
@@ -148,7 +150,7 @@ export const RiderOrdersAvailablePage: React.FC = () => {
                   fullWidth
                   onClick={() => handleAccept(activeOffer.id)}
                 >
-                  Accept Offer & Start →
+                  ACCEPT MISSION →
                 </RiderButton>
               </div>
             </div>
@@ -156,8 +158,8 @@ export const RiderOrdersAvailablePage: React.FC = () => {
         </div>
       ) : (
         <RiderEmptyState
-          title="No Available Offers Right Now"
-          description="There are no open delivery offers matching your location. Stay online to receive live notifications."
+          title="NO ACTIVE DISPATCH OFFERS IN SECTOR"
+          description="Radar listening on 5G channel. Maintain active GPS vessel telemetry to receive upcoming high-surge offers."
         />
       )}
     </div>

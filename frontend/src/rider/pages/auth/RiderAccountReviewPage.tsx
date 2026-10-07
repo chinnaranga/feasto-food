@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Clock, CheckCircle2, ShieldCheck } from 'lucide-react';
+import { Clock, CheckCircle2, ShieldCheck, Zap } from 'lucide-react';
 import useRiderAuthStore from '../../store/useRiderAuthStore';
 import { RiderButton, RiderPageHeader } from '../../components/RiderUIComponents';
 import { AccountStatusCard, VerificationStepper } from '../../components/auth/RiderAuthComponents';
@@ -15,14 +15,14 @@ export const RiderAccountReviewPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#f8f9fa] flex flex-col text-left">
-      <VerificationStepper currentStep="review" />
+    <div className="min-h-screen bg-[#F3F0E8] flex flex-col text-left py-4 sm:py-8 px-4 sm:px-6 selection:bg-[#D7F04A] selection:text-[#141518]">
+      <div className="max-w-xl mx-auto w-full space-y-6 my-auto">
+        <VerificationStepper currentStep="review" />
 
-      <div className="p-4 max-w-sm mx-auto w-full my-auto space-y-4">
-        <div className="bg-white p-6 rounded-3xl border border-neutral-200 shadow-modal space-y-5">
+        <div className="bg-[#FAF8F5] p-6 sm:p-8 border border-[#141518] shadow-[6px_6px_0px_#141518] space-y-5">
           <RiderPageHeader
-            title="Account Under Review"
-            subtitle="Your identity, driving license, and vehicle registration are submitted for review."
+            title="Dossier Under Review"
+            subtitle="Your government KYC, driving license permit, and vehicle registration are queued in the compliance inspection stream."
           />
 
           <AccountStatusCard
@@ -31,19 +31,43 @@ export const RiderAccountReviewPage: React.FC = () => {
             notes={reviewStatus.reviewerNotes}
           />
 
-          <div className="p-4 rounded-2xl bg-neutral-50 border border-neutral-150 space-y-2 text-xs">
-            <h4 className="font-bold text-neutral-900">Verification Steps Checklist:</h4>
-            <ul className="space-y-1 text-neutral-600">
-              <li className="flex items-center gap-1.5"><CheckCircle2 size={13} className="text-emerald-600" /> Phone OTP Verified</li>
-              <li className="flex items-center gap-1.5"><CheckCircle2 size={13} className="text-emerald-600" /> Government Aadhaar/PAN Submitted</li>
-              <li className="flex items-center gap-1.5"><CheckCircle2 size={13} className="text-emerald-600" /> Driving License Uploaded</li>
-              <li className="flex items-center gap-1.5"><CheckCircle2 size={13} className="text-emerald-600" /> EV Vehicle Registration Checked</li>
+          <div className="p-4 bg-[#F3F0E8] border border-[#141518] space-y-2 text-xs font-mono">
+            <h4 className="font-black text-[#141518] uppercase tracking-wider">
+              VERIFICATION AUDIT CHECKLIST:
+            </h4>
+            <ul className="space-y-1.5 text-[#141518]">
+              <li className="flex items-center gap-2">
+                <span className="w-4 h-4 bg-[#141518] text-[#FAF8F5] text-[10px] flex items-center justify-center font-bold">
+                  ✓
+                </span>
+                <span>Phone OTP Cryptographic Handshake Verified</span>
+              </li>
+              <li className="flex items-center gap-2">
+                <span className="w-4 h-4 bg-[#141518] text-[#FAF8F5] text-[10px] flex items-center justify-center font-bold">
+                  ✓
+                </span>
+                <span>Government UIDAI / NSDL Identity Record Synced</span>
+              </li>
+              <li className="flex items-center gap-2">
+                <span className="w-4 h-4 bg-[#141518] text-[#FAF8F5] text-[10px] flex items-center justify-center font-bold">
+                  ✓
+                </span>
+                <span>Commercial Driving License Authenticated</span>
+              </li>
+              <li className="flex items-center gap-2">
+                <span className="w-4 h-4 bg-[#141518] text-[#FAF8F5] text-[10px] flex items-center justify-center font-bold">
+                  ✓
+                </span>
+                <span>Vehicle Parivahan RC Verified</span>
+              </li>
             </ul>
           </div>
 
-          <RiderButton variant="primary" size="lg" fullWidth onClick={handleSimulateApproval}>
-            Simulate Instant Approval →
-          </RiderButton>
+          <div className="pt-2">
+            <RiderButton variant="primary" size="lg" fullWidth onClick={handleSimulateApproval}>
+              SIMULATE INSTANT APPROVAL CLEARANCE →
+            </RiderButton>
+          </div>
         </div>
       </div>
     </div>

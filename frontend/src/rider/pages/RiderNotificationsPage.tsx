@@ -1,19 +1,26 @@
 import React from 'react';
-import { Bell, Sparkles, Shield } from 'lucide-react';
+import { Bell, Sparkles, Shield, Zap } from 'lucide-react';
 import { RiderPageHeader } from '../components/RiderUIComponents';
 
 export const RiderNotificationsPage: React.FC = () => {
   return (
-    <div className="space-y-4 text-left">
-      <RiderPageHeader title="Rider Alerts & System Updates" subtitle="Notifications on incentives, zone shifts, and safety." />
-      <div className="space-y-2 text-xs">
-        <div className="p-4 rounded-2xl bg-white border border-neutral-200/90 space-y-1">
-          <div className="flex items-center gap-2 font-bold text-neutral-900">
-            <Sparkles size={14} className="text-[#e35205]" />
-            <span>Weekend Peak Quest Bonus Activated</span>
+    <div className="space-y-4 text-left font-mono">
+      <RiderPageHeader
+        title="DISPATCH ALERTS & TELEMETRY"
+        subtitle="Operational notices on surge quests, zone rebalancing, and fleet security."
+      />
+      <div className="space-y-3 text-xs font-mono">
+        <div className="p-4 bg-[#FAF8F5] border border-[#141518] shadow-[3px_3px_0px_#141518] space-y-1.5">
+          <div className="flex items-center gap-2 font-black uppercase text-[#141518]">
+            <div className="p-1 bg-[#D7F04A] border border-[#141518]">
+              <Sparkles size={13} />
+            </div>
+            <span>WEEKEND PEAK SURGE QUEST ACTIVATED</span>
           </div>
-          <p className="text-neutral-500">Complete 10 deliveries between 18:00 and 22:00 to earn an extra ₹250 bonus payout.</p>
-          <span className="text-[10px] text-neutral-400 font-mono block">2 hours ago</span>
+          <p className="text-[#55565B] font-sans">
+            Complete 10 deliveries between 18:00 and 22:00 in Bandra West to unlock an instant ₹250 direct cash bonus.
+          </p>
+          <span className="text-[10px] text-[#55565B] font-mono block">2 HOURS AGO · SYSTEM DISPATCH</span>
         </div>
       </div>
     </div>

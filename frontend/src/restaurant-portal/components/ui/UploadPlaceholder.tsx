@@ -30,17 +30,22 @@ export const UploadPlaceholder: React.FC<UploadPlaceholderProps> = ({
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file && onUpload) {
-      // Create object URL for local preview
       const url = URL.createObjectURL(file);
       onUpload(url);
     }
   };
 
   return (
-    <div className="flex flex-col gap-1.5 w-full text-left">
-      <span className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider">{label}</span>
+    <div className="flex flex-col gap-1.5 w-full text-left font-mono">
+      <span className="text-[10px] font-bold text-[#52555F] uppercase tracking-wider">{label}</span>
 
-      <div className={`relative rounded-xl overflow-hidden border-2 border-dashed transition-colors duration-200 ${ASPECT_CLASSES[aspectRatio]} ${previewUrl ? 'border-neutral-200' : 'border-neutral-200 bg-neutral-50 hover:border-[#e35205]/40 hover:bg-orange-50/30'}`}>
+      <div
+        className={`relative overflow-hidden border-2 border-dashed transition-colors duration-200 ${ASPECT_CLASSES[aspectRatio]} ${
+          previewUrl
+            ? 'border-[#141518]/30 bg-[#FAF8F5]'
+            : 'border-[#141518]/25 bg-[#FAF8F5] hover:border-[#141518] hover:bg-[#F3F0E8]'
+        }`}
+      >
         {previewUrl ? (
           <>
             <img
@@ -49,11 +54,11 @@ export const UploadPlaceholder: React.FC<UploadPlaceholderProps> = ({
               className="w-full h-full object-cover"
             />
             {/* Overlay actions */}
-            <div className="absolute inset-0 bg-black/40 opacity-0 hover:opacity-100 transition-opacity duration-200 flex items-center justify-center gap-2">
+            <div className="absolute inset-0 bg-black/50 opacity-0 hover:opacity-100 transition-opacity duration-200 flex items-center justify-center gap-2">
               <button
                 type="button"
                 onClick={() => inputRef.current?.click()}
-                className="flex items-center gap-1 bg-white text-neutral-800 text-[10px] font-bold px-2.5 py-1.5 rounded-lg shadow-sm hover:bg-neutral-100 transition-colors cursor-pointer"
+                className="flex items-center gap-1 bg-[#FAF8F5] text-[#141518] text-[10px] font-mono font-bold px-2.5 py-1.5 border border-[#141518] shadow-[2px_2px_0px_#141518] hover:bg-[#D7F04A] transition-colors cursor-pointer"
               >
                 <Upload size={11} />
                 Change
@@ -62,44 +67,41 @@ export const UploadPlaceholder: React.FC<UploadPlaceholderProps> = ({
                 <button
                   type="button"
                   onClick={onClear}
-                  className="flex items-center gap-1 bg-red-600 text-white text-[10px] font-bold px-2.5 py-1.5 rounded-lg shadow-sm hover:bg-red-700 transition-colors cursor-pointer"
+                  className="p-1.5 bg-[#991B1B] text-white hover:bg-red-700 transition-colors cursor-pointer"
+                  title="Remove image"
                 >
-                  <X size={11} />
-                  Remove
+                  <X size={13} />
                 </button>
               )}
             </div>
           </>
         ) : (
-          <button
-            type="button"
+          <div
             onClick={() => inputRef.current?.click()}
-            className="absolute inset-0 flex flex-col items-center justify-center gap-2 cursor-pointer group"
-            aria-label={`Upload ${label}`}
+            className="w-full h-full flex flex-col items-center justify-center gap-2 p-4 cursor-pointer group"
           >
-            <div className="w-8 h-8 rounded-lg bg-neutral-100 group-hover:bg-orange-100 flex items-center justify-center transition-colors duration-200">
-              <ImageIcon size={15} className="text-neutral-400 group-hover:text-[#e35205] transition-colors duration-200" />
+            <div className="w-10 h-10 border border-[#141518]/20 bg-[#FAF8F5] group-hover:bg-[#141518] group-hover:text-[#D7F04A] text-[#141518] flex items-center justify-center transition-colors">
+              <Upload size={16} />
             </div>
             <div className="text-center">
-              <p className="text-[10px] font-bold text-neutral-500 group-hover:text-neutral-700">
-                Click to upload
-              </p>
-              <p className="text-[9px] text-neutral-400">PNG, JPG, WEBP up to 5MB</p>
+              <span className="text-xs font-mono font-bold text-[#141518] block group-hover:underline">
+                Upload image
+              </span>
+              <span className="text-[9px] font-mono text-[#52555F] block mt-0.5">
+                {hint || 'PNG, JPG, or WEBP up to 5MB'}
+              </span>
             </div>
-          </button>
+          </div>
         )}
+
+        <input
+          ref={inputRef}
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={handleChange}
+        />
       </div>
-
-      {hint && <p className="text-[9px] text-neutral-400">{hint}</p>}
-
-      <input
-        ref={inputRef}
-        type="file"
-        accept="image/png,image/jpeg,image/webp"
-        className="hidden"
-        onChange={handleChange}
-        aria-label={`Upload ${label} file`}
-      />
     </div>
   );
 };

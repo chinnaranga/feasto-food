@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Bike, ShieldCheck, CheckCircle2 } from 'lucide-react';
+import { Bike, ShieldCheck, CheckCircle2, Zap } from 'lucide-react';
 import useRiderAuthStore from '../../store/useRiderAuthStore';
 import { RiderButton, RiderInput, RiderPageHeader } from '../../components/RiderUIComponents';
 import { VerificationStepper } from '../../components/auth/RiderAuthComponents';
@@ -9,7 +9,9 @@ export const RiderVehicleVerifyPage: React.FC = () => {
   const navigate = useNavigate();
   const { vehicleData, updateVehicleData, submitForAccountReview } = useRiderAuthStore();
 
-  const [vehicleType, setVehicleType] = useState<'motorbike' | 'scooter_ev' | 'bicycle' | 'car'>(vehicleData.vehicleType || 'scooter_ev');
+  const [vehicleType, setVehicleType] = useState<'motorbike' | 'scooter_ev' | 'bicycle' | 'car'>(
+    vehicleData.vehicleType || 'scooter_ev'
+  );
   const [brandModel, setBrandModel] = useState(vehicleData.brandModel || '');
   const [plateNumber, setPlateNumber] = useState(vehicleData.plateNumber || '');
 
@@ -23,61 +25,64 @@ export const RiderVehicleVerifyPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#f8f9fa] flex flex-col text-left py-4 sm:py-8 px-4 sm:px-6">
+    <div className="min-h-screen bg-[#F3F0E8] flex flex-col text-left py-4 sm:py-8 px-4 sm:px-6 selection:bg-[#D7F04A] selection:text-[#141518]">
       <div className="max-w-6xl mx-auto w-full space-y-6 my-auto">
         <VerificationStepper currentStep="vehicle" />
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
           {/* Left Panel */}
-          <div className="hidden lg:flex lg:col-span-5 bg-neutral-900 text-white rounded-3xl p-8 flex-col justify-between space-y-8 shadow-xl">
+          <div className="hidden lg:flex lg:col-span-5 bg-[#141518] text-[#FAF8F5] border border-[#141518] shadow-[6px_6px_0px_#141518] p-8 flex-col justify-between space-y-8">
             <div className="space-y-4">
-              <span className="text-[10px] font-mono font-bold tracking-widest text-emerald-400 uppercase bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/30">
-                Vehicle Onboarding & Fleet
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#D7F04A] text-[#141518] border border-[#141518] text-[10px] font-mono font-black uppercase tracking-widest shadow-[2px_2px_0px_#D7F04A]">
+                <Zap size={11} className="fill-[#141518]" /> FLEET ONBOARDING & RC
               </span>
-              <h2 className="text-2xl font-black font-heading leading-tight">
-                Vehicle Specifications & Registration
+              <h2 className="text-3xl font-heading font-black leading-tight uppercase tracking-tight text-white">
+                VESSEL SPECIFICATION & GREEN INCENTIVES
               </h2>
-              <p className="text-xs text-neutral-300 leading-relaxed">
-                Feasto supports electric scooters, petrol motorbikes, bicycles, and commercial four-wheelers with zero emission bonuses.
+              <p className="text-xs text-[#B0B1B6] leading-relaxed font-sans">
+                Feasto welcomes electric two-wheelers, fuel motorcycles, cargo bicycles, and four-wheelers. EV partners
+                automatically unlock the Green Delivery Surge Tier (+₹15 extra on every completed drop).
               </p>
             </div>
 
-            <div className="space-y-3 font-mono text-xs text-neutral-300">
-              <div className="flex items-center gap-2">
-                <CheckCircle2 size={16} className="text-emerald-400 shrink-0" />
-                <span>EV Green Fleet Bonus Eligibility (+₹15/trip)</span>
+            <div className="space-y-2.5 font-mono text-xs text-[#FAF8F5]">
+              <div className="p-3 bg-[#1E2025] border border-[#2B2E36] flex items-center gap-2.5">
+                <span className="text-[#D7F04A] font-black">⚡</span>
+                <span>EV Green Fleet Bonus: Extra ₹15 / Trip Automatic Credit</span>
               </div>
-              <div className="flex items-center gap-2">
-                <CheckCircle2 size={16} className="text-emerald-400 shrink-0" />
-                <span>Automated RC Plate Verification</span>
+              <div className="p-3 bg-[#1E2025] border border-[#2B2E36] flex items-center gap-2.5">
+                <span className="text-[#D7F04A] font-black">✓</span>
+                <span>Automated Parivahan Registration Certificate (RC) Check</span>
               </div>
             </div>
 
-            <div className="pt-4 border-t border-white/10 flex items-center justify-between text-[11px] text-neutral-400">
-              <span>Fleet Operations</span>
-              <span>Fast Track Approval</span>
+            <div className="pt-4 border-t border-[#2B2E36] flex items-center justify-between text-[11px] font-mono text-[#8E929C]">
+              <span>FLEET CODE: FEASTO-IND</span>
+              <span>FAST-TRACK DISPATCH</span>
             </div>
           </div>
 
           {/* Right Form Card */}
-          <div className="lg:col-span-7 bg-white p-6 sm:p-8 rounded-3xl border border-neutral-200 shadow-modal space-y-6">
+          <div className="lg:col-span-7 bg-[#FAF8F5] p-6 sm:p-8 border border-[#141518] shadow-[6px_6px_0px_#141518] space-y-6">
             <form onSubmit={handleSubmit} className="space-y-5">
               <RiderPageHeader
-                title="Vehicle Specification & RC"
-                subtitle="Step 5 of 5: Register vehicle category, plate number, and commercial details."
+                title="Vehicle Specifications & RC Plate"
+                subtitle="Step 5 of 6: Register your delivery vehicle class, model, and registration plate."
               />
 
-              <div className="space-y-1 text-xs">
-                <label className="font-bold text-neutral-700 block">Vehicle Category *</label>
+              <div className="space-y-1.5 text-xs">
+                <label className="text-[11px] font-mono font-bold tracking-wider uppercase text-[#141518] block">
+                  Vehicle Category *
+                </label>
                 <select
                   value={vehicleType}
                   onChange={(e) => setVehicleType(e.target.value as any)}
-                  className="w-full px-3.5 py-2.5 bg-neutral-50 border border-neutral-200 rounded-xl font-bold text-neutral-900 focus:outline-none focus:border-neutral-400"
+                  className="w-full px-3.5 py-2.5 bg-[#FAF8F5] border border-[#141518] text-xs font-mono font-bold text-[#141518] focus:outline-none focus:ring-1 focus:ring-[#141518] shadow-[2px_2px_0px_#141518]"
                 >
-                  <option value="scooter_ev">EV Scooter / Electric Vehicle (+Green Bonus)</option>
-                  <option value="motorbike">Petrol Motorbike</option>
-                  <option value="bicycle">Bicycle (Hyper-local 1-2 km)</option>
-                  <option value="car">Four-Wheeler Car / Delivery Van</option>
+                  <option value="scooter_ev">EV Scooter / Electric Vehicle (+₹15 Green Surge Tier)</option>
+                  <option value="motorbike">Petrol Motorcycle / Standard Commuter</option>
+                  <option value="bicycle">Bicycle (Hyper-local 1-2 km Deliveries)</option>
+                  <option value="car">Delivery Van / Four-Wheeler Cargo</option>
                 </select>
               </div>
 
@@ -87,11 +92,11 @@ export const RiderVehicleVerifyPage: React.FC = () => {
                   required
                   value={brandModel}
                   onChange={(e) => setBrandModel(e.target.value)}
-                  placeholder="e.g. Ather 450X Apex / Hero Splendor"
+                  placeholder="e.g. Ather 450X / Hero Splendor"
                 />
 
                 <RiderInput
-                  label="Registration License Plate Number *"
+                  label="Registration RC Plate Number *"
                   required
                   value={plateNumber}
                   onChange={(e) => setPlateNumber(e.target.value)}
@@ -101,7 +106,7 @@ export const RiderVehicleVerifyPage: React.FC = () => {
 
               <div className="pt-2">
                 <RiderButton variant="primary" size="lg" fullWidth type="submit">
-                  Submit Application for Onboarding Review →
+                  SUBMIT DOSSIER FOR ONBOARDING REVIEW →
                 </RiderButton>
               </div>
             </form>

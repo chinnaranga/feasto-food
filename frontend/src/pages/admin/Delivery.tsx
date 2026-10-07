@@ -68,9 +68,8 @@ export const Delivery: React.FC = () => {
       header: 'ACTIVE DISPATCH',
       render: (item) => (
         <span
-          className={`font-mono text-xs font-bold ${
-            item.currentDeliveries > 0 ? 'text-[#D7F04A]' : 'text-[#8E929C]'
-          }`}
+          className={`font-mono text-xs font-bold ${item.currentDeliveries > 0 ? 'text-[#D7F04A]' : 'text-[#8E929C]'
+            }`}
         >
           {item.currentDeliveries > 0 ? `${item.currentDeliveries} in motion` : 'Standby'}
         </span>
@@ -119,11 +118,10 @@ export const Delivery: React.FC = () => {
             <button
               key={tab}
               onClick={() => setStatusFilter(tab)}
-              className={`px-3 py-1.5 uppercase font-bold tracking-wider transition-colors cursor-pointer border ${
-                statusFilter === tab
+              className={`px-3 py-1.5 uppercase font-bold tracking-wider transition-colors cursor-pointer border ${statusFilter === tab
                   ? 'bg-[#1B3BFF] text-white border-[#1B3BFF]'
                   : 'bg-[#1D212A] text-[#8E929C] border-white/10 hover:text-white'
-              }`}
+                }`}
             >
               {tab === 'on_delivery' ? 'On Delivery' : tab}
             </button>

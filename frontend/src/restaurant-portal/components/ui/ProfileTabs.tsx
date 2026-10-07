@@ -20,18 +20,18 @@ export const ProfileTabs: React.FC = () => {
   ];
 
   return (
-    <div className="flex border-b border-neutral-200 overflow-x-auto select-none no-scrollbar py-1 text-left shrink-0 bg-white">
-      <nav className="flex gap-1.5 px-6">
+    <div className="flex border-b border-[#141518]/15 overflow-x-auto select-none no-scrollbar py-2 text-left shrink-0 bg-[#FAF8F5] px-4 font-mono">
+      <nav className="flex gap-2">
         {tabs.map((tab) => (
           <NavLink
             key={tab.path}
             to={tab.path}
             end={tab.path === '/restaurant-portal/profile'}
             className={({ isActive }) =>
-              `flex items-center gap-1.5 px-3.5 py-2.5 rounded-lg text-xs font-bold transition-all duration-200 cursor-pointer ${
+              `flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono uppercase tracking-wider transition-all duration-150 cursor-pointer border ${
                 isActive
-                  ? 'bg-neutral-100 text-neutral-800 border-neutral-300'
-                  : 'text-neutral-400 hover:text-neutral-700 hover:bg-neutral-50/50'
+                  ? 'bg-[#141518] text-[#FAF8F5] font-bold border-[#141518] shadow-[2px_2px_0px_#141518]'
+                  : 'text-[#52555F] hover:text-[#141518] hover:bg-[#EBE7DD] border-transparent'
               }`
             }
           >
@@ -43,4 +43,5 @@ export const ProfileTabs: React.FC = () => {
     </div>
   );
 };
+
 export default ProfileTabs;

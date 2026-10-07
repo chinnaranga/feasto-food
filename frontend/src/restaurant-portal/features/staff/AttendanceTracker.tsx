@@ -83,24 +83,24 @@ export const AttendanceTracker: React.FC = () => {
       {/* Clock In Simulation tool */}
       {clockableShifts.length > 0 ? (
         <form onSubmit={handleClockInSubmit} className="p-5 border border-neutral-200 bg-neutral-50/50 rounded-2xl space-y-4">
-          <div className="flex items-center gap-1.5 border-b border-neutral-100 pb-2">
-            <Sparkles size={13} className="text-[#e35205]" />
-            <h5 className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider font-heading">
+          <div className="flex items-center gap-1.5 border-b border-[#141518]/10 pb-2">
+            <Sparkles size={13} className="text-[#1B3BFF]" />
+            <h5 className="text-[10px] font-bold text-[#52555F] uppercase tracking-wider font-mono">
               Simulate Employee Clock-In Terminal
             </h5>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end font-mono">
             {/* Scheduled shift select */}
             <div className="flex flex-col gap-1 w-full">
-              <label htmlFor="shiftClockSelect" className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider">
+              <label htmlFor="shiftClockSelect" className="text-[10px] font-bold text-[#52555F] uppercase tracking-wider">
                 Select Scheduled Shift
               </label>
               <select
                 id="shiftClockSelect"
                 value={activeShiftId}
                 onChange={(e) => setActiveShiftId(e.target.value)}
-                className="w-full px-3 py-2 bg-white border border-neutral-200 focus:outline-none rounded-lg text-xs font-semibold text-neutral-800 cursor-pointer"
+                className="w-full px-3 py-2 bg-[#FAF8F5] border border-[#141518]/20 focus:border-[#141518] focus:outline-none text-xs font-semibold text-[#141518] cursor-pointer"
                 required
               >
                 <option value="">Choose shift...</option>
@@ -115,11 +115,11 @@ export const AttendanceTracker: React.FC = () => {
             {/* Late Option */}
             <div className="flex items-center gap-2 h-10 select-none cursor-pointer" onClick={() => setIsLateOption(!isLateOption)}>
               {isLateOption ? (
-                <CheckSquare size={16} className="text-[#e35205]" />
+                <CheckSquare size={16} className="text-[#1B3BFF]" />
               ) : (
-                <Square size={16} className="text-neutral-300" />
+                <Square size={16} className="text-[#52555F]/40" />
               )}
-              <span className="text-xs font-bold text-neutral-600">Mark check-in as Late Arrival</span>
+              <span className="text-xs font-bold text-[#52555F]">Mark check-in as Late Arrival</span>
             </div>
 
             <button
@@ -169,10 +169,10 @@ export const AttendanceTracker: React.FC = () => {
                       <button
                         key={status}
                         onClick={() => updateAttendance(m.id, status)}
-                        className={`px-2 py-1 text-[8px] font-black uppercase border rounded-md cursor-pointer transition-colors ${
+                        className={`px-2 py-1 text-[8px] font-mono font-bold uppercase border cursor-pointer transition-colors ${
                           m.attendance === status
-                            ? 'bg-[#e35205] text-white border-transparent shadow-xs'
-                            : 'bg-white text-neutral-400 border-neutral-200 hover:bg-neutral-50'
+                            ? 'bg-[#141518] text-[#D7F04A] border-[#141518] shadow-[2px_2px_0px_#141518]'
+                            : 'bg-[#FAF8F5] text-[#52555F] border-[#141518]/20 hover:border-[#141518]'
                         }`}
                       >
                         {status.replace('-', ' ')}

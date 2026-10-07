@@ -15,76 +15,84 @@ export const RiderActiveHomePage: React.FC = () => {
   if (!activeTask) {
     return (
       <RiderEmptyState
-        title="No Active Delivery Task"
-        description="You do not currently have an accepted order in progress. Go to the Offers Feed to accept a delivery job."
+        title="NO ACTIVE DISPATCH MISSION"
+        description="You do not currently have an accepted courier mission in progress. Return to Available Offers to accept a live delivery order."
       />
     );
   }
 
   return (
-    <div className="space-y-6 text-left">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-neutral-200/60">
+    <div className="space-y-6 text-left font-mono">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-[#141518]/15">
         <div>
-          <h1 className="text-xl sm:text-2xl font-black text-neutral-900 font-heading tracking-tight">
-            Active Delivery Workflow
+          <h1 className="text-xl sm:text-2xl font-heading font-black text-[#141518] uppercase tracking-tight">
+            ACTIVE COURIER WORKFLOW
           </h1>
-          <p className="text-xs text-neutral-500 font-mono mt-0.5">
-            Order {activeTask.orderNumber} • {activeTask.currentStage === 'en_route_to_pickup' ? 'Navigating to Restaurant' : 'Navigating to Customer'}
+          <p className="text-xs text-[#55565B] font-mono mt-0.5">
+            MISSION {activeTask.orderNumber} • {activeTask.currentStage === 'en_route_to_pickup' ? 'ROUTE TO KITCHEN' : 'ROUTE TO CUSTOMER'}
           </p>
         </div>
 
-        <span className="text-xs font-mono font-bold px-3 py-1.5 rounded-xl bg-amber-50 text-amber-900 border border-amber-200/80 w-fit">
-          ● Order In Transit
+        <span className="text-xs font-mono font-black px-3 py-1.5 bg-[#D7F04A] text-[#141518] border border-[#141518] shadow-[2px_2px_0px_#141518] w-fit">
+          ● VESSEL EN ROUTE
         </span>
       </div>
 
-      {/* Responsive Split Delivery Workspace (7 cols Map + 5 cols Delivery Focus Card on lg) */}
+      {/* Responsive Split Delivery Workspace */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        {/* Left Column: Live Map Canvas (7 cols on lg) */}
+        {/* Left Column: Live Map Canvas */}
         <div className="lg:col-span-7 space-y-4">
-          <RealLiveMapCanvas
-            routeSummary={routeSummary}
-            onRecenter={recenterMap}
-            onReroute={triggerReroute}
-            onToggleTileMode={toggleTileMode}
-          />
+          <div className="border border-[#141518] shadow-[4px_4px_0px_#141518] overflow-hidden bg-[#14161B]">
+            <RealLiveMapCanvas
+              routeSummary={routeSummary}
+              onRecenter={recenterMap}
+              onReroute={triggerReroute}
+              onToggleTileMode={toggleTileMode}
+            />
+          </div>
 
-          <div className="p-4 sm:p-5 rounded-2xl bg-white border border-neutral-200/90 shadow-2xs space-y-3">
+          <div className="p-4 sm:p-5 bg-[#FAF8F5] border border-[#141518] shadow-[3px_3px_0px_#141518] space-y-2.5">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Sparkles size={16} className="text-blue-600" />
-                <h3 className="text-xs font-black uppercase text-neutral-900 font-heading">AI Route Telemetry</h3>
+                <Sparkles size={16} className="text-[#141518]" />
+                <h3 className="text-xs font-mono font-black uppercase text-[#141518] tracking-wider">
+                  AI DISPATCH ROUTE TELEMETRY
+                </h3>
               </div>
-              <span className="text-xs font-mono font-bold text-emerald-700">96% Accuracy</span>
+              <span className="text-xs font-mono font-black px-2 py-0.5 bg-[#D7F04A] text-[#141518] border border-[#141518]">
+                96% ACCURACY
+              </span>
             </div>
-            <p className="text-xs text-neutral-600 leading-relaxed font-mono">{aiInsight.routeEfficiencyTip}</p>
+            <p className="text-xs text-[#141518] leading-relaxed font-mono">{aiInsight.routeEfficiencyTip}</p>
           </div>
         </div>
 
-        {/* Right Column: Focus Card & Step Checklist (5 cols on lg) */}
+        {/* Right Column: Focus Card & Step Checklist */}
         <div className="lg:col-span-5 space-y-4">
           <DeliveryFocusCard task={activeTask} onAdvance={advanceStage} />
 
-          <div className="p-4 sm:p-5 rounded-2xl bg-white border border-neutral-200/90 shadow-2xs space-y-3">
-            <div className="flex items-center justify-between border-b border-neutral-100 pb-2">
-              <span className="text-xs font-bold text-neutral-900 font-heading">Fulfillment Assistance</span>
+          <div className="p-4 sm:p-5 bg-[#FAF8F5] border border-[#141518] shadow-[4px_4px_0px_#141518] space-y-3">
+            <div className="flex items-center justify-between border-b border-[#141518]/15 pb-2">
+              <span className="text-xs font-mono font-black text-[#141518] uppercase tracking-wider">
+                FULFILLMENT PROTOCOL
+              </span>
               <button
                 onClick={() => setReportIssueModalOpen(true)}
-                className="text-xs font-bold text-red-600 hover:underline flex items-center gap-1 cursor-pointer"
+                className="text-xs font-mono font-bold text-[#EF4444] hover:underline flex items-center gap-1 cursor-pointer uppercase"
               >
                 <AlertTriangle size={14} />
-                <span>Report Delivery Issue</span>
+                <span>REPORT ISSUE</span>
               </button>
             </div>
 
-            <div className="space-y-2 text-xs font-mono text-neutral-700">
-              <div className="flex items-center justify-between p-2.5 rounded-xl bg-neutral-50 border border-neutral-200/80">
-                <span>Pickup SLA Window</span>
-                <strong className="text-neutral-900 font-bold">{activeTask.pickupSlaTime}</strong>
+            <div className="space-y-2 text-xs font-mono text-[#141518]">
+              <div className="flex items-center justify-between p-2.5 bg-[#F3F0E8] border border-[#141518]">
+                <span className="text-[#55565B]">PICKUP SLA WINDOW</span>
+                <strong className="text-[#141518] font-black">{activeTask.pickupSlaTime}</strong>
               </div>
-              <div className="flex items-center justify-between p-2.5 rounded-xl bg-neutral-50 border border-neutral-200/80">
-                <span>Customer Contact</span>
-                <span className="text-[#e35205] font-bold">{activeTask.customerPhone}</span>
+              <div className="flex items-center justify-between p-2.5 bg-[#F3F0E8] border border-[#141518]">
+                <span className="text-[#55565B]">CUSTOMER CONTACT</span>
+                <span className="text-[#141518] font-black">{activeTask.customerPhone}</span>
               </div>
             </div>
           </div>

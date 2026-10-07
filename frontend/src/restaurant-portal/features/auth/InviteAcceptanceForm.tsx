@@ -54,16 +54,19 @@ export const InviteAcceptanceForm: React.FC = () => {
     return (
       <div className="space-y-6 text-left">
         <div>
-          <h2 className="text-xl font-black text-neutral-900 tracking-tight">
-            Invitation Accepted
+          <span className="font-mono text-[10px] uppercase font-bold tracking-widest text-[#15803D] block">
+            ✓ INVITATION ACCEPTED
+          </span>
+          <h2 className="font-heading font-black text-2xl uppercase tracking-tight text-[#141518] mt-1">
+            WELCOME TO THE BRIGADE
           </h2>
-          <p className="text-xs text-neutral-500 mt-1">
-            You have successfully joined the restaurant workspace. You can now log in using your password credentials.
+          <p className="font-sans text-xs text-[#52555F] mt-1">
+            You have successfully joined the restaurant studio. You can now authenticate with your master passkey.
           </p>
         </div>
-        <Link to="/restaurant-portal/login">
-          <Button variant="primary" className="w-full mt-4">
-            Proceed to Sign In
+        <Link to="/restaurant-portal/login" className="block mt-4">
+          <Button variant="acid" className="w-full">
+            PROCEED TO TERMINAL SIGN IN →
           </Button>
         </Link>
       </div>
@@ -73,30 +76,33 @@ export const InviteAcceptanceForm: React.FC = () => {
   return (
     <div className="space-y-6 text-left">
       <div>
-        <h2 className="text-xl font-black text-neutral-900 tracking-tight">
-          Join your workspace team
+        <span className="font-mono text-[10px] uppercase font-bold tracking-widest text-[#8A8D98] block">
+          [05 / ONBOARDING]
+        </span>
+        <h2 className="font-heading font-black text-2xl uppercase tracking-tight text-[#141518] mt-1">
+          ACCEPT TEAM INVITATION
         </h2>
-        <p className="text-xs text-neutral-500 mt-1">
-          Complete your profile creation to accept the invitation link.
+        <p className="font-sans text-xs text-[#52555F] mt-1">
+          Complete your staff profile to claim access to your restaurant station.
         </p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        <div className="p-3 bg-neutral-50 border border-neutral-200 rounded-lg text-[10px] text-neutral-500 font-bold">
-          Invitation Token: <span className="font-mono text-neutral-700">{token || 'simulated-token-xyz'}</span>
+        <div className="p-3 bg-[#FAF8F5] border border-[#141518]/20 text-[10px] text-[#52555F] font-mono">
+          INVITATION TOKEN: <span className="font-bold text-[#141518]">{token || 'STU-INV-8802'}</span>
         </div>
 
         <FormField
-          label="Full Name"
+          label="Your Full Name"
           id="fullName"
-          placeholder="Chef Sato"
+          placeholder="Chef Marco Rossi"
           error={errors.fullName?.message}
           disabled={isLoading}
           {...register('fullName')}
         />
 
         <PasswordField
-          label="Choose Password"
+          label="Establish Station Password"
           id="password"
           placeholder="••••••••"
           error={errors.password?.message}
@@ -106,7 +112,7 @@ export const InviteAcceptanceForm: React.FC = () => {
         />
 
         <PasswordField
-          label="Confirm Password"
+          label="Confirm Station Password"
           id="confirmPassword"
           placeholder="••••••••"
           error={errors.confirmPassword?.message}
@@ -115,7 +121,7 @@ export const InviteAcceptanceForm: React.FC = () => {
         />
 
         <CheckboxField
-          label="I agree to the Terms of Service and Privacy Policy"
+          label="I agree to the Feasto Kitchen Operating Standards & Data Policy"
           id="termsAccepted"
           error={errors.termsAccepted?.message}
           {...register('termsAccepted')}
@@ -127,7 +133,7 @@ export const InviteAcceptanceForm: React.FC = () => {
           className="w-full mt-2"
           isLoading={isLoading}
         >
-          Accept & Join Team
+          ACCEPT & JOIN BRIGADE →
         </Button>
       </form>
     </div>

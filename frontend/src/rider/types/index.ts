@@ -43,6 +43,7 @@ export interface DeliveryOffer {
   customerName: string;
   customerPhone: string;
   dropoffAddress: string;
+  deliveryAddress?: string;
   pickupDistanceKm: number;
   dropoffDistanceKm: number;
   estimatedTimeMins: number;

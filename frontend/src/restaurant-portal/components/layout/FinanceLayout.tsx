@@ -47,7 +47,7 @@ export const FinanceLayout: React.FC = () => {
   };
 
   return (
-    <PageContainer className="pb-16 text-left select-none">
+    <PageContainer className="pb-16 text-left select-none font-mono">
       {/* Primary Page Header */}
       <PortalPageHeader
         title="Accounting, Billing & Financial Operations"
@@ -56,9 +56,9 @@ export const FinanceLayout: React.FC = () => {
           <div className="flex items-center gap-2">
             <button
               onClick={handleExportReport}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 border border-neutral-200 hover:bg-neutral-50 bg-white rounded-xl text-xs font-black uppercase tracking-wider text-neutral-700 transition-colors cursor-pointer shadow-3xs"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 border border-[#141518] hover:bg-[#D7F04A] bg-[#FAF8F5] text-xs font-bold uppercase tracking-wider text-[#141518] transition-colors cursor-pointer shadow-[2px_2px_0px_#141518]"
             >
-              <Download size={13} className="text-[#e35205]" />
+              <Download size={13} className="text-[#1B3BFF]" />
               <span>Export Audit Report</span>
             </button>
           </div>
@@ -66,18 +66,18 @@ export const FinanceLayout: React.FC = () => {
       />
 
       {/* Roster & Date Range Toolbar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-neutral-200/80 pb-4 mt-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#141518]/15 pb-4 mt-6">
         {/* Branch Selector */}
         <div className="flex items-center gap-2">
-          <Building2 size={14} className="text-neutral-400 shrink-0" />
-          <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider">Branch Context:</span>
+          <Building2 size={14} className="text-[#52555F] shrink-0" />
+          <span className="text-[10px] font-bold text-[#52555F] uppercase tracking-wider">Branch Context:</span>
           <select
             value={selectedRestaurant?.id || selectedBranchId}
             onChange={(e) => {
               setSelectedBranchId(e.target.value);
               selectRestaurant(e.target.value);
             }}
-            className="px-3 py-1.5 bg-white border border-neutral-200 focus:border-[#e35205] focus:outline-none rounded-xl text-xs font-bold text-neutral-700 cursor-pointer shadow-3xs"
+            className="px-3 py-1.5 bg-[#FAF8F5] border border-[#141518]/20 focus:border-[#141518] focus:outline-none text-xs font-bold text-[#141518] cursor-pointer"
           >
             <option value="all">All Branches (Consolidated)</option>
             {restaurants.map((r) => (
@@ -90,17 +90,17 @@ export const FinanceLayout: React.FC = () => {
 
         {/* Date Preset Selector */}
         <div className="flex items-center gap-2">
-          <Calendar size={14} className="text-neutral-400 shrink-0" />
-          <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider">Timeframe:</span>
-          <div className="flex p-0.5 bg-neutral-100/80 rounded-xl border border-neutral-200/60">
+          <Calendar size={14} className="text-[#52555F] shrink-0" />
+          <span className="text-[10px] font-bold text-[#52555F] uppercase tracking-wider">Timeframe:</span>
+          <div className="flex p-0.5 bg-[#FAF8F5] border border-[#141518]/20">
             {(['today', 'week', 'month', 'quarter', 'ytd'] as DateRangePreset[]).map((preset) => (
               <button
                 key={preset}
                 onClick={() => setDateRangePreset(preset)}
-                className={`px-2.5 py-1 text-[10px] font-black uppercase tracking-wider rounded-lg transition-all cursor-pointer ${
+                className={`px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider transition-all cursor-pointer ${
                   dateRangePreset === preset
-                    ? 'bg-white text-neutral-800 shadow-3xs'
-                    : 'text-neutral-500 hover:text-neutral-800'
+                    ? 'bg-[#141518] text-[#D7F04A]'
+                    : 'text-[#52555F] hover:text-[#141518]'
                 }`}
               >
                 {preset}
@@ -111,7 +111,7 @@ export const FinanceLayout: React.FC = () => {
       </div>
 
       {/* Sub-Navigation Tabs */}
-      <div className="flex gap-1 overflow-x-auto scrollbar-none py-3 border-b border-neutral-200/80 -mx-4 px-4 sm:mx-0 sm:px-0">
+      <div className="flex gap-1 overflow-x-auto scrollbar-none py-3 border-b border-[#141518]/15 -mx-4 px-4 sm:mx-0 sm:px-0">
         {navItems.map((item) => {
           const isActive =
             location.pathname === item.path ||
@@ -120,13 +120,13 @@ export const FinanceLayout: React.FC = () => {
             <NavLink
               key={item.path}
               to={item.path}
-              className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all shrink-0 cursor-pointer ${
+              className={`inline-flex items-center gap-2 px-3 py-1.5 text-xs font-mono font-bold uppercase tracking-wider transition-all shrink-0 cursor-pointer border ${
                 isActive
-                  ? 'bg-neutral-900 text-white shadow-3xs'
-                  : 'text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100/70'
+                  ? 'bg-[#141518] text-[#FAF8F5] border-[#141518] shadow-[2px_2px_0px_#141518]'
+                  : 'bg-[#FAF8F5] text-[#52555F] border-[#141518]/15 hover:border-[#141518] hover:text-[#141518]'
               }`}
             >
-              <span className={isActive ? 'text-[#e35205]' : 'text-neutral-400'}>{item.icon}</span>
+              <span className={isActive ? 'text-[#D7F04A]' : 'text-[#52555F]'}>{item.icon}</span>
               <span>{item.label}</span>
             </NavLink>
           );

@@ -21,47 +21,91 @@ export const RiderProfilePreferencesPage: React.FC = () => {
   };
 
   return (
-    <div className="space-y-4 text-left">
-      <RiderPageHeader title="Delivery Order Preferences" subtitle="Configure order types and customer contact preferences." />
+    <div className="space-y-4 text-left font-mono">
+      <RiderPageHeader
+        title="DISPATCH ORDER PREFERENCES"
+        subtitle="Configure accepted dispatch categories, cargo sizes, and priority matching."
+      />
 
-      <form onSubmit={handleSubmit} className="p-5 rounded-2xl bg-white border border-neutral-200/90 shadow-2xs space-y-4 text-xs">
+      <form
+        onSubmit={handleSubmit}
+        className="p-5 bg-[#FAF8F5] border border-[#141518] shadow-[4px_4px_0px_#141518] space-y-4 text-xs font-mono"
+      >
         <div className="space-y-3">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between p-3 bg-[#F3F0E8] border border-[#141518]">
             <div>
-              <strong className="font-bold text-neutral-800 block">Food & Beverage Deliveries</strong>
-              <span className="text-[11px] text-neutral-500 block">Standard restaurant to diner orders.</span>
+              <strong className="font-bold text-[#141518] uppercase block">
+                FOOD & BEVERAGE DISPATCH
+              </strong>
+              <span className="text-[11px] text-[#55565B] block font-sans">
+                Standard gourmet restaurant to diner orders.
+              </span>
             </div>
-            <input type="checkbox" checked={food} onChange={(e) => setFood(e.target.checked)} className="w-4 h-4 text-[#e35205] cursor-pointer" />
+            <input
+              type="checkbox"
+              checked={food}
+              onChange={(e) => setFood(e.target.checked)}
+              className="w-4 h-4 accent-[#141518] cursor-pointer"
+            />
           </div>
 
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between p-3 bg-[#F3F0E8] border border-[#141518]">
             <div>
-              <strong className="font-bold text-neutral-800 block">Merchant Pickup Handoff</strong>
-              <span className="text-[11px] text-neutral-500 block">Store-to-courier Hub transfers.</span>
+              <strong className="font-bold text-[#141518] uppercase block">
+                MERCHANT PICKUP HANDOFF
+              </strong>
+              <span className="text-[11px] text-[#55565B] block font-sans">
+                Store-to-courier hub transfer routes.
+              </span>
             </div>
-            <input type="checkbox" checked={pickup} onChange={(e) => setPickup(e.target.checked)} className="w-4 h-4 text-[#e35205] cursor-pointer" />
+            <input
+              type="checkbox"
+              checked={pickup}
+              onChange={(e) => setPickup(e.target.checked)}
+              className="w-4 h-4 accent-[#141518] cursor-pointer"
+            />
           </div>
 
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between p-3 bg-[#F3F0E8] border border-[#141518]">
             <div>
-              <strong className="font-bold text-neutral-800 block">Priority Surge Orders</strong>
-              <span className="text-[11px] text-neutral-500 block">Express high-payout priority deliveries.</span>
+              <strong className="font-bold text-[#141518] uppercase block">
+                PRIORITY SURGE MISSIONS
+              </strong>
+              <span className="text-[11px] text-[#55565B] block font-sans">
+                Express high-payout priority surge deliveries.
+              </span>
             </div>
-            <input type="checkbox" checked={priority} onChange={(e) => setPriority(e.target.checked)} className="w-4 h-4 text-[#e35205] cursor-pointer" />
+            <input
+              type="checkbox"
+              checked={priority}
+              onChange={(e) => setPriority(e.target.checked)}
+              className="w-4 h-4 accent-[#141518] cursor-pointer"
+            />
           </div>
 
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between p-3 bg-[#F3F0E8] border border-[#141518]">
             <div>
-              <strong className="font-bold text-neutral-800 block">Catering & Large Catering Orders</strong>
-              <span className="text-[11px] text-neutral-500 block">Bulk orders requiring larger thermal bag capacity.</span>
+              <strong className="font-bold text-[#141518] uppercase block">
+                BULK CATERING CARGO
+              </strong>
+              <span className="text-[11px] text-[#55565B] block font-sans">
+                Large catering orders requiring max bag volume.
+              </span>
             </div>
-            <input type="checkbox" checked={large} onChange={(e) => setLarge(e.target.checked)} className="w-4 h-4 text-[#e35205] cursor-pointer" />
+            <input
+              type="checkbox"
+              checked={large}
+              onChange={(e) => setLarge(e.target.checked)}
+              className="w-4 h-4 accent-[#141518] cursor-pointer"
+            />
           </div>
         </div>
 
-        <RiderButton variant="primary" type="submit" fullWidth>
-          Save Order Preferences
-        </RiderButton>
+        <div className="pt-2">
+          <RiderButton variant="primary" type="submit" fullWidth>
+            SAVE DISPATCH PREFERENCES →
+          </RiderButton>
+        </div>
       </form>
     </div>
   );

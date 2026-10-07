@@ -15,19 +15,26 @@ export const RiderEmailVerifyPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#f8f9fa] flex items-center justify-center p-4 text-left">
-      <div className="w-full max-w-sm bg-white p-6 rounded-3xl border border-neutral-200 shadow-modal space-y-4 text-center">
-        <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto">
+    <div className="min-h-screen bg-[#F3F0E8] flex items-center justify-center p-4 sm:p-6 text-left selection:bg-[#D7F04A] selection:text-[#141518]">
+      <div className="w-full max-w-md bg-[#FAF8F5] p-6 sm:p-8 border border-[#141518] shadow-[6px_6px_0px_#141518] space-y-5 text-center">
+        <div className="w-12 h-12 bg-[#D7F04A] border border-[#141518] shadow-[2px_2px_0px_#141518] text-[#141518] flex items-center justify-center mx-auto">
           <Mail size={24} />
         </div>
-        <h3 className="text-base font-black text-neutral-900 font-heading">Verify Your Email Address</h3>
-        <p className="text-xs text-neutral-500 max-w-xs mx-auto leading-relaxed">
-          We have sent a verification link to <strong className="text-neutral-900">{registrationData.email || 'arjun@feasto.food'}</strong>.
-        </p>
+        <div className="space-y-1">
+          <h3 className="text-xl font-heading font-black text-[#141518] uppercase tracking-tight">
+            VERIFY INVOICE EMAIL
+          </h3>
+          <p className="text-xs text-[#55565B] max-w-xs mx-auto leading-relaxed font-sans">
+            We have transmitted an activation key to{' '}
+            <strong className="text-[#141518] font-mono">{registrationData.email || 'arjun@feasto.food'}</strong>.
+          </p>
+        </div>
 
-        <RiderButton variant="primary" size="lg" fullWidth onClick={handleContinue}>
-          Email Verified • Continue →
-        </RiderButton>
+        <div className="pt-2">
+          <RiderButton variant="primary" size="lg" fullWidth onClick={handleContinue}>
+            EMAIL CONFIRMED · PROCEED TO KYC →
+          </RiderButton>
+        </div>
       </div>
     </div>
   );

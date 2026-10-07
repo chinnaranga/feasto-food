@@ -67,24 +67,25 @@ export const StaffDirectory: React.FC = () => {
       {/* Directory filters bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         {/* Search */}
-        <div className="relative w-full sm:w-64">
-          <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" />
+        {/* Search */}
+        <div className="relative w-full sm:w-64 font-mono">
+          <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#52555F]" />
           <input
             type="text"
             placeholder="Search roster by name/email..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-8 pr-3 py-2 bg-white border border-neutral-200 focus:border-[#e35205] focus:ring-2 focus:ring-[#e35205]/20 focus:outline-none rounded-xl text-xs font-semibold text-neutral-800 transition-all placeholder:text-neutral-400"
+            className="w-full pl-8 pr-3 py-2 bg-[#FAF8F5] border border-[#141518]/20 focus:border-[#141518] focus:outline-none text-xs font-semibold text-[#141518] transition-all placeholder:text-[#52555F]/60"
           />
         </div>
 
         {/* Filters select panel */}
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2 font-mono">
           {/* Roles */}
           <select
             value={filters.role}
             onChange={(e) => setFilter('role', e.target.value)}
-            className="px-2.5 py-1.5 bg-white border border-neutral-200 focus:border-[#e35205] focus:outline-none rounded-xl text-[10px] font-black uppercase tracking-wider text-neutral-600 cursor-pointer"
+            className="px-2.5 py-1.5 bg-[#FAF8F5] border border-[#141518]/20 focus:border-[#141518] focus:outline-none text-[10px] font-bold uppercase tracking-wider text-[#141518] cursor-pointer"
           >
             <option value="all">All Roles</option>
             <option value="owner">Owner / Admin</option>
@@ -99,7 +100,7 @@ export const StaffDirectory: React.FC = () => {
           <select
             value={filters.branch}
             onChange={(e) => setFilter('branch', e.target.value)}
-            className="px-2.5 py-1.5 bg-white border border-neutral-200 focus:border-[#e35205] focus:outline-none rounded-xl text-[10px] font-black uppercase tracking-wider text-neutral-600 cursor-pointer"
+            className="px-2.5 py-1.5 bg-[#FAF8F5] border border-[#141518]/20 focus:border-[#141518] focus:outline-none text-[10px] font-bold uppercase tracking-wider text-[#141518] cursor-pointer"
           >
             <option value="all">All Branches</option>
             {branchesList.map((b) => (
@@ -111,7 +112,7 @@ export const StaffDirectory: React.FC = () => {
           <select
             value={filters.status}
             onChange={(e) => setFilter('status', e.target.value)}
-            className="px-2.5 py-1.5 bg-white border border-neutral-200 focus:border-[#e35205] focus:outline-none rounded-xl text-[10px] font-black uppercase tracking-wider text-neutral-600 cursor-pointer"
+            className="px-2.5 py-1.5 bg-[#FAF8F5] border border-[#141518]/20 focus:border-[#141518] focus:outline-none text-[10px] font-bold uppercase tracking-wider text-[#141518] cursor-pointer"
           >
             <option value="all">All Statuses</option>
             <option value="active">Active Members</option>
@@ -201,11 +202,11 @@ export const StaffDirectory: React.FC = () => {
       )}
 
       {/* AI Staff scheduler optimization tip */}
-      <div className="p-3.5 bg-neutral-50 border border-neutral-200/50 rounded-xl flex items-start gap-2.5">
-        <Sparkles size={13} className="text-[#e35205] shrink-0 mt-0.5" />
+      <div className="p-3.5 bg-[#FAF8F5] border border-[#141518]/20 shadow-[3px_3px_0px_#141518] flex items-start gap-2.5 font-mono">
+        <Sparkles size={14} className="text-[#1B3BFF] shrink-0 mt-0.5" />
         <div>
-          <p className="text-[10px] font-black text-neutral-500 uppercase tracking-widest font-heading">AI Staff Scheduler</p>
-          <p className="text-[9px] text-neutral-400 mt-0.5 leading-relaxed">
+          <p className="text-[10px] font-black text-[#141518] uppercase tracking-widest font-heading">AI Staff Scheduler</p>
+          <p className="text-[10px] text-[#52555F] mt-0.5 leading-relaxed">
             Tanaka Yoshi (Kitchen Chef) has contributed 92% of the kitchen throughput. We suggest scheduling Tanaka on peak dinner slots to maintain lower prep wait averages.
           </p>
         </div>

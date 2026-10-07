@@ -9,21 +9,21 @@ interface RecommendationCardProps {
 
 const CATEGORY_CONFIGS = {
   efficiency: {
-    bg: 'bg-emerald-50/40 border-emerald-100',
-    icon: <Zap size={13} className="text-emerald-600" />,
-    pill: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+    bg: 'bg-[#FAF8F5] border-[#141518]/20',
+    icon: <Zap size={13} className="text-emerald-700" />,
+    pill: 'bg-emerald-50 text-emerald-800 border-emerald-300',
     label: 'Efficiency Insight',
   },
   revenue: {
-    bg: 'bg-orange-50/30 border-orange-100',
-    icon: <TrendingUp size={13} className="text-[#e35205]" />,
-    pill: 'bg-orange-50 text-[#e35205] border-orange-200',
+    bg: 'bg-[#FAF8F5] border-[#141518]/20',
+    icon: <TrendingUp size={13} className="text-[#1B3BFF]" />,
+    pill: 'bg-[#1B3BFF]/10 text-[#1B3BFF] border-[#1B3BFF]/30',
     label: 'Growth Insight',
   },
   inventory: {
-    bg: 'bg-indigo-50/30 border-indigo-100',
-    icon: <Target size={13} className="text-indigo-600" />,
-    pill: 'bg-indigo-50 text-indigo-700 border-indigo-200',
+    bg: 'bg-[#FAF8F5] border-[#141518]/20',
+    icon: <Target size={13} className="text-[#141518]" />,
+    pill: 'bg-[#141518]/10 text-[#141518] border-[#141518]/30',
     label: 'Supply Insight',
   },
 };
@@ -33,18 +33,18 @@ export const RecommendationCard: React.FC<RecommendationCardProps> = ({ insight 
   const { triggerQuickAction } = usePortalDashboardStore();
 
   return (
-    <div className={`rounded-xl border p-4 flex flex-col gap-3 transition-all duration-200 hover:shadow-xs text-left ${config.bg}`}>
+    <div className={`border p-4 flex flex-col gap-3 transition-all duration-200 shadow-[3px_3px_0px_#141518] text-left ${config.bg}`}>
       {/* Category header */}
       <div className="flex items-center justify-between">
-        <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full border text-[9px] font-black uppercase tracking-wider ${config.pill}`}>
+        <span className={`inline-flex items-center gap-1 px-2 py-0.5 border text-[9px] font-mono font-bold uppercase tracking-wider ${config.pill}`}>
           {config.icon}
           {config.label}
         </span>
-        <Sparkles size={11} className="text-[#e35205]/40 animate-pulse" />
+        <Sparkles size={12} className="text-[#1B3BFF] animate-pulse" />
       </div>
 
       {/* Suggestion text */}
-      <p className="text-[11px] font-semibold text-neutral-700 leading-normal">
+      <p className="text-xs font-mono font-medium text-[#141518] leading-normal">
         {insight.text}
       </p>
 
@@ -53,10 +53,10 @@ export const RecommendationCard: React.FC<RecommendationCardProps> = ({ insight 
         <button
           type="button"
           onClick={() => triggerQuickAction(insight.actionLabel || '')}
-          className="inline-flex items-center gap-1 self-start text-[10px] font-black text-[#e35205] hover:text-[#c94804] transition-colors cursor-pointer group"
+          className="inline-flex items-center gap-1 self-start font-mono text-[10px] font-black text-[#1B3BFF] hover:text-[#141518] transition-colors cursor-pointer group uppercase tracking-wider"
         >
           <span>{insight.actionLabel}</span>
-          <ArrowRight size={10} className="transform group-hover:translate-x-0.5 transition-transform" />
+          <ArrowRight size={10} className="transform group-hover:translate-x-1 transition-transform" />
         </button>
       )}
     </div>

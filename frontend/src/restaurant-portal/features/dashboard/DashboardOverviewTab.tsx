@@ -167,7 +167,7 @@ export const DashboardOverviewTab: React.FC = () => {
                     <div className="space-y-1.5 flex-1">
                       <div className="flex items-center gap-2">
                         <span className="font-mono text-xs font-black text-[#141518]">
-                          #{order.orderNumber}
+                          #{order.orderNumber || order.id.slice(-6).toUpperCase()}
                         </span>
                         <FeastoStatus status={order.status} size="sm" />
                         <span className="font-mono text-[10px] text-[#8A8D98]">
@@ -182,10 +182,10 @@ export const DashboardOverviewTab: React.FC = () => {
 
                       <div className="flex items-center gap-4 font-mono text-[11px] text-[#52555F]">
                         <span>{totalItemsCount} items</span>
-                        <span>₹{order.totalAmount}</span>
+                        <span>₹{order.totalAmount ?? order.total}</span>
                         <span className="flex items-center gap-1 text-[#1B3BFF]">
                           <Clock size={11} />
-                          ETA: {order.estimatedPrepTimeMins}m
+                          ETA: {order.estimatedPrepTimeMins ?? order.eta ?? 20}m
                         </span>
                       </div>
                     </div>

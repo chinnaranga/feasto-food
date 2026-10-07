@@ -85,7 +85,7 @@ function OperationalOrderCard({
       <div className="flex items-start justify-between gap-2">
         <div className="flex items-center gap-2">
           <span className="font-mono text-sm font-black text-[#141518]">
-            #{order.orderNumber}
+            #{order.orderNumber || order.id.slice(-6).toUpperCase()}
           </span>
           <FeastoStatus status={order.status} size="sm" />
           {order.isPriority && (
@@ -115,7 +115,7 @@ function OperationalOrderCard({
       {/* Footer & Direct Quick Action */}
       <div className="mt-3 pt-2.5 border-t border-[#141518]/10 flex items-center justify-between gap-2">
         <div className="font-mono text-xs">
-          <span className="font-bold text-[#141518]">₹{order.totalAmount}</span>
+          <span className="font-bold text-[#141518]">₹{order.totalAmount ?? order.total}</span>
           <span className="text-[10px] text-[#8A8D98] ml-1">({totalItemsCount} items)</span>
         </div>
 
@@ -180,7 +180,7 @@ function OrderDetailInspector({ order }: { order: PortalOrder }) {
       label: 'Order Placed',
       timestamp: timeAgo(order.placedAt),
       status: 'completed' as const,
-      description: `Payment confirmed · ₹${order.totalAmount}`,
+      description: `Payment confirmed · ₹${order.totalAmount ?? order.total}`,
     },
     {
       id: 'confirmed',
@@ -232,13 +232,13 @@ function OrderDetailInspector({ order }: { order: PortalOrder }) {
         </div>
 
         <h2 className="font-heading font-black text-2xl uppercase tracking-tight text-[#141518] mt-1">
-          #{order.orderNumber}
+          #{order.orderNumber || order.id.slice(-6).toUpperCase()}
         </h2>
 
         <div className="flex items-center gap-3 font-mono text-xs text-[#52555F] mt-1">
           <span>Placed {new Date(order.placedAt).toLocaleTimeString()}</span>
           <span>·</span>
-          <span>ETA: {order.estimatedPrepTimeMins} mins</span>
+          <span>ETA: {order.estimatedPrepTimeMins ?? order.eta ?? 20} mins</span>
         </div>
       </div>
 
@@ -263,7 +263,7 @@ function OrderDetailInspector({ order }: { order: PortalOrder }) {
           </h4>
           <p className="font-mono text-xs text-[#52555F] flex items-center gap-1">
             <MapPin size={12} className="shrink-0 text-[#8A8D98]" />
-            {order.deliveryAddress}
+            {order.deliveryAddress || order.address?.fullAddress}
           </p>
         </div>
 
@@ -296,7 +296,7 @@ function OrderDetailInspector({ order }: { order: PortalOrder }) {
 
           <div className="p-3 bg-[#EBE7DD]/40 border border-[#141518]/15 flex items-center justify-between font-mono text-xs">
             <span className="font-bold text-[#52555F]">ORDER TOTAL</span>
-            <span className="font-black text-base text-[#141518]">₹{order.totalAmount}</span>
+            <span className="font-black text-base text-[#141518]">₹{order.totalAmount ?? order.total}</span>
           </div>
         </div>
 

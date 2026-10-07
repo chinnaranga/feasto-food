@@ -73,16 +73,16 @@ export const CategoryList: React.FC = () => {
           </div>
 
           {/* View mode toggle */}
-          <div className="flex border border-neutral-200 rounded-xl overflow-hidden p-0.5 bg-neutral-50 shrink-0">
+          <div className="flex border border-[#141518]/20 p-0.5 bg-[#FAF8F5] shrink-0 font-mono">
             <button
               onClick={() => setViewMode('list')}
-              className={`px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-wider cursor-pointer ${viewMode === 'list' ? 'bg-white text-[#e35205] shadow-3xs' : 'text-neutral-400 hover:text-neutral-600'}`}
+              className={`px-3 py-1.5 text-[9px] font-bold uppercase tracking-wider cursor-pointer ${viewMode === 'list' ? 'bg-[#141518] text-[#D7F04A]' : 'text-[#52555F] hover:text-[#141518]'}`}
             >
               List
             </button>
             <button
               onClick={() => setViewMode('tree')}
-              className={`px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-wider cursor-pointer ${viewMode === 'tree' ? 'bg-white text-[#e35205] shadow-3xs' : 'text-neutral-400 hover:text-neutral-600'}`}
+              className={`px-3 py-1.5 text-[9px] font-bold uppercase tracking-wider cursor-pointer ${viewMode === 'tree' ? 'bg-[#141518] text-[#D7F04A]' : 'text-[#52555F] hover:text-[#141518]'}`}
             >
               Hierarchy Tree
             </button>
@@ -92,7 +92,7 @@ export const CategoryList: React.FC = () => {
           <button
             type="button"
             onClick={() => navigate('/restaurant-portal/menu/categories/new')}
-            className="inline-flex items-center gap-1 px-3 py-2 bg-[#e35205] hover:bg-[#c94804] text-white text-[10px] font-black uppercase tracking-wider rounded-xl shadow-xs transition-colors cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-3 py-2 bg-[#141518] hover:bg-[#D7F04A] text-[#FAF8F5] hover:text-[#141518] text-[10px] font-bold uppercase tracking-wider border border-[#141518] shadow-[2px_2px_0px_#141518] transition-colors cursor-pointer"
           >
             <Plus size={12} /> Add Category
           </button>
@@ -215,7 +215,7 @@ export const CategoryList: React.FC = () => {
           </p>
           <button
             onClick={() => navigate('/restaurant-portal/menu/categories/new')}
-            className="mt-4 px-3 py-1.5 bg-[#e35205] hover:bg-[#c94804] text-white text-[10px] font-black uppercase tracking-wider rounded-xl shadow-xs transition-colors cursor-pointer"
+            className="mt-4 px-4 py-2 bg-[#141518] hover:bg-[#D7F04A] text-[#FAF8F5] hover:text-[#141518] text-[10px] font-mono font-bold uppercase tracking-wider border border-[#141518] shadow-[2px_2px_0px_#141518] transition-colors cursor-pointer"
           >
             Create Category
           </button>

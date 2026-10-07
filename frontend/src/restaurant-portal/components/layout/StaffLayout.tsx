@@ -15,7 +15,6 @@ export const StaffLayout: React.FC = () => {
 
   // Statistics counters
   const totalCount = staff.length;
-  const activeCount = staff.filter((s) => s.status === 'active').length;
   const onShiftNow = staff.filter((s) => s.attendance === 'present' || s.attendance === 'late').length;
   const lateCount = staff.filter((s) => s.attendance === 'late').length;
 
@@ -28,7 +27,7 @@ export const StaffLayout: React.FC = () => {
   ];
 
   return (
-    <PageContainer className="pb-16">
+    <PageContainer className="pb-16 font-mono text-left">
       {/* Page Header */}
       <PortalPageHeader
         title="Staff & Shift Operations"
@@ -38,7 +37,7 @@ export const StaffLayout: React.FC = () => {
             <button
               type="button"
               onClick={() => navigate('/restaurant-portal/staff/new')}
-              className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#e35205] hover:bg-[#c94804] text-white text-xs font-black uppercase tracking-wider rounded-xl shadow-sm transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#141518] hover:bg-[#D7F04A] text-[#FAF8F5] hover:text-[#141518] text-xs font-bold uppercase tracking-wider border border-[#141518] shadow-[2px_2px_0px_#141518] transition-colors cursor-pointer"
             >
               <Plus size={14} />
               <span>Roster Staff</span>
@@ -47,7 +46,7 @@ export const StaffLayout: React.FC = () => {
             <button
               type="button"
               onClick={() => navigate('/restaurant-portal/staff')}
-              className="inline-flex items-center gap-1 px-3 py-2 border border-neutral-200 hover:bg-neutral-50 rounded-xl text-xs font-black uppercase tracking-wider text-neutral-600 transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1 px-3 py-2 bg-[#FAF8F5] border border-[#141518]/20 hover:bg-[#141518] hover:text-[#FAF8F5] text-xs font-bold uppercase tracking-wider text-[#141518] transition-colors cursor-pointer"
             >
               Back to Roster
             </button>
@@ -56,32 +55,29 @@ export const StaffLayout: React.FC = () => {
       />
 
       {isEditorPage ? (
-        /* Full width editor display */
         <div className="w-full mt-6">
           <Suspense fallback={<PortalLoader />}>
             <Outlet />
           </Suspense>
         </div>
       ) : (
-        /* Split view: Sidebar on left, Outlet on right */
         <div className="flex flex-col lg:flex-row gap-6 mt-6 items-start text-left">
-          
           {/* Sub Navigation Sidebar */}
-          <aside className="w-full lg:w-60 shrink-0 space-y-1.5 select-none bg-white border border-neutral-200/80 rounded-2xl p-3 shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
-            <span className="text-[9px] font-bold text-neutral-400 uppercase tracking-widest px-3.5 block mb-2">
+          <aside className="w-full lg:w-64 shrink-0 space-y-1.5 select-none bg-[#FAF8F5] border border-[#141518]/15 p-3 shadow-[4px_4px_0px_#141518]">
+            <span className="text-[9px] font-bold text-[#52555F] uppercase tracking-widest px-3 block mb-2">
               Staffing Scopes
             </span>
-            <nav className="space-y-0.5">
+            <nav className="space-y-1">
               {sideNav.map((node) => (
                 <NavLink
                   key={node.path}
                   to={node.path}
                   end={node.end}
                   className={({ isActive }) =>
-                    `flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer justify-between ${
+                    `flex items-center gap-2.5 px-3 py-2 text-xs font-mono transition-colors cursor-pointer justify-between ${
                       isActive
-                        ? 'bg-neutral-50 text-[#e35205] border border-neutral-200/50 shadow-3xs'
-                        : 'text-neutral-500 hover:text-neutral-800 hover:bg-neutral-50/50'
+                        ? 'bg-[#141518] text-[#FAF8F5] font-bold border-l-2 border-[#D7F04A]'
+                        : 'text-[#52555F] hover:bg-[#EBE7DD] hover:text-[#141518]'
                     }`
                   }
                 >
@@ -92,39 +88,26 @@ export const StaffLayout: React.FC = () => {
                   
                   <div className="flex items-center gap-1">
                     {node.count > 0 && (
-                      <span className={`text-[9px] font-black px-1.5 py-0.5 rounded-full ${
-                        node.label.includes('Attendance') ? 'bg-amber-100 text-amber-700 animate-pulse' :
-                        'bg-neutral-100 text-neutral-500'
+                      <span className={`text-[9px] font-mono font-bold px-1.5 py-0.5 border ${
+                        node.label.includes('Attendance') ? 'bg-amber-50 text-amber-800 border-amber-300 animate-pulse' :
+                        'bg-[#141518]/10 text-[#141518] border-[#141518]/15'
                       }`}>
                         {node.count}
                       </span>
                     )}
-                    <ChevronRight size={10} className="text-neutral-300" />
+                    <ChevronRight size={10} className="text-[#52555F]" />
                   </div>
                 </NavLink>
               ))}
             </nav>
-
-            {/* Sidebar quick status stats */}
-            <div className="border-t border-neutral-100 pt-3 mt-4 px-3 space-y-2">
-              <div className="flex justify-between items-center text-[10px]">
-                <span className="font-semibold text-neutral-400 uppercase">On Shift</span>
-                <span className="font-bold text-emerald-600">{onShiftNow} present</span>
-              </div>
-              <div className="flex justify-between items-center text-[10px]">
-                <span className="font-semibold text-neutral-400 uppercase">Active Roster</span>
-                <span className="font-bold text-neutral-600">{activeCount} / {totalCount}</span>
-              </div>
-            </div>
           </aside>
 
-          {/* Active staff pane view */}
-          <div className="flex-1 w-full bg-white border border-neutral-200/80 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.02)] p-6 min-h-[500px]">
+          {/* Active staff outlet */}
+          <div className="flex-1 w-full bg-[#FAF8F5] border border-[#141518]/15 shadow-[4px_4px_0px_#141518] p-6 min-h-[500px]">
             <Suspense fallback={<PortalLoader />}>
               <Outlet />
             </Suspense>
           </div>
-
         </div>
       )}
     </PageContainer>

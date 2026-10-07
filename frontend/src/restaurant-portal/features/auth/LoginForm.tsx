@@ -42,18 +42,21 @@ export const LoginForm: React.FC = () => {
   return (
     <div className="space-y-6 text-left">
       <div>
-        <h2 className="text-xl font-black text-neutral-900 tracking-tight">
-          Sign in to merchant desk
+        <span className="font-mono text-[10px] uppercase font-bold tracking-widest text-[#8A8D98] block">
+          [01 / MERCHANTS]
+        </span>
+        <h2 className="font-heading font-black text-2xl uppercase tracking-tight text-[#141518] mt-1">
+          SIGN IN TO STUDIO
         </h2>
-        <p className="text-xs text-neutral-500 mt-1">
-          Enter your restaurant credentials to manage orders.
+        <p className="font-sans text-xs text-[#52555F] mt-1">
+          Enter verified merchant credentials to access kitchen and dispatch terminals.
         </p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         {error && (
-          <div className="p-3 bg-red-50 border border-red-100 rounded-lg text-[10px] font-bold text-red-600">
-            {error}
+          <div className="p-3 bg-red-50 border border-red-200 text-xs font-mono font-bold text-red-700">
+            ⚠ {error}
           </div>
         )}
 
@@ -61,7 +64,7 @@ export const LoginForm: React.FC = () => {
           label="Email address"
           id="email"
           type="email"
-          placeholder="name@restaurant.com"
+          placeholder="chef@restaurant.com"
           error={errors.email?.message}
           disabled={isLoading}
           {...register('email')}
@@ -77,33 +80,33 @@ export const LoginForm: React.FC = () => {
         />
 
         {/* Access Role Presets Selector (for merchant sandbox test purposes) */}
-        <div className="flex flex-col gap-1 w-full">
-          <label htmlFor="preferredRole" className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider">
+        <div className="flex flex-col gap-1 w-full text-left">
+          <label htmlFor="preferredRole" className="text-[10px] font-mono font-bold text-[#141518] uppercase tracking-wider">
             Simulate Merchant Role
           </label>
           <select
             id="preferredRole"
-            className="w-full px-3 py-2 bg-white border border-neutral-200 focus:border-[#e35205] focus:ring-2 focus:ring-[#e35205]/20 rounded-lg text-xs font-bold text-neutral-800 transition-all duration-200 cursor-pointer"
+            className="w-full px-3 py-2.5 bg-white border border-[#141518]/20 focus:border-[#141518] focus:ring-1 focus:ring-[#141518] text-xs font-mono font-bold text-[#141518] transition-all duration-150 cursor-pointer"
             {...register('preferredRole')}
           >
-            <option value="Owner">Owner (Manage All)</option>
-            <option value="Manager">Manager (Menus & Staff)</option>
-            <option value="Finance">Finance (Analytics & Sales)</option>
-            <option value="Kitchen">Kitchen (Orders Monitor)</option>
-            <option value="Cashier">Cashier (Orders Fulfill)</option>
-            <option value="Staff">Staff (Read Only Dashboard)</option>
+            <option value="Owner">Owner (All Stations & Financials)</option>
+            <option value="Manager">Manager (Menus, Catalog & Staff)</option>
+            <option value="Finance">Finance (Settlements & Velocity)</option>
+            <option value="Kitchen">Kitchen (Hearth & KDS Line)</option>
+            <option value="Cashier">Cashier (POS & Pass Dispatch)</option>
+            <option value="Staff">Staff (Read-Only Terminal)</option>
           </select>
         </div>
 
         <div className="flex items-center justify-between pt-1 text-xs select-none">
           <CheckboxField
-            label="Remember me"
+            label="Remember this terminal"
             id="rememberMe"
             {...register('rememberMe')}
           />
           <Link
             to="/restaurant-portal/forgot-password"
-            className="text-xs font-bold text-[#e35205] hover:text-[#c94804]"
+            className="font-mono text-xs font-bold text-[#1B3BFF] hover:underline"
           >
             Forgot password?
           </Link>
@@ -115,18 +118,18 @@ export const LoginForm: React.FC = () => {
           className="w-full mt-2"
           isLoading={isLoading}
         >
-          Sign In
+          ENTER KITCHEN STUDIO →
         </Button>
       </form>
 
-      <div className="text-center pt-2">
-        <span className="text-xs text-neutral-400">
+      <div className="text-center pt-3 border-t border-[#141518]/10">
+        <span className="font-mono text-xs text-[#52555F]">
           New restaurant brand?{' '}
           <Link
             to="/restaurant-portal/signup"
-            className="font-bold text-[#e35205] hover:text-[#c94804]"
+            className="font-bold text-[#141518] underline hover:text-[#1B3BFF]"
           >
-            Create account
+            Create merchant account
           </Link>
         </span>
       </div>

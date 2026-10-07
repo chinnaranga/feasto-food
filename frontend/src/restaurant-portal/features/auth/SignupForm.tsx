@@ -62,16 +62,19 @@ export const SignupForm: React.FC = () => {
     return (
       <div className="space-y-6 text-left">
         <div>
-          <h2 className="text-xl font-black text-neutral-900 tracking-tight">
-            Account Created Successfully
+          <span className="font-mono text-[10px] uppercase font-bold tracking-widest text-[#15803D] block">
+            ✓ REGISTRATION CONFIRMED
+          </span>
+          <h2 className="font-heading font-black text-2xl uppercase tracking-tight text-[#141518] mt-1">
+            ACCOUNT CREATED
           </h2>
-          <p className="text-xs text-neutral-500 mt-1">
-            An email verification code has been dispatched. Please verify your session to log in.
+          <p className="font-sans text-xs text-[#52555F] mt-1">
+            A secure terminal verification code has been dispatched. Verify your session to initiate setup.
           </p>
         </div>
-        <Link to="/restaurant-portal/verify">
-          <Button variant="primary" className="w-full mt-4">
-            Verify Email
+        <Link to="/restaurant-portal/verify" className="block mt-4">
+          <Button variant="acid" className="w-full">
+            VERIFY TERMINAL CODE →
           </Button>
         </Link>
       </div>
@@ -81,45 +84,48 @@ export const SignupForm: React.FC = () => {
   return (
     <div className="space-y-6 text-left">
       <div>
-        <h2 className="text-xl font-black text-neutral-900 tracking-tight">
-          Create merchant account
+        <span className="font-mono text-[10px] uppercase font-bold tracking-widest text-[#8A8D98] block">
+          [02 / REGISTER]
+        </span>
+        <h2 className="font-heading font-black text-2xl uppercase tracking-tight text-[#141518] mt-1">
+          REGISTER KITCHEN BRAND
         </h2>
-        <p className="text-xs text-neutral-500 mt-1">
-          Register your brand to manage branch menus.
+        <p className="font-sans text-xs text-[#52555F] mt-1">
+          Establish your culinary merchant identity and connect branch dispatch terminals.
         </p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <FormField
-          label="Full Name"
+          label="Executive Chef / Owner Name"
           id="fullName"
-          placeholder="Chef Kenji Sato"
+          placeholder="Chef Vikram Sethi"
           error={errors.fullName?.message}
           disabled={isLoading}
           {...register('fullName')}
         />
 
         <FormField
-          label="Email address"
+          label="Corporate / Merchant Email"
           id="email"
           type="email"
-          placeholder="name@restaurant.com"
+          placeholder="kitchen@restaurant.com"
           error={errors.email?.message}
           disabled={isLoading}
           {...register('email')}
         />
 
         <FormField
-          label="Restaurant Name"
+          label="Restaurant / Brand Legal Name"
           id="workspaceName"
-          placeholder="Sora Sushi"
+          placeholder="The Bombay Hearth"
           error={errors.workspaceName?.message}
           disabled={isLoading}
           {...register('workspaceName')}
         />
 
         <PasswordField
-          label="Password"
+          label="Terminal Master Password"
           id="password"
           placeholder="••••••••"
           error={errors.password?.message}
@@ -138,7 +144,7 @@ export const SignupForm: React.FC = () => {
         />
 
         <CheckboxField
-          label="I agree to the Terms of Service and Privacy Policy"
+          label="I agree to the Feasto Merchant Operating Agreement & Data Standards"
           id="termsAccepted"
           error={errors.termsAccepted?.message}
           {...register('termsAccepted')}
@@ -150,18 +156,18 @@ export const SignupForm: React.FC = () => {
           className="w-full mt-2"
           isLoading={isLoading}
         >
-          Create Account
+          REGISTER MERCHANT STUDIO →
         </Button>
       </form>
 
-      <div className="text-center pt-2">
-        <span className="text-xs text-neutral-400">
+      <div className="text-center pt-3 border-t border-[#141518]/10">
+        <span className="font-mono text-xs text-[#52555F]">
           Already registered?{' '}
           <Link
             to="/restaurant-portal/login"
-            className="font-bold text-[#e35205] hover:text-[#c94804]"
+            className="font-bold text-[#141518] underline hover:text-[#1B3BFF]"
           >
-            Sign In
+            Sign in to existing studio
           </Link>
         </span>
       </div>

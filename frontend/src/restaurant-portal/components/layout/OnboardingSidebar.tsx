@@ -27,21 +27,25 @@ export const OnboardingSidebar: React.FC<OnboardingSidebarProps> = ({
   completedSteps,
 }) => {
   return (
-    <div className="w-80 border-r border-neutral-200 bg-neutral-50/50 p-8 flex flex-col justify-between select-none text-left">
+    <div className="w-80 border-r border-[#141518]/15 bg-[#FAF8F5] p-8 flex flex-col justify-between select-none text-left font-mono">
       <div className="space-y-8">
-        
         {/* Brand Header */}
         <div className="flex items-center gap-2">
-          <div className="w-6 h-6 rounded bg-[#e35205] flex items-center justify-center text-white font-black text-[10px]">
-            F
+          <div className="w-7 h-7 bg-[#141518] text-[#D7F04A] flex items-center justify-center font-black text-xs">
+            FS
           </div>
-          <span className="text-[10px] font-black uppercase tracking-wider text-neutral-800">
-            Feasto Merchant Setup
-          </span>
+          <div>
+            <span className="font-heading font-black text-xs uppercase tracking-widest text-[#141518] block">
+              FEASTO STUDIO
+            </span>
+            <span className="text-[9px] uppercase tracking-wider text-[#52555F] block">
+              MERCHANT INITIALIZATION
+            </span>
+          </div>
         </div>
 
         {/* Vertical Steps List */}
-        <nav className="space-y-5">
+        <nav className="space-y-4">
           {STEPS.map((step, idx) => {
             const isActive = idx === currentStepIndex;
             const isCompleted = completedSteps.includes(step.key);
@@ -50,31 +54,31 @@ export const OnboardingSidebar: React.FC<OnboardingSidebarProps> = ({
             return (
               <div
                 key={step.key}
-                className={`flex gap-3 items-start transition-all duration-200`}
+                className="flex gap-3 items-start transition-all duration-150"
               >
                 {/* Visual Indicator */}
                 <div
-                  className={`w-5 h-5 rounded-full border flex items-center justify-center shrink-0 text-[10px] font-bold transition-all duration-200 ${
+                  className={`w-6 h-6 border flex items-center justify-center shrink-0 text-[10px] font-bold transition-all duration-150 ${
                     isCompleted
-                      ? 'bg-emerald-50 border-emerald-300 text-emerald-600'
+                      ? 'bg-[#141518] border-[#141518] text-[#D7F04A]'
                       : isActive
-                      ? 'border-[#e35205] bg-[#e35205]/5 text-[#e35205] shadow-[0_0_0_2px_rgba(227,82,5,0.15)]'
-                      : 'border-neutral-200 text-neutral-400 bg-white'
+                      ? 'border-[#141518] bg-[#D7F04A] text-[#141518] shadow-[2px_2px_0px_#141518]'
+                      : 'border-[#141518]/20 text-[#52555F] bg-[#F3F0E8]'
                   }`}
                 >
-                  {isCompleted ? <Check size={11} strokeWidth={3} /> : idx + 1}
+                  {isCompleted ? <Check size={12} strokeWidth={3} /> : idx + 1}
                 </div>
 
                 {/* Text descriptors */}
                 <div className="min-w-0">
                   <span
-                    className={`text-xs font-bold block transition-main ${
-                      isActive ? 'text-neutral-900 font-extrabold' : isFuture ? 'text-neutral-400' : 'text-neutral-700'
+                    className={`text-xs block uppercase tracking-wider ${
+                      isActive ? 'text-[#141518] font-black' : isFuture ? 'text-[#52555F]/60' : 'text-[#141518] font-bold'
                     }`}
                   >
                     {step.label}
                   </span>
-                  <span className="text-[10px] text-neutral-400 block mt-0.5 leading-none">
+                  <span className="text-[10px] text-[#52555F] block mt-0.5 leading-none">
                     {step.sub}
                   </span>
                 </div>
@@ -85,11 +89,14 @@ export const OnboardingSidebar: React.FC<OnboardingSidebarProps> = ({
       </div>
 
       {/* Help links footer */}
-      <div className="text-[10px] text-neutral-400 font-bold space-y-1">
-        <a href="#help" className="hover:text-neutral-600 transition-main block">Merchant Support FAQ</a>
-        <span>PCI-DSS Operations v1.0</span>
+      <div className="text-[10px] text-[#52555F] font-bold space-y-1 border-t border-[#141518]/10 pt-4">
+        <a href="#help" className="hover:text-[#141518] transition-colors block uppercase tracking-wider">
+          Merchant Support FAQ
+        </a>
+        <span className="text-[9px] text-[#52555F]/70">PCI-DSS OPERATIONS V2.0</span>
       </div>
     </div>
   );
 };
+
 export default OnboardingSidebar;

@@ -31,6 +31,7 @@ export interface PortalOrderItem {
 
 export interface PortalOrder {
   id: string;
+  orderNumber?: string;
   restaurantId: string;
   restaurantName: string;
   customerId?: string;
@@ -42,14 +43,17 @@ export interface PortalOrder {
   taxes: number;
   discount: number;
   total: number;
+  totalAmount?: number;
   status: PortalOrderStatus;
   eta: number;
+  estimatedPrepTimeMins?: number;
   address: {
     fullAddress: string;
     city: string;
     pincode: string;
     landmark?: string;
   };
+  deliveryAddress?: string;
   paymentMethod: string;
   placedAt: string;
   acceptedAt?: string;

@@ -51,16 +51,19 @@ export const ResetPasswordForm: React.FC = () => {
     return (
       <div className="space-y-6 text-left">
         <div>
-          <h2 className="text-xl font-black text-neutral-900 tracking-tight">
-            Password Updated
+          <span className="font-mono text-[10px] uppercase font-bold tracking-widest text-[#15803D] block">
+            ✓ CREDENTIALS SYNCHRONIZED
+          </span>
+          <h2 className="font-heading font-black text-2xl uppercase tracking-tight text-[#141518] mt-1">
+            PASSWORD UPDATED
           </h2>
-          <p className="text-xs text-neutral-500 mt-1">
-            Your new login credentials are active. Please sign in with your updated details.
+          <p className="font-sans text-xs text-[#52555F] mt-1">
+            Your new merchant credentials are now active across all connected terminals.
           </p>
         </div>
-        <Link to="/restaurant-portal/login">
-          <Button variant="primary" className="w-full mt-4">
-            Sign In Now
+        <Link to="/restaurant-portal/login" className="block mt-4">
+          <Button variant="acid" className="w-full">
+            SIGN IN WITH NEW PASSKEY →
           </Button>
         </Link>
       </div>
@@ -70,17 +73,20 @@ export const ResetPasswordForm: React.FC = () => {
   return (
     <div className="space-y-6 text-left">
       <div>
-        <h2 className="text-xl font-black text-neutral-900 tracking-tight">
-          Create New Password
+        <span className="font-mono text-[10px] uppercase font-bold tracking-widest text-[#8A8D98] block">
+          [04 / CREDENTIALS]
+        </span>
+        <h2 className="font-heading font-black text-2xl uppercase tracking-tight text-[#141518] mt-1">
+          SET NEW PASSWORD
         </h2>
-        <p className="text-xs text-neutral-500 mt-1">
-          Set your new secure portal login credentials.
+        <p className="font-sans text-xs text-[#52555F] mt-1">
+          Set your new high-entropy terminal access password.
         </p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <PasswordField
-          label="New Password"
+          label="New Master Password"
           id="password"
           placeholder="••••••••"
           error={errors.password?.message}
@@ -104,7 +110,7 @@ export const ResetPasswordForm: React.FC = () => {
           className="w-full mt-2"
           isLoading={isLoading}
         >
-          Reset Password
+          SAVE PASSWORD & PROCEED →
         </Button>
       </form>
     </div>

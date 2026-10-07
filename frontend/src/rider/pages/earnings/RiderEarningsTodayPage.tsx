@@ -127,18 +127,18 @@ export const RiderEarningsTodayPage: React.FC = () => {
                     <span className="text-white font-heading font-bold">{trip.restaurantName}</span>
                   </div>
                   <div className="text-[11px] text-[#8E929C] flex items-center gap-3">
-                    <span>{trip.distanceKm} km</span>
-                    <span>{trip.durationMinutes} mins</span>
-                    <span>Drop: {trip.customerArea}</span>
+                    {trip.distanceKm ? <span>{trip.distanceKm} km</span> : <span>₹{trip.distancePay} dist</span>}
+                    {trip.durationMinutes ? <span>{trip.durationMinutes} mins</span> : <span>{trip.timestamp}</span>}
+                    {trip.customerArea && <span>Drop: {trip.customerArea}</span>}
                   </div>
                 </div>
 
                 <div className="text-right">
                   <span className="font-black text-sm text-[#D7F04A] block">
-                    +₹{trip.payoutAmount + trip.tipAmount}
+                    +₹{trip.netPay ?? ((trip.payoutAmount ?? (trip.basePay + trip.distancePay)) + trip.tipAmount)}
                   </span>
                   <span className="text-[10px] text-[#8E929C]">
-                    Base ₹{trip.payoutAmount} + Tip ₹{trip.tipAmount}
+                    Base ₹{trip.basePay + trip.distancePay} + Tip ₹{trip.tipAmount}
                   </span>
                 </div>
               </div>

@@ -106,7 +106,7 @@ export const KitchenDisplayView: React.FC = () => {
                       TICKET {idx + 1} OF {activeTickets.length}
                     </span>
                     <h3 className="font-heading font-black text-2xl uppercase tracking-tight text-white mt-0.5">
-                      #{order.orderNumber}
+                      #{order.orderNumber || order.id.slice(-6).toUpperCase()}
                     </h3>
                   </div>
 
@@ -121,7 +121,7 @@ export const KitchenDisplayView: React.FC = () => {
                       {isCooking ? 'FIRING NOW' : 'QUEUED'}
                     </span>
                     <span className="text-[11px] text-[#8E929C] block mt-1">
-                      {order.estimatedPrepTimeMins}m target
+                      {order.estimatedPrepTimeMins ?? order.eta ?? 20}m target
                     </span>
                   </div>
                 </div>

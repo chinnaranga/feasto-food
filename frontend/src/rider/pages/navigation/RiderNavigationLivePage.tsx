@@ -42,55 +42,59 @@ export const RiderNavigationLivePage: React.FC = () => {
   }, []);
 
   return (
-    <div className="space-y-4 text-left">
+    <div className="space-y-4 text-left font-mono">
       <div className="flex items-center justify-between">
         <RiderPageHeader
-          title="Turn-by-Turn GPS Guidance"
-          subtitle={`Order ${routeSummary.orderNumber} • ${routeSummary.currentStreetName}`}
+          title="TURN-BY-TURN GPS GUIDANCE"
+          subtitle={`MISSION ${routeSummary.orderNumber} • ${routeSummary.currentStreetName}`}
         />
         <GPSStatusBadge status={routeSummary.gpsSignal} />
       </div>
 
       {/* Real Live Map Canvas Component */}
-      <RealLiveMapCanvas
-        routeSummary={routeSummary}
-        polylineCoords={routePolylineCoords}
-        onRecenter={recenterMap}
-        onReroute={triggerReroute}
-        onToggleTileMode={toggleTileMode}
-      />
+      <div className="border border-[#141518] shadow-[4px_4px_0px_#141518] overflow-hidden bg-[#14161B]">
+        <RealLiveMapCanvas
+          routeSummary={routeSummary}
+          polylineCoords={routePolylineCoords}
+          onRecenter={recenterMap}
+          onReroute={triggerReroute}
+          onToggleTileMode={toggleTileMode}
+        />
+      </div>
 
       {/* Next Turn Direction Banner */}
       <NextTurnCard instruction={currentInstruction} onAdvance={advanceInstruction} />
 
       {/* Dynamic ETA & Distance Telemetry Tiles */}
       <div className="grid grid-cols-2 gap-3 font-mono">
-        <div className="p-4 rounded-2xl bg-white border border-neutral-200/90 shadow-2xs space-y-1">
-          <span className="text-[10px] font-black uppercase text-neutral-400 font-heading">Estimated Delivery ETA</span>
-          <h4 className="text-xl font-black text-emerald-700 leading-none">{routeSummary.estimatedEtaMins} Mins</h4>
-          <span className="text-[11px] text-neutral-500 block pt-1">{aiInsight.bestRouteName}</span>
+        <div className="p-4 bg-[#FAF8F5] border border-[#141518] shadow-[3px_3px_0px_#141518] space-y-1">
+          <span className="text-[10px] font-black uppercase text-[#55565B] tracking-wider">ESTIMATED ETA</span>
+          <h4 className="text-xl font-black text-[#141518] leading-none">{routeSummary.estimatedEtaMins} MINS</h4>
+          <span className="text-[11px] text-[#55565B] block pt-1 font-mono">{aiInsight.bestRouteName}</span>
         </div>
 
-        <div className="p-4 rounded-2xl bg-white border border-neutral-200/90 shadow-2xs space-y-1">
-          <span className="text-[10px] font-black uppercase text-neutral-400 font-heading">Remaining Distance</span>
-          <h4 className="text-xl font-black text-neutral-900 leading-none">{routeSummary.distanceRemainingKm} KM</h4>
-          <span className="text-[11px] text-emerald-700 font-bold block pt-1">
-            {aiInsight.etaConfidenceScorePct}% ETA Confidence
+        <div className="p-4 bg-[#FAF8F5] border border-[#141518] shadow-[3px_3px_0px_#141518] space-y-1">
+          <span className="text-[10px] font-black uppercase text-[#55565B] tracking-wider">REMAINING DISTANCE</span>
+          <h4 className="text-xl font-black text-[#141518] leading-none">{routeSummary.distanceRemainingKm} KM</h4>
+          <span className="text-[11px] text-[#141518] font-black block pt-1 uppercase">
+            {aiInsight.etaConfidenceScorePct}% CONFIDENCE
           </span>
         </div>
       </div>
 
       {/* AI Traffic Reroute Suggestion */}
-      <div className="p-4 rounded-2xl bg-white border border-neutral-200/90 shadow-2xs space-y-2 text-xs">
+      <div className="p-4 bg-[#FAF8F5] border border-[#141518] shadow-[3px_3px_0px_#141518] space-y-2 text-xs font-mono">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-1.5 font-bold text-neutral-900">
-            <Sparkles size={15} className="text-[#e35205]" />
-            <span>AI Traffic Delay Telemetry</span>
+          <div className="flex items-center gap-1.5 font-bold text-[#141518]">
+            <Sparkles size={15} className="text-[#141518]" />
+            <span className="uppercase tracking-wider">AI SATELLITE TRAFFIC TELEMETRY</span>
           </div>
-          <span className="text-[10px] font-mono font-bold text-emerald-700">Live Traffic Sync</span>
+          <span className="text-[10px] font-mono font-black px-2 py-0.5 bg-[#D7F04A] text-[#141518] border border-[#141518]">
+            5G SYNCED
+          </span>
         </div>
 
-        <p className="text-neutral-600 leading-relaxed">{aiInsight.rerouteRecommendation}</p>
+        <p className="text-[#55565B] leading-relaxed font-sans">{aiInsight.rerouteRecommendation}</p>
       </div>
     </div>
   );

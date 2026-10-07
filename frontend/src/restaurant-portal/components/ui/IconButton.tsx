@@ -13,12 +13,14 @@ export const IconButton: React.FC<IconButtonProps> = ({
   className = '',
   ...props
 }) => {
-  const baseStyle = 'inline-flex items-center justify-center rounded-lg transition-all duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#e35205]/20 disabled:opacity-50 disabled:cursor-not-allowed';
-  
+  const baseStyle =
+    'inline-flex items-center justify-center transition-all duration-150 cursor-pointer focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed';
+
   const variants = {
-    outline: 'bg-white hover:bg-neutral-50 text-neutral-500 border border-neutral-200 shadow-[0_1px_2px_rgba(0,0,0,0.02)]',
-    ghost: 'bg-transparent hover:bg-neutral-100 text-neutral-500',
-    secondary: 'bg-neutral-100 hover:bg-neutral-200 text-neutral-600',
+    outline:
+      'bg-white hover:bg-[#FAF8F5] text-[#141518] border border-[#141518]/25 shadow-[1px_1px_0px_#141518] active:translate-x-[1px] active:translate-y-[1px]',
+    ghost: 'bg-transparent hover:bg-[#141518]/5 text-[#141518]',
+    secondary: 'bg-[#FAF8F5] hover:bg-[#EBE7DD] text-[#141518] border border-[#141518]/15',
   };
 
   const sizes = {

@@ -204,13 +204,13 @@ export const IngredientEditor: React.FC = () => {
           <button
             type="button"
             onClick={() => navigate('/restaurant-portal/inventory')}
-            className="px-3 py-2 border border-neutral-200 hover:bg-neutral-50 rounded-xl text-xs font-black uppercase tracking-wider text-neutral-500 transition-colors cursor-pointer"
+            className="px-3 py-2 border border-[#141518]/20 bg-[#FAF8F5] hover:bg-[#141518] hover:text-[#FAF8F5] text-xs font-mono font-bold uppercase tracking-wider text-[#141518] transition-colors cursor-pointer"
           >
             Cancel
           </button>
           <button
             type="submit"
-            className="px-4 py-2 bg-[#e35205] hover:bg-[#c94804] text-white text-xs font-black uppercase tracking-wider rounded-xl shadow-sm transition-colors cursor-pointer"
+            className="px-4 py-2 bg-[#141518] hover:bg-[#D7F04A] text-[#FAF8F5] hover:text-[#141518] text-xs font-mono font-bold uppercase tracking-wider border border-[#141518] shadow-[2px_2px_0px_#141518] transition-colors cursor-pointer"
           >
             Save Stock Details
           </button>
@@ -240,7 +240,7 @@ export const IngredientEditor: React.FC = () => {
                 <select
                   id="category"
                   {...register('category')}
-                  className="w-full px-3 py-2 bg-white border border-neutral-200 focus:border-[#e35205] focus:outline-none rounded-lg text-xs font-semibold text-neutral-800 cursor-pointer"
+                  className="w-full px-3 py-2 bg-[#FAF8F5] border border-[#141518]/20 focus:border-[#141518] focus:outline-none text-xs font-mono font-semibold text-[#141518] cursor-pointer"
                 >
                   {TYPE_OPTIONS.map((opt) => (
                     <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -249,14 +249,14 @@ export const IngredientEditor: React.FC = () => {
               </div>
 
               {/* Unit */}
-              <div className="flex flex-col gap-1 w-full">
-                <label htmlFor="unit" className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider">
+              <div className="flex flex-col gap-1 w-full font-mono">
+                <label htmlFor="unit" className="text-[10px] font-bold text-[#52555F] uppercase tracking-wider">
                   Measurement Unit
                 </label>
                 <select
                   id="unit"
                   {...register('unit')}
-                  className="w-full px-3 py-2 bg-white border border-neutral-200 focus:border-[#e35205] focus:outline-none rounded-lg text-xs font-semibold text-neutral-800 cursor-pointer"
+                  className="w-full px-3 py-2 bg-[#FAF8F5] border border-[#141518]/20 focus:border-[#141518] focus:outline-none text-xs font-mono font-semibold text-[#141518] cursor-pointer"
                 >
                   {UNIT_OPTIONS.map((u) => (
                     <option key={u} value={u}>{u}</option>
@@ -266,16 +266,16 @@ export const IngredientEditor: React.FC = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 font-mono">
             {/* Location */}
             <div className="flex flex-col gap-1 w-full">
-              <label htmlFor="location" className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider">
+              <label htmlFor="location" className="text-[10px] font-bold text-[#52555F] uppercase tracking-wider">
                 Storage Area
               </label>
               <select
                 id="location"
                 {...register('location')}
-                className="w-full px-3 py-2 bg-white border border-neutral-200 focus:border-[#e35205] focus:outline-none rounded-lg text-xs font-semibold text-neutral-800 cursor-pointer"
+                className="w-full px-3 py-2 bg-[#FAF8F5] border border-[#141518]/20 focus:border-[#141518] focus:outline-none text-xs font-mono font-semibold text-[#141518] cursor-pointer"
               >
                 {LOCATION_OPTIONS.map((opt) => (
                   <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -397,20 +397,20 @@ export const IngredientEditor: React.FC = () => {
 
           {/* AI optimizer trigger card */}
           <SectionDivider label="AI Safety Optimizer" />
-          <Card className="text-left space-y-4">
+          <Card className="text-left space-y-4 font-mono">
             <div className="flex items-center gap-1.5">
-              <Sparkles size={13} className="text-[#e35205]" />
-              <h5 className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider">
+              <Sparkles size={13} className="text-[#1B3BFF]" />
+              <h5 className="text-[10px] font-bold text-[#52555F] uppercase tracking-wider">
                 Safety Stock Calculator
               </h5>
             </div>
-            <p className="text-[10px] text-neutral-400 leading-normal">
+            <p className="text-[10px] text-[#52555F] leading-normal">
               Based on your current stock capacity, let AI calculate optimal safety, reorder trigger bounds, and maximum stock sizes.
             </p>
             <button
               type="button"
               onClick={handleAiOptimizeLevels}
-              className="w-full py-2 bg-neutral-900 hover:bg-neutral-850 text-white text-[10px] font-black uppercase tracking-wider rounded-xl transition-all cursor-pointer"
+              className="w-full py-2 bg-[#141518] hover:bg-[#D7F04A] text-[#FAF8F5] hover:text-[#141518] text-[10px] font-bold uppercase tracking-wider border border-[#141518] shadow-[2px_2px_0px_#141518] transition-all cursor-pointer"
             >
               Generate Optimal Bounds
             </button>
@@ -418,10 +418,10 @@ export const IngredientEditor: React.FC = () => {
 
           {/* Recipe Menu Linking checklist */}
           <SectionDivider label="Recipe Menu Coupling" />
-          <Card className="text-left select-none space-y-3 max-h-64 overflow-y-auto pr-1">
-            <div className="flex items-start gap-1.5 border-b border-neutral-100 pb-2">
-              <Info size={12} className="text-neutral-400 mt-0.5 shrink-0" />
-              <p className="text-[9px] text-neutral-400 leading-normal">
+          <Card className="text-left select-none space-y-3 max-h-64 overflow-y-auto pr-1 font-mono">
+            <div className="flex items-start gap-1.5 border-b border-[#141518]/10 pb-2">
+              <Info size={12} className="text-[#52555F] mt-0.5 shrink-0" />
+              <p className="text-[9px] text-[#52555F] leading-normal">
                 Checkmark which client-app dishes rely on this raw stock item. (Enables auto-out-of-stock warning triggers).
               </p>
             </div>
@@ -434,14 +434,14 @@ export const IngredientEditor: React.FC = () => {
                     <div
                       key={item.id}
                       onClick={() => handleToggleRecipeLink(item.id)}
-                      className="flex items-center gap-2.5 py-1.5 hover:bg-neutral-50/60 rounded px-1.5 -mx-1.5 cursor-pointer"
+                      className="flex items-center gap-2.5 py-1.5 hover:bg-[#EBE7DD] px-1.5 -mx-1.5 cursor-pointer transition-colors"
                     >
                       {isChecked ? (
-                        <CheckSquare size={13} className="text-[#e35205]" />
+                        <CheckSquare size={13} className="text-[#1B3BFF]" />
                       ) : (
-                        <Square size={13} className="text-neutral-300" />
+                        <Square size={13} className="text-[#52555F]/40" />
                       )}
-                      <span className="text-xs font-bold text-neutral-700">{item.name}</span>
+                      <span className="text-xs font-bold text-[#141518]">{item.name}</span>
                     </div>
                   );
                 })}

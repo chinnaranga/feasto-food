@@ -73,7 +73,7 @@ export const WasteTracker: React.FC = () => {
         <button
           type="button"
           onClick={() => setShowAddLog(!showAddLog)}
-          className="inline-flex items-center gap-1.5 px-3 py-2 bg-[#e35205] hover:bg-[#c94804] text-white text-[10px] font-black uppercase tracking-wider rounded-xl shadow-xs transition-colors cursor-pointer"
+          className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-[#141518] hover:bg-[#D7F04A] text-[#FAF8F5] hover:text-[#141518] text-[10px] font-mono font-bold uppercase tracking-wider border border-[#141518] shadow-[2px_2px_0px_#141518] transition-colors cursor-pointer"
         >
           <Plus size={12} /> Log Waste
         </button>

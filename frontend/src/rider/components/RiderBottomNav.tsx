@@ -8,35 +8,37 @@ export const RiderBottomNav: React.FC = () => {
   const { deliveryOffers, activeOffer } = useRiderStore();
 
   const navItems = [
-    { label: 'Home', path: '/rider/dashboard', icon: <Home size={18} /> },
-    { label: 'Offers', path: '/rider/orders', icon: <ShoppingBag size={18} />, badge: deliveryOffers.length },
-    { label: 'Active Task', path: '/rider/active', icon: <Navigation size={18} />, badge: activeOffer ? 1 : 0 },
-    { label: 'Earnings', path: '/rider/earnings', icon: <Wallet size={18} /> },
-    { label: 'Profile', path: '/rider/profile', icon: <User size={18} /> },
+    { label: 'HOME', path: '/rider/dashboard', icon: <Home size={16} /> },
+    { label: 'OFFERS', path: '/rider/orders', icon: <ShoppingBag size={16} />, badge: deliveryOffers.length },
+    { label: 'ACTIVE', path: '/rider/active', icon: <Navigation size={16} />, badge: activeOffer ? 1 : 0 },
+    { label: 'WALLET', path: '/rider/earnings', icon: <Wallet size={16} /> },
+    { label: 'DOSSIER', path: '/rider/profile', icon: <User size={16} /> },
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-neutral-200/90 z-[400] py-2 px-3 select-none pb-[calc(0.5rem+env(safe-area-inset-bottom))]">
+    <nav className="fixed bottom-0 left-0 right-0 bg-[#FAF8F5] border-t border-[#141518] z-[400] py-2 px-3 select-none pb-[calc(0.5rem+env(safe-area-inset-bottom))] font-mono">
       <div className="max-w-lg mx-auto flex items-center justify-around">
         {navItems.map((item) => {
-          const isActive = location.pathname === item.path;
+          const isActive = location.pathname === item.path || (item.path !== '/rider/dashboard' && location.pathname.startsWith(item.path));
           return (
             <NavLink
               key={item.path}
               to={item.path}
-              className={`flex flex-col items-center gap-1 px-3 py-1.5 rounded-xl transition-all cursor-pointer relative ${
-                isActive ? 'text-[#e35205] font-black' : 'text-neutral-500 hover:text-neutral-900 font-bold'
+              className={`flex flex-col items-center gap-1 px-3 py-1 border transition-all cursor-pointer relative ${
+                isActive
+                  ? 'bg-[#D7F04A] text-[#141518] border-[#141518] font-black shadow-[2px_2px_0px_#141518]'
+                  : 'border-transparent text-[#55565B] hover:text-[#141518] font-bold'
               }`}
             >
               <div className="relative">
                 {item.icon}
                 {item.badge && item.badge > 0 ? (
-                  <span className="absolute -top-1.5 -right-2 text-[9px] font-black px-1.5 py-0.2 rounded-full bg-[#e35205] text-white">
+                  <span className="absolute -top-1.5 -right-2 text-[8px] font-mono font-black px-1 py-0.2 bg-[#141518] text-[#D7F04A] border border-[#141518]">
                     {item.badge}
                   </span>
                 ) : null}
               </div>
-              <span className="text-[10px] tracking-tight">{item.label}</span>
+              <span className="text-[9px] uppercase tracking-wider">{item.label}</span>
             </NavLink>
           );
         })}

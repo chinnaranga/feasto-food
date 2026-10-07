@@ -35,49 +35,49 @@ export const MetricCard: React.FC<MetricCardProps> = ({
   const isZero = trendPct !== undefined && trendPct === 0;
 
   return (
-    <Card className="text-left relative overflow-hidden transition-all duration-200 hover:shadow-md hover:border-neutral-300 select-none">
+    <Card className="text-left relative overflow-hidden transition-all duration-150 hover:border-[#141518] hover:shadow-[3px_3px_0px_#141518] select-none bg-white border border-[#141518]/20 p-5">
       {/* Header icon row */}
       <div className="flex items-center justify-between mb-2">
-        <span className="text-[9px] font-bold text-neutral-400 uppercase tracking-widest block">
+        <span className="font-mono text-[10px] font-bold text-[#8A8D98] uppercase tracking-widest block">
           {title}
         </span>
-        {icon && <div className="text-neutral-400 shrink-0">{icon}</div>}
+        {icon && <div className="text-[#141518] shrink-0">{icon}</div>}
       </div>
 
       {/* Main value display */}
       <div className="flex items-baseline gap-1.5">
-        <span className="text-2xl font-black text-neutral-800 leading-none tracking-tight">
+        <span className="font-heading font-black text-2xl sm:text-3xl text-[#141518] leading-none tracking-tight">
           {value}
         </span>
       </div>
 
       {/* Trend indicators */}
       {trendPct !== undefined && (
-        <div className="flex items-center gap-1.5 mt-2">
+        <div className="flex items-center gap-2 mt-2.5 font-mono">
           <div
-            className={`inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-md text-[9px] font-black ${
+            className={`inline-flex items-center gap-0.5 px-1.5 py-0.5 text-[9px] font-black uppercase border ${
               isZero
-                ? 'bg-neutral-100 text-neutral-500'
+                ? 'bg-[#FAF8F5] text-[#8A8D98] border-[#141518]/20'
                 : isPositive
-                ? 'bg-emerald-50 text-emerald-700'
-                : 'bg-red-50 text-red-700'
+                ? 'bg-emerald-50 text-[#15803D] border-emerald-300'
+                : 'bg-red-50 text-[#991B1B] border-red-300'
             }`}
           >
             {isZero ? null : isPositive ? (
-              <ArrowUpRight size={9} strokeWidth={3} />
+              <ArrowUpRight size={10} strokeWidth={3} />
             ) : (
-              <ArrowDownRight size={9} strokeWidth={3} />
+              <ArrowDownRight size={10} strokeWidth={3} />
             )}
             <span>{Math.abs(trendPct)}%</span>
           </div>
           {trendLabel && (
-            <span className="text-[10px] text-neutral-400 font-medium">{trendLabel}</span>
+            <span className="text-[10px] text-[#8A8D98] font-bold">{trendLabel}</span>
           )}
         </div>
       )}
 
       {subtext && !trendPct && (
-        <p className="text-[10px] text-neutral-400 font-medium mt-2">{subtext}</p>
+        <p className="font-mono text-[10px] text-[#8A8D98] mt-2">{subtext}</p>
       )}
     </Card>
   );

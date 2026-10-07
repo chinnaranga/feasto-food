@@ -22,22 +22,24 @@ export const RiderProfileOverviewPage: React.FC = () => {
   ];
 
   return (
-    <div className="space-y-4 text-left">
+    <div className="space-y-4 text-left font-mono">
       <RiderPageHeader
-        title="Rider Operational Hub"
-        subtitle="Manage your profile settings, active vehicle, compliance papers, and duty preferences."
+        title="COURIER DOSSIER HUB"
+        subtitle="Operational profile configurations, vehicle fleet setup, compliance papers, and duty preferences."
       />
 
       {/* Quick Action Menu Grid */}
-      <div className="grid grid-cols-2 gap-2 text-xs">
+      <div className="grid grid-cols-2 gap-2.5 text-xs font-mono">
         {shortcuts.map((item) => (
           <button
             key={item.path}
             onClick={() => navigate(item.path)}
-            className="p-3.5 rounded-2xl bg-white border border-neutral-200/90 shadow-2xs text-left hover:bg-neutral-50 transition-colors space-y-1.5 cursor-pointer"
+            className="p-3.5 bg-[#FAF8F5] border border-[#141518] shadow-[2px_2px_0px_#141518] text-left hover:bg-[#F3F0E8] transition-colors space-y-1.5 cursor-pointer active:translate-x-[1px] active:translate-y-[1px]"
           >
-            <div className="p-1.5 rounded-lg bg-neutral-100 text-neutral-700 w-fit">{item.icon}</div>
-            <strong className="text-neutral-900 font-bold block">{item.label}</strong>
+            <div className="p-1.5 bg-[#D7F04A] text-[#141518] border border-[#141518] w-fit">
+              {item.icon}
+            </div>
+            <strong className="text-[#141518] uppercase text-xs font-bold block">{item.label}</strong>
           </button>
         ))}
       </div>
@@ -46,11 +48,16 @@ export const RiderProfileOverviewPage: React.FC = () => {
       <VehicleCard vehicle={vehicle} />
 
       {/* Compliance Document Audit Sample */}
-      <div className="p-4 rounded-2xl bg-white border border-neutral-200/90 shadow-2xs space-y-3">
-        <div className="flex items-center justify-between border-b border-neutral-100 pb-2">
-          <h4 className="text-xs font-black text-neutral-900 font-heading uppercase">Compliance Documents Status</h4>
-          <button onClick={() => navigate('/rider/profile/documents')} className="text-xs font-bold text-[#e35205]">
-            View All ({documents.length}) →
+      <div className="p-4 bg-[#FAF8F5] border border-[#141518] shadow-[4px_4px_0px_#141518] space-y-3 font-mono">
+        <div className="flex items-center justify-between border-b border-[#141518]/15 pb-2">
+          <h4 className="text-xs font-heading font-black text-[#141518] uppercase tracking-wider">
+            COMPLIANCE PAPERS STATUS
+          </h4>
+          <button
+            onClick={() => navigate('/rider/profile/documents')}
+            className="text-xs font-mono font-bold text-[#141518] underline underline-offset-4 decoration-[#D7F04A] decoration-2 hover:text-[#1B3BFF] cursor-pointer uppercase"
+          >
+            VIEW ALL ({documents.length}) →
           </button>
         </div>
 

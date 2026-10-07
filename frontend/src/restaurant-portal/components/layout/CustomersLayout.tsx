@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react';
 import { NavLink, Outlet, useNavigate, useLocation } from 'react-router-dom';
-import { Plus, Users, Layers, ShieldAlert, FileText, Share2, ChevronRight, Sparkles } from 'lucide-react';
+import { Plus, Users, Layers, ShieldAlert, FileText, Share2, ChevronRight } from 'lucide-react';
 import PageContainer from './PageContainer';
 import PortalPageHeader from '../common/PortalPageHeader';
 import PortalLoader from '../common/PortalLoader';
@@ -15,8 +15,6 @@ export const CustomersLayout: React.FC = () => {
 
   // Counters
   const totalCount = customers.length;
-  const vipCount = customers.filter(c => c.loyaltyStatus === 'VIP').length;
-  const dormantCount = customers.filter(c => c.loyaltyStatus === 'Dormant').length;
   const atRiskCount = customers.filter(c => c.riskScore > 60).length;
 
   const sideNav = [
@@ -28,7 +26,7 @@ export const CustomersLayout: React.FC = () => {
   ];
 
   return (
-    <PageContainer className="pb-16">
+    <PageContainer className="pb-16 font-mono text-left">
       {/* Header */}
       <PortalPageHeader
         title="Guest Relationship Intelligence (CRM)"
@@ -38,7 +36,7 @@ export const CustomersLayout: React.FC = () => {
             <button
               type="button"
               onClick={() => navigate('/restaurant-portal/customers/new')}
-              className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#e35205] hover:bg-[#c94804] text-white text-xs font-black uppercase tracking-wider rounded-xl shadow-sm transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#141518] hover:bg-[#D7F04A] text-[#FAF8F5] hover:text-[#141518] text-xs font-bold uppercase tracking-wider border border-[#141518] shadow-[2px_2px_0px_#141518] transition-colors cursor-pointer"
             >
               <Plus size={14} />
               <span>Add Guest</span>
@@ -47,7 +45,7 @@ export const CustomersLayout: React.FC = () => {
             <button
               type="button"
               onClick={() => navigate('/restaurant-portal/customers')}
-              className="inline-flex items-center gap-1 px-3 py-2 border border-neutral-200 hover:bg-neutral-50 rounded-xl text-xs font-black uppercase tracking-wider text-neutral-600 transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1 px-3 py-2 bg-[#FAF8F5] border border-[#141518]/20 hover:bg-[#141518] hover:text-[#FAF8F5] text-xs font-bold uppercase tracking-wider text-[#141518] transition-colors cursor-pointer"
             >
               Back to CRM
             </button>
@@ -64,21 +62,21 @@ export const CustomersLayout: React.FC = () => {
       ) : (
         <div className="flex flex-col lg:flex-row gap-6 mt-6 items-start text-left">
           {/* Sub Navigation Sidebar */}
-          <aside className="w-full lg:w-64 shrink-0 space-y-1.5 select-none bg-white border border-neutral-200/80 rounded-2xl p-3 shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
-            <span className="text-[9px] font-bold text-neutral-400 uppercase tracking-widest px-3.5 block mb-2 font-heading">
+          <aside className="w-full lg:w-64 shrink-0 space-y-1.5 select-none bg-[#FAF8F5] border border-[#141518]/15 p-3 shadow-[4px_4px_0px_#141518]">
+            <span className="text-[9px] font-bold text-[#52555F] uppercase tracking-widest px-3 block mb-2 font-mono">
               CRM Navigation
             </span>
-            <nav className="space-y-0.5">
+            <nav className="space-y-1">
               {sideNav.map((node) => (
                 <NavLink
                   key={node.path}
                   to={node.path}
                   end={node.end}
                   className={({ isActive }) =>
-                    `flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer justify-between ${
+                    `flex items-center gap-2.5 px-3 py-2 text-xs font-mono transition-colors cursor-pointer justify-between ${
                       isActive
-                        ? 'bg-neutral-50 text-[#e35205] border border-neutral-200/50 shadow-3xs'
-                        : 'text-neutral-500 hover:text-neutral-800 hover:bg-neutral-50/50'
+                        ? 'bg-[#141518] text-[#FAF8F5] font-bold border-l-2 border-[#D7F04A]'
+                        : 'text-[#52555F] hover:bg-[#EBE7DD] hover:text-[#141518]'
                     }`
                   }
                 >
@@ -89,47 +87,22 @@ export const CustomersLayout: React.FC = () => {
 
                   <div className="flex items-center gap-1">
                     {node.count > 0 && (
-                      <span className={`text-[9px] font-black px-1.5 py-0.5 rounded-full ${
-                        node.label.includes('Retention') ? 'bg-red-50 text-red-650 animate-pulse border border-red-100' :
-                        'bg-neutral-100 text-neutral-500'
+                      <span className={`text-[9px] font-mono font-bold px-1.5 py-0.5 border ${
+                        node.label.includes('Retention') ? 'bg-red-50 text-red-800 border-red-300 animate-pulse' :
+                        'bg-[#141518]/10 text-[#141518] border-[#141518]/15'
                       }`}>
                         {node.count}
                       </span>
                     )}
-                    <ChevronRight size={10} className="text-neutral-300" />
+                    <ChevronRight size={10} className="text-[#52555F]" />
                   </div>
                 </NavLink>
               ))}
             </nav>
-
-            {/* Sidebar quick status stats */}
-            <div className="border-t border-neutral-100 pt-4 mt-4 px-3 space-y-3">
-              <div>
-                <p className="text-[9px] font-black text-neutral-400 uppercase tracking-wider font-heading">Loyalty Distribution</p>
-                <div className="flex justify-between items-center text-[10px] mt-1.5">
-                  <span className="font-semibold text-neutral-500">VIP Clients</span>
-                  <span className="font-bold text-[#e35205]">{vipCount} guests</span>
-                </div>
-                <div className="flex justify-between items-center text-[10px] mt-1">
-                  <span className="font-semibold text-neutral-500">Dormant Regulars</span>
-                  <span className="font-bold text-neutral-600">{dormantCount} inactive</span>
-                </div>
-              </div>
-
-              {/* Churn alert trigger suggestion */}
-              {atRiskCount > 0 && (
-                <div className="p-2.5 bg-red-50/50 border border-red-100 rounded-xl flex gap-2">
-                  <Sparkles size={11} className="text-red-650 mt-0.5 shrink-0" />
-                  <p className="text-[9px] text-red-750 leading-relaxed font-semibold">
-                    {atRiskCount} VIPs show churn risk signal. Review Win-Back suggestions.
-                  </p>
-                </div>
-              )}
-            </div>
           </aside>
 
-          {/* Active CRM panel view */}
-          <div className="flex-1 w-full bg-white border border-neutral-200/80 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.02)] p-6 min-h-[500px]">
+          {/* Active CRM outlet */}
+          <div className="flex-1 w-full bg-[#FAF8F5] border border-[#141518]/15 shadow-[4px_4px_0px_#141518] p-6 min-h-[500px]">
             <Suspense fallback={<PortalLoader />}>
               <Outlet />
             </Suspense>

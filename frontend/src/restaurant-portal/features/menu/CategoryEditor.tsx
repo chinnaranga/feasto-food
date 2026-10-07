@@ -132,7 +132,7 @@ export const CategoryEditor: React.FC = () => {
           </button>
           <button
             type="submit"
-            className="px-4 py-2 bg-[#e35205] hover:bg-[#c94804] text-white text-xs font-black uppercase tracking-wider rounded-xl shadow-sm transition-colors cursor-pointer"
+            className="px-4 py-2 bg-[#141518] hover:bg-[#D7F04A] text-[#FAF8F5] hover:text-[#141518] text-xs font-mono font-bold uppercase tracking-wider border border-[#141518] shadow-[2px_2px_0px_#141518] transition-colors cursor-pointer"
           >
             Save Collection
           </button>
@@ -160,7 +160,7 @@ export const CategoryEditor: React.FC = () => {
               <select
                 id="parentId"
                 {...register('parentId')}
-                className="w-full px-3 py-2 bg-white border border-neutral-200 focus:border-[#e35205] focus:ring-2 focus:ring-[#e35205]/20 focus:outline-none rounded-lg text-xs font-semibold text-neutral-800 cursor-pointer"
+                className="w-full px-3 py-2 bg-[#FAF8F5] border border-[#141518]/20 focus:border-[#141518] focus:outline-none text-xs font-mono font-semibold text-[#141518] cursor-pointer"
               >
                 <option value="">None (Top-Level Category)</option>
                 {parentCandidates.map((c) => (
@@ -171,15 +171,15 @@ export const CategoryEditor: React.FC = () => {
           </div>
 
           {/* Description Copy */}
-          <div className="flex flex-col gap-1 w-full">
+          <div className="flex flex-col gap-1 w-full font-mono">
             <div className="flex justify-between items-center">
-              <label htmlFor="description" className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider">
+              <label htmlFor="description" className="text-[10px] font-bold text-[#52555F] uppercase tracking-wider">
                 Collection Description
               </label>
               <button
                 type="button"
                 onClick={handleAiCopywrite}
-                className="inline-flex items-center gap-1 text-[9px] font-bold text-[#e35205] hover:text-[#c94804] cursor-pointer"
+                className="inline-flex items-center gap-1 text-[9px] font-bold text-[#1B3BFF] hover:text-[#141518] cursor-pointer uppercase tracking-wider"
               >
                 <Sparkles size={10} /> Auto-write Description
               </button>
@@ -188,7 +188,7 @@ export const CategoryEditor: React.FC = () => {
               id="description"
               type="text"
               placeholder="e.g. Slow-cooked aromatic rice plates paired with chef choice curries."
-              className="w-full px-3 py-2 bg-white border border-neutral-200 focus:border-[#e35205] focus:ring-2 focus:ring-[#e35205]/20 focus:outline-none rounded-lg text-xs text-neutral-800 transition-all placeholder:text-neutral-400"
+              className="w-full px-3 py-2 bg-[#FAF8F5] border border-[#141518]/20 focus:border-[#141518] focus:outline-none text-xs text-[#141518] transition-all placeholder:text-[#52555F]/60"
               {...register('description')}
             />
             {errors.description && <span className="text-[10px] font-bold text-red-600 mt-1">{errors.description.message}</span>}
@@ -225,10 +225,10 @@ export const CategoryEditor: React.FC = () => {
                     key={day}
                     type="button"
                     onClick={() => handleToggleDay(day)}
-                    className={`px-3 py-2 border rounded-xl text-[10px] font-black uppercase tracking-wider transition-all cursor-pointer ${
+                    className={`px-3 py-2 border text-[10px] font-mono font-bold uppercase tracking-wider transition-all cursor-pointer ${
                       isActive
-                        ? 'bg-[#e35205] text-white border-transparent shadow-xs'
-                        : 'bg-white text-neutral-400 border-neutral-200 hover:border-neutral-300'
+                        ? 'bg-[#141518] text-[#D7F04A] border-[#141518] shadow-[2px_2px_0px_#141518]'
+                        : 'bg-[#FAF8F5] text-[#52555F] border-[#141518]/20 hover:border-[#141518]'
                     }`}
                   >
                     {day}
@@ -240,9 +240,9 @@ export const CategoryEditor: React.FC = () => {
         </div>
 
         {/* RIGHT COLUMN: AI assistant panels, status controls */}
-        <div className="space-y-6">
+        <div className="space-y-6 font-mono">
           <SectionDivider label="Publish Status" />
-          <div className="rounded-xl border border-neutral-100 bg-neutral-50/40 px-4 divide-y divide-neutral-100">
+          <div className="border border-[#141518]/15 bg-[#FAF8F5] px-4 divide-y divide-[#141518]/10">
             <ToggleRow
               label="Public Visibility Status"
               description="Unpublish collection to hide it temporarily from customer app catalogs."
@@ -255,8 +255,8 @@ export const CategoryEditor: React.FC = () => {
           <SectionDivider label="IA Health Optimizer" />
           <Card className="text-left select-none space-y-4">
             <div className="flex items-center gap-1.5">
-              <Sparkles size={13} className="text-[#e35205]" />
-              <h5 className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider">
+              <Sparkles size={13} className="text-[#1B3BFF]" />
+              <h5 className="text-[10px] font-bold text-[#52555F] uppercase tracking-wider">
                 Category Health Audit
               </h5>
             </div>

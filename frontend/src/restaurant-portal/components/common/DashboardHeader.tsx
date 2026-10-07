@@ -24,7 +24,7 @@ export const DashboardHeader: React.FC = () => {
       filter: rangeFilter
     }));
     const downloadAnchor = document.createElement('a');
-    downloadAnchor.setAttribute("href",     dataStr);
+    downloadAnchor.setAttribute("href", dataStr);
     downloadAnchor.setAttribute("download", `feasto_report_${rangeFilter}.json`);
     document.body.appendChild(downloadAnchor);
     downloadAnchor.click();
@@ -39,36 +39,39 @@ export const DashboardHeader: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-neutral-100 pb-5 select-none text-left">
+    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#141518]/15 pb-5 select-none text-left">
       {/* Greeter metadata */}
       <div>
-        <div className="flex items-center gap-2 mb-1.5">
-          <h2 className="text-xl font-black tracking-tight text-neutral-800 font-heading">
-            {getGreeting()}, {user?.displayName || 'Merchant'}
-          </h2>
-          <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[9px] font-bold border border-emerald-100 animate-pulse">
+        <div className="flex items-center gap-2 mb-1">
+          <span className="font-mono text-[10px] font-bold text-[#1B3BFF] uppercase tracking-widest">
+            [01 // TELEMETRY HUB]
+          </span>
+          <div className="inline-flex items-center gap-1.5 px-2 py-0.5 bg-[#D7F04A] text-[#141518] border border-[#141518] text-[9px] font-mono font-bold uppercase">
             <Radio size={9} />
-            <span>Terminal Sync Live</span>
+            <span>SYNC LIVE</span>
           </div>
         </div>
-        <p className="text-xs text-neutral-400">
-          Operational telemetry and performance analytics dashboard for{' '}
-          <span className="font-bold text-neutral-700">{selectedRestaurant?.name || 'your store'}</span>.
+        <h2 className="font-heading font-black text-2xl uppercase tracking-tight text-[#141518]">
+          {getGreeting()}, {user?.displayName || 'Merchant'}
+        </h2>
+        <p className="font-mono text-xs text-[#52555F] mt-0.5">
+          Operational control and throughput telemetry for{' '}
+          <span className="font-bold text-[#141518]">{selectedRestaurant?.name || 'STUDIO ALPHA'}</span>.
         </p>
       </div>
 
       {/* Control panel buttons */}
-      <div className="flex items-center gap-2 self-start md:self-center">
+      <div className="flex items-center gap-2 self-start md:self-center font-mono">
         {/* Time Segmented Filter */}
-        <div className="bg-neutral-100 p-0.5 rounded-xl flex items-center border border-neutral-200/40">
+        <div className="bg-[#FAF8F5] p-0.5 flex items-center border border-[#141518]/20">
           {(['today', 'yesterday', 'week'] as const).map((range) => (
             <button
               key={range}
               onClick={() => setRangeFilter(range)}
-              className={`px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all duration-150 cursor-pointer ${
+              className={`px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider transition-all duration-150 cursor-pointer ${
                 rangeFilter === range
-                  ? 'bg-white text-neutral-800 shadow-sm'
-                  : 'text-neutral-400 hover:text-neutral-600'
+                  ? 'bg-[#141518] text-[#D7F04A]'
+                  : 'text-[#52555F] hover:text-[#141518]'
               }`}
             >
               {range}
@@ -86,7 +89,7 @@ export const DashboardHeader: React.FC = () => {
               action: 'Manually refreshed workspace telemetry signals.',
             });
           }}
-          className="p-2 rounded-xl border border-neutral-200 bg-white hover:bg-neutral-50 text-neutral-500 hover:text-neutral-700 transition-colors cursor-pointer"
+          className="p-2 border border-[#141518]/20 bg-[#FAF8F5] hover:bg-[#141518] text-[#141518] hover:text-[#FAF8F5] transition-colors cursor-pointer"
           title="Force telemetry refresh"
         >
           <RefreshCw size={13} className="hover:rotate-180 transition-transform duration-300" />
@@ -96,7 +99,7 @@ export const DashboardHeader: React.FC = () => {
         <button
           type="button"
           onClick={handleExport}
-          className="inline-flex items-center gap-1.5 px-3 py-2 bg-[#e35205] hover:bg-[#c94804] text-white text-[10px] font-black uppercase tracking-wider rounded-xl shadow-xs transition-colors cursor-pointer"
+          className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-[#141518] hover:bg-[#D7F04A] text-[#FAF8F5] hover:text-[#141518] border border-[#141518] text-[10px] font-bold uppercase tracking-wider shadow-[2px_2px_0px_#141518] transition-colors cursor-pointer"
         >
           <Download size={11} />
           <span>Export Summary</span>

@@ -55,16 +55,19 @@ export const VerificationCodeInput: React.FC = () => {
     return (
       <div className="space-y-6 text-left">
         <div>
-          <h2 className="text-xl font-black text-neutral-900 tracking-tight">
-            Email Verified Successfully
+          <span className="font-mono text-[10px] uppercase font-bold tracking-widest text-[#15803D] block">
+            ✓ SECURITY CLEARANCE VERIFIED
+          </span>
+          <h2 className="font-heading font-black text-2xl uppercase tracking-tight text-[#141518] mt-1">
+            SESSION VALIDATED
           </h2>
-          <p className="text-xs text-neutral-500 mt-1">
-            Your merchant session is now active. You can proceed to the dashboard.
+          <p className="font-sans text-xs text-[#52555F] mt-1">
+            Your merchant terminal session is authenticated. You can now access your restaurant control surface.
           </p>
         </div>
-        <Link to="/restaurant-portal/dashboard">
-          <Button variant="primary" className="w-full mt-4">
-            Go to Dashboard
+        <Link to="/restaurant-portal/dashboard" className="block mt-4">
+          <Button variant="acid" className="w-full">
+            OPEN RESTAURANT STUDIO →
           </Button>
         </Link>
       </div>
@@ -74,23 +77,26 @@ export const VerificationCodeInput: React.FC = () => {
   return (
     <div className="space-y-6 text-left">
       <div>
-        <h2 className="text-xl font-black text-neutral-900 tracking-tight">
-          Verify your email
+        <span className="font-mono text-[10px] uppercase font-bold tracking-widest text-[#8A8D98] block">
+          [06 / SECURITY]
+        </span>
+        <h2 className="font-heading font-black text-2xl uppercase tracking-tight text-[#141518] mt-1">
+          2FA TERMINAL VERIFY
         </h2>
-        <p className="text-xs text-neutral-500 mt-1">
-          Enter the 6-digit confirmation code sent to your registered address.
+        <p className="font-sans text-xs text-[#52555F] mt-1">
+          Enter the 6-digit confirmation code dispatched to your registered merchant device.
         </p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <FormField
-          label="Verification Code"
+          label="6-Digit Terminal Token"
           id="code"
-          placeholder="000000"
+          placeholder="000 000"
           maxLength={6}
           error={errors.code?.message}
           disabled={isLoading}
-          className="text-center tracking-widest text-lg font-black font-mono"
+          className="text-center tracking-[0.5em] text-xl font-black font-mono border-2 border-[#141518]"
           {...register('code')}
         />
 
@@ -100,20 +106,20 @@ export const VerificationCodeInput: React.FC = () => {
           className="w-full mt-2"
           isLoading={isLoading}
         >
-          Confirm Code
+          CONFIRM TOKEN & ENTER →
         </Button>
       </form>
 
-      <div className="flex items-center justify-between pt-2 text-xs">
-        <span className="text-neutral-400">Didn't receive code?</span>
+      <div className="flex items-center justify-between pt-3 border-t border-[#141518]/10 text-xs font-mono">
+        <span className="text-[#8A8D98]">Token not received?</span>
         {resendTimer > 0 ? (
-          <span className="text-neutral-400 font-bold">Resend code in {resendTimer}s</span>
+          <span className="text-[#8A8D98] font-bold">Resend in {resendTimer}s</span>
         ) : (
           <button
             onClick={handleResend}
-            className="font-bold text-[#e35205] hover:text-[#c94804] cursor-pointer"
+            className="font-bold text-[#141518] underline hover:text-[#1B3BFF] cursor-pointer"
           >
-            Resend Code
+            Dispatch new token
           </button>
         )}
       </div>

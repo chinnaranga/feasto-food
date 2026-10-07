@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react';
 import { NavLink, Outlet, useNavigate, useLocation } from 'react-router-dom';
-import { Plus, LayoutGrid, AlertTriangle, AlertCircle, Calendar, Trash2, ChevronRight, Bookmark } from 'lucide-react';
+import { Plus, LayoutGrid, AlertTriangle, AlertCircle, Calendar, Trash2, ChevronRight } from 'lucide-react';
 import PageContainer from './PageContainer';
 import PortalPageHeader from '../common/PortalPageHeader';
 import PortalLoader from '../common/PortalLoader';
@@ -27,12 +27,10 @@ export const InventoryLayout: React.FC = () => {
     if (!i.expiryDate) return false;
     const timeDiff = new Date(i.expiryDate).getTime() - Date.now();
     const daysDiff = Math.ceil(timeDiff / (24 * 3600 * 1000));
-    return daysDiff >= 0 && daysDiff <= 7; // within 7 days
+    return daysDiff >= 0 && daysDiff <= 7;
   }).length;
 
   const expiryCount = expiredCount + nearExpiryCount;
-
-  // Waste logs count
   const wasteCount = items.reduce((total, i) => total + i.wasteLogs.length, 0);
 
   const sideNav = [
@@ -44,7 +42,7 @@ export const InventoryLayout: React.FC = () => {
   ];
 
   return (
-    <PageContainer className="pb-16">
+    <PageContainer className="pb-16 font-mono text-left">
       {/* Page Header */}
       <PortalPageHeader
         title="Inventory & Stock Control"
@@ -54,7 +52,7 @@ export const InventoryLayout: React.FC = () => {
             <button
               type="button"
               onClick={() => navigate('/restaurant-portal/inventory/new')}
-              className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#e35205] hover:bg-[#c94804] text-white text-xs font-black uppercase tracking-wider rounded-xl shadow-sm transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#141518] hover:bg-[#D7F04A] text-[#FAF8F5] hover:text-[#141518] text-xs font-bold uppercase tracking-wider border border-[#141518] shadow-[2px_2px_0px_#141518] transition-colors cursor-pointer"
             >
               <Plus size={14} />
               <span>Add Stock Item</span>
@@ -63,7 +61,7 @@ export const InventoryLayout: React.FC = () => {
             <button
               type="button"
               onClick={() => navigate('/restaurant-portal/inventory')}
-              className="inline-flex items-center gap-1 px-3 py-2 border border-neutral-200 hover:bg-neutral-50 rounded-xl text-xs font-black uppercase tracking-wider text-neutral-600 transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1 px-3 py-2 bg-[#FAF8F5] border border-[#141518]/20 hover:bg-[#141518] hover:text-[#FAF8F5] text-xs font-bold uppercase tracking-wider text-[#141518] transition-colors cursor-pointer"
             >
               Back to Stock
             </button>
@@ -72,32 +70,29 @@ export const InventoryLayout: React.FC = () => {
       />
 
       {isEditorPage ? (
-        /* Full width layout for clean editor */
         <div className="w-full mt-6">
           <Suspense fallback={<PortalLoader />}>
             <Outlet />
           </Suspense>
         </div>
       ) : (
-        /* Split view: Nav on left, Outlet on right */
         <div className="flex flex-col lg:flex-row gap-6 mt-6 items-start text-left">
-          
           {/* Sub Navigation Sidebar */}
-          <aside className="w-full lg:w-60 shrink-0 space-y-1.5 select-none bg-white border border-neutral-200/80 rounded-2xl p-3 shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
-            <span className="text-[9px] font-bold text-neutral-400 uppercase tracking-widest px-3.5 block mb-2">
+          <aside className="w-full lg:w-64 shrink-0 space-y-1.5 select-none bg-[#FAF8F5] border border-[#141518]/15 p-3 shadow-[4px_4px_0px_#141518]">
+            <span className="text-[9px] font-bold text-[#52555F] uppercase tracking-widest px-3 block mb-2">
               Inventory Scopes
             </span>
-            <nav className="space-y-0.5">
+            <nav className="space-y-1">
               {sideNav.map((node) => (
                 <NavLink
                   key={node.path}
                   to={node.path}
                   end={node.end}
                   className={({ isActive }) =>
-                    `flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer justify-between ${
+                    `flex items-center gap-2.5 px-3 py-2 text-xs font-mono transition-colors cursor-pointer justify-between ${
                       isActive
-                        ? 'bg-neutral-50 text-[#e35205] border border-neutral-200/50 shadow-3xs'
-                        : 'text-neutral-500 hover:text-neutral-800 hover:bg-neutral-50/50'
+                        ? 'bg-[#141518] text-[#FAF8F5] font-bold border-l-2 border-[#D7F04A]'
+                        : 'text-[#52555F] hover:bg-[#EBE7DD] hover:text-[#141518]'
                     }`
                   }
                 >
@@ -107,28 +102,27 @@ export const InventoryLayout: React.FC = () => {
                   </div>
                   <div className="flex items-center gap-1">
                     {node.count > 0 && (
-                      <span className={`text-[9px] font-black px-1.5 py-0.5 rounded-full ${
-                        node.label.includes('Out of Stock') || node.label.includes('Expiry') ? 'bg-red-100 text-red-700' :
-                        node.label.includes('Low Stock') ? 'bg-amber-100 text-amber-700' :
-                        'bg-neutral-100 text-neutral-500'
+                      <span className={`text-[9px] font-mono font-bold px-1.5 py-0.5 border ${
+                        node.label.includes('Out of Stock') || node.label.includes('Expiry') ? 'bg-red-50 text-red-800 border-red-300' :
+                        node.label.includes('Low Stock') ? 'bg-amber-50 text-amber-800 border-amber-300' :
+                        'bg-[#141518]/10 text-[#141518] border-[#141518]/15'
                       }`}>
                         {node.count}
                       </span>
                     )}
-                    <ChevronRight size={10} className="text-neutral-300" />
+                    <ChevronRight size={10} className="text-[#52555F]" />
                   </div>
                 </NavLink>
               ))}
             </nav>
           </aside>
 
-          {/* Active inventory pane */}
-          <div className="flex-1 w-full bg-white border border-neutral-200/80 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.02)] p-6 min-h-[500px]">
+          {/* Active inventory outlet */}
+          <div className="flex-1 w-full bg-[#FAF8F5] border border-[#141518]/15 shadow-[4px_4px_0px_#141518] p-6 min-h-[500px]">
             <Suspense fallback={<PortalLoader />}>
               <Outlet />
             </Suspense>
           </div>
-
         </div>
       )}
     </PageContainer>

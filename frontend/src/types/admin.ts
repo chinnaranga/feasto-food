@@ -75,3 +75,21 @@ export interface AdminUser {
   ordersCount: number;
   spends: number;
 }
+
+export interface AdminDeliveryPartner {
+  id: string;
+  name: string;
+  phone: string;
+  zone: string;
+  currentDeliveries: number;
+  deliveriesCount: number;
+  rating: number;
+  status: 'active' | 'on_delivery' | 'offline';
+  vehicleType?: string;
+  totalDeliveries?: number;
+  activeOrderId?: string;
+  batteryLevel?: number;
+  currentZone?: string;
+  lastLocationUpdate?: string;
+}
+

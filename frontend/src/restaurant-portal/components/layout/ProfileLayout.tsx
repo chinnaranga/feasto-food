@@ -9,7 +9,7 @@ import PortalLoader from '../common/PortalLoader';
 
 export const ProfileLayout: React.FC = () => {
   return (
-    <PageContainer className="pb-24">
+    <PageContainer className="pb-24 font-mono text-left">
       {/* Page Header */}
       <PortalPageHeader
         title="Restaurant Workspace Configurations"
@@ -17,9 +17,8 @@ export const ProfileLayout: React.FC = () => {
       />
 
       <div className="flex flex-col lg:flex-row gap-6 mt-6 items-start text-left">
-        
         {/* Main tabs view card panel */}
-        <div className="flex-1 w-full bg-white border border-neutral-200/80 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col min-h-[500px]">
+        <div className="flex-1 w-full bg-[#FAF8F5] border border-[#141518]/15 shadow-[4px_4px_0px_#141518] overflow-hidden flex flex-col min-h-[500px]">
           {/* Sub-tabs bar */}
           <ProfileTabs />
           
@@ -35,7 +34,6 @@ export const ProfileLayout: React.FC = () => {
         <div className="w-full lg:w-72 shrink-0 space-y-4">
           <ProfileCompletenessMeter />
         </div>
-
       </div>
 
       {/* Slide-up Save changes trigger */}
@@ -43,4 +41,5 @@ export const ProfileLayout: React.FC = () => {
     </PageContainer>
   );
 };
+
 export default ProfileLayout;

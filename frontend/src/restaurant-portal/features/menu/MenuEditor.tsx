@@ -263,7 +263,7 @@ export const MenuEditor: React.FC = () => {
           </button>
           <button
             type="submit"
-            className="px-4 py-2 bg-[#e35205] hover:bg-[#c94804] text-white text-xs font-black uppercase tracking-wider rounded-xl shadow-sm transition-colors cursor-pointer"
+            className="px-4 py-2 bg-[#141518] hover:bg-[#D7F04A] text-[#FAF8F5] hover:text-[#141518] text-xs font-mono font-bold uppercase tracking-wider border border-[#141518] shadow-[2px_2px_0px_#141518] transition-colors cursor-pointer"
           >
             Save Item Details
           </button>
@@ -271,16 +271,16 @@ export const MenuEditor: React.FC = () => {
       </div>
 
       {/* Editor Tab selector */}
-      <div className="flex border-b border-neutral-200 overflow-x-auto select-none no-scrollbar py-0.5">
+      <div className="flex border-b border-[#141518]/15 overflow-x-auto select-none no-scrollbar py-0.5 font-mono">
         {formTabs.map((tab) => (
           <button
             key={tab.value}
             type="button"
             onClick={() => setActiveFormTab(tab.value)}
-            className={`px-4 py-2 text-[10px] font-black uppercase tracking-wider border-b-2 cursor-pointer transition-all ${
+            className={`px-4 py-2 text-[10px] font-bold uppercase tracking-wider border-b-2 cursor-pointer transition-all ${
               activeFormTab === tab.value
-                ? 'border-[#e35205] text-neutral-800 font-black'
-                : 'border-transparent text-neutral-400 hover:text-neutral-600'
+                ? 'border-[#141518] text-[#141518]'
+                : 'border-transparent text-[#52555F] hover:text-[#141518]'
             }`}
           >
             {tab.label}
@@ -310,7 +310,7 @@ export const MenuEditor: React.FC = () => {
                 <select
                   id="category"
                   {...register('category')}
-                  className="w-full px-3 py-2 bg-white border border-neutral-200 focus:border-[#e35205] focus:ring-2 focus:ring-[#e35205]/20 focus:outline-none rounded-lg text-xs font-semibold text-neutral-800 cursor-pointer"
+                  className="w-full px-3 py-2 bg-[#FAF8F5] border border-[#141518]/20 focus:border-[#141518] focus:outline-none text-xs font-mono font-semibold text-[#141518] cursor-pointer"
                 >
                   {CATEGORY_OPTIONS.map((cat) => (
                     <option key={cat} value={cat}>{cat}</option>
@@ -331,13 +331,13 @@ export const MenuEditor: React.FC = () => {
           {/* Description + Copywriter */}
           <div className="flex flex-col gap-1 w-full relative">
             <div className="flex justify-between items-center">
-              <label htmlFor="description" className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider">
+              <label htmlFor="description" className="text-[10px] font-mono font-bold text-[#52555F] uppercase tracking-wider">
                 Dish Description
               </label>
               <button
                 type="button"
                 onClick={handleAiCopywrite}
-                className="inline-flex items-center gap-1 text-[9px] font-bold text-[#e35205] hover:text-[#c94804] cursor-pointer"
+                className="inline-flex items-center gap-1 text-[9px] font-mono font-bold text-[#1B3BFF] hover:text-[#141518] cursor-pointer uppercase tracking-wider"
               >
                 <Sparkles size={10} /> Auto-write Description
               </button>
@@ -346,7 +346,7 @@ export const MenuEditor: React.FC = () => {
               id="description"
               rows={4}
               placeholder="Provide a delicious description of your dish to entice customers. Include key ingredients."
-              className="w-full px-3 py-2 bg-white border border-neutral-200 focus:border-[#e35205] focus:ring-2 focus:ring-[#e35205]/20 focus:outline-none rounded-lg text-xs text-neutral-800 resize-none transition-all duration-150"
+              className="w-full px-3 py-2 bg-[#FAF8F5] border border-[#141518]/20 focus:border-[#141518] focus:outline-none text-xs text-[#141518] resize-none transition-all duration-150 font-mono"
               {...register('description')}
             />
             {errors.description && <FormError message={errors.description.message} />}
@@ -449,15 +449,15 @@ export const MenuEditor: React.FC = () => {
 
           {/* Pricing Suggestion assistant card */}
           <SectionDivider label="AI Price & Margin Calculator" />
-          <div className="rounded-xl border border-neutral-200 bg-neutral-50/50 p-5 space-y-4">
+          <div className="border border-[#141518]/20 bg-[#FAF8F5] p-5 space-y-4 shadow-[3px_3px_0px_#141518] font-mono">
             <div className="flex items-center gap-2">
-              <TrendingUp size={14} className="text-[#e35205]" />
-              <span className="text-xs font-bold text-neutral-800">Suggest Margin Optimized Pricing</span>
+              <TrendingUp size={14} className="text-[#1B3BFF]" />
+              <span className="text-xs font-bold text-[#141518] uppercase tracking-wider">Suggest Margin Optimized Pricing</span>
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div className="flex flex-col gap-1">
-                <label htmlFor="foodCost" className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider">
+                <label htmlFor="foodCost" className="text-[10px] font-bold text-[#52555F] uppercase tracking-wider">
                   Raw Food Ingredient Cost (INR)
                 </label>
                 <input
@@ -466,19 +466,19 @@ export const MenuEditor: React.FC = () => {
                   placeholder="e.g. 150"
                   value={foodCostInput}
                   onChange={(e) => setFoodCostInput(e.target.value === '' ? '' : Number(e.target.value))}
-                  className="w-full px-3 py-2 bg-white border border-neutral-200 focus:border-[#e35205] focus:outline-none rounded-lg text-xs font-semibold text-neutral-800"
+                  className="w-full px-3 py-2 bg-[#FAF8F5] border border-[#141518]/20 focus:border-[#141518] focus:outline-none text-xs font-semibold text-[#141518]"
                 />
               </div>
 
               <div className="flex flex-col gap-1">
-                <label htmlFor="targetMargin" className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider">
+                <label htmlFor="targetMargin" className="text-[10px] font-bold text-[#52555F] uppercase tracking-wider">
                   Target Gross Margin (%)
                 </label>
                 <select
                   id="targetMargin"
                   value={targetMargin}
                   onChange={(e) => setTargetMargin(Number(e.target.value))}
-                  className="w-full px-3 py-2 bg-white border border-neutral-200 focus:border-[#e35205] focus:outline-none rounded-lg text-xs font-semibold text-neutral-800 cursor-pointer"
+                  className="w-full px-3 py-2 bg-[#FAF8F5] border border-[#141518]/20 focus:border-[#141518] focus:outline-none text-xs font-semibold text-[#141518] cursor-pointer"
                 >
                   <option value={50}>50% Margin</option>
                   <option value={60}>60% Margin</option>
@@ -490,15 +490,15 @@ export const MenuEditor: React.FC = () => {
             </div>
 
             {aiPriceSuggestion !== null && (
-              <div className="flex items-center gap-3 bg-white p-3 rounded-lg border border-neutral-200/60 justify-between">
+              <div className="flex items-center gap-3 bg-[#FAF8F5] p-3 border border-[#141518]/20 justify-between">
                 <div>
-                  <p className="text-[10px] text-neutral-400 font-bold uppercase">Optimal Suggested Base Price</p>
-                  <p className="text-sm font-black text-[#e35205] mt-0.5">₹{aiPriceSuggestion}</p>
+                  <p className="text-[10px] text-[#52555F] font-bold uppercase tracking-wider">Optimal Suggested Base Price</p>
+                  <p className="text-base font-heading font-black text-[#141518] mt-0.5">₹{aiPriceSuggestion}</p>
                 </div>
                 <button
                   type="button"
                   onClick={() => setValue('basePrice', aiPriceSuggestion)}
-                  className="px-3 py-1.5 bg-[#e35205] hover:bg-[#c94804] text-white text-[9px] font-black uppercase tracking-wider rounded-lg transition-colors cursor-pointer"
+                  className="px-3 py-1.5 bg-[#141518] hover:bg-[#D7F04A] text-[#FAF8F5] hover:text-[#141518] text-[9px] font-bold uppercase tracking-wider border border-[#141518] shadow-[2px_2px_0px_#141518] transition-colors cursor-pointer"
                 >
                   Apply Suggested Price
                 </button>
@@ -510,16 +510,16 @@ export const MenuEditor: React.FC = () => {
 
       {/* ─── TAB 3: Customizations (Variants/Add-ons) ─────────────────────────── */}
       {activeFormTab === 'variants' && (
-        <div className="space-y-6">
+        <div className="space-y-6 font-mono">
           {/* Custom sizing variations */}
-          <div className="flex items-center justify-between border-b border-neutral-100 pb-2">
-            <h4 className="text-xs font-bold text-neutral-500 uppercase tracking-wider">
+          <div className="flex items-center justify-between border-b border-[#141518]/15 pb-2">
+            <h4 className="text-xs font-bold text-[#52555F] uppercase tracking-wider">
               Sizing Variations (Variants)
             </h4>
             <button
               type="button"
               onClick={() => appendVariant({ label: '', priceAdjustment: 0, available: true })}
-              className="inline-flex items-center gap-1 text-[10px] font-black text-[#e35205] hover:text-[#c94804] cursor-pointer"
+              className="inline-flex items-center gap-1 text-[10px] font-bold text-[#1B3BFF] hover:text-[#141518] cursor-pointer uppercase tracking-wider"
             >
               <Plus size={12} /> Add Variant Option
             </button>
@@ -560,14 +560,14 @@ export const MenuEditor: React.FC = () => {
           )}
 
           {/* Add-on Extra Toppings list */}
-          <div className="flex items-center justify-between border-b border-neutral-100 pb-2 pt-4">
-            <h4 className="text-xs font-bold text-neutral-500 uppercase tracking-wider">
+          <div className="flex items-center justify-between border-b border-[#141518]/15 pb-2 pt-4">
+            <h4 className="text-xs font-bold text-[#52555F] uppercase tracking-wider">
               Extra Toppings & Sides (Add-ons)
             </h4>
             <button
               type="button"
               onClick={() => appendAddon({ name: '', price: 0, available: true })}
-              className="inline-flex items-center gap-1 text-[10px] font-black text-[#e35205] hover:text-[#c94804] cursor-pointer"
+              className="inline-flex items-center gap-1 text-[10px] font-bold text-[#1B3BFF] hover:text-[#141518] cursor-pointer uppercase tracking-wider"
             >
               <Plus size={12} /> Add Extra Add-on
             </button>
@@ -576,12 +576,12 @@ export const MenuEditor: React.FC = () => {
           {addonFields.length > 0 ? (
             <div className="space-y-2">
               {addonFields.map((field, index) => (
-                <div key={field.id} className="flex items-center gap-3 p-3 bg-neutral-50 rounded-xl border border-neutral-200/50">
+                <div key={field.id} className="flex items-center gap-3 p-3 bg-[#FAF8F5] border border-[#141518]/15">
                   <div className="flex-1">
                     <input
                       type="text"
                       placeholder="e.g. Extra Cheese, Truffle Topping"
-                      className="w-full px-2.5 py-1.5 bg-white border border-neutral-200 rounded-lg text-xs font-semibold text-neutral-800"
+                      className="w-full px-2.5 py-1.5 bg-[#FAF8F5] border border-[#141518]/20 text-xs font-mono font-semibold text-[#141518]"
                       {...register(`addons.${index}.name`)}
                     />
                   </div>
@@ -589,14 +589,14 @@ export const MenuEditor: React.FC = () => {
                     <input
                       type="number"
                       placeholder="Extra cost"
-                      className="w-full px-2.5 py-1.5 bg-white border border-neutral-200 rounded-lg text-xs font-semibold text-neutral-800"
+                      className="w-full px-2.5 py-1.5 bg-[#FAF8F5] border border-[#141518]/20 text-xs font-mono font-semibold text-[#141518]"
                       {...register(`addons.${index}.price`)}
                     />
                   </div>
                   <button
                     type="button"
                     onClick={() => removeAddon(index)}
-                    className="p-2 text-neutral-400 hover:text-red-600 transition-colors cursor-pointer"
+                    className="p-2 text-[#52555F] hover:text-[#991B1B] transition-colors cursor-pointer"
                   >
                     <Trash2 size={13} />
                   </button>
@@ -604,25 +604,25 @@ export const MenuEditor: React.FC = () => {
               ))}
             </div>
           ) : (
-            <p className="text-[10px] text-neutral-400 italic">No extra add-on groups added.</p>
+            <p className="text-[10px] text-[#52555F] italic">No extra add-on groups added.</p>
           )}
         </div>
       )}
 
       {/* ─── TAB 4: Dietary & Nutrition ───────────────────────────────────────── */}
       {activeFormTab === 'dietary' && (
-        <div className="space-y-6">
+        <div className="space-y-6 font-mono">
           <SectionDivider label="Dietary Classification" />
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {/* Classification */}
             <div className="flex flex-col gap-1 w-full">
-              <label htmlFor="dietary" className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider">
+              <label htmlFor="dietary" className="text-[10px] font-bold text-[#52555F] uppercase tracking-wider">
                 Dietary Category
               </label>
               <select
                 id="dietary"
                 {...register('dietary')}
-                className="w-full px-3 py-2 bg-white border border-neutral-200 focus:border-[#e35205] focus:outline-none rounded-lg text-xs font-semibold text-neutral-800 cursor-pointer"
+                className="w-full px-3 py-2 bg-[#FAF8F5] border border-[#141518]/20 focus:border-[#141518] focus:outline-none text-xs font-semibold text-[#141518] cursor-pointer"
               >
                 {DIETARY_OPTIONS.map((opt) => (
                   <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -635,9 +635,9 @@ export const MenuEditor: React.FC = () => {
               <button
                 type="button"
                 onClick={handleAiTagging}
-                className="inline-flex items-center gap-1 px-4 py-2 border border-orange-100 hover:bg-orange-50/20 text-[#e35205] rounded-xl text-[10px] font-black uppercase tracking-wider transition-all self-start cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-4 py-2 border border-[#141518] hover:bg-[#D7F04A] bg-[#FAF8F5] text-[#141518] text-[10px] font-bold uppercase tracking-wider transition-all self-start cursor-pointer shadow-[2px_2px_0px_#141518]"
               >
-                <Sparkles size={11} /> Auto-scan allergens from desc
+                <Sparkles size={11} className="text-[#1B3BFF]" /> Auto-scan allergens from desc
               </button>
             </div>
           </div>

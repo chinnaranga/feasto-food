@@ -34,33 +34,35 @@ export const ProfileHeader: React.FC<{
   readinessPct: number;
 }> = ({ personalInfo, readinessPct }) => {
   return (
-    <div className="p-5 rounded-2xl bg-white border border-neutral-200/90 shadow-2xs space-y-4 text-left">
+    <div className="p-5 bg-[#FAF8F5] border border-[#141518] shadow-[4px_4px_0px_#141518] space-y-4 text-left font-mono">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3.5">
-          <div className="w-14 h-14 rounded-2xl bg-neutral-900 text-white font-heading font-black text-xl flex items-center justify-center shadow-3xs">
+          <div className="w-14 h-14 bg-[#141518] text-[#D7F04A] border border-[#141518] font-mono font-black text-xl flex items-center justify-center shadow-[3px_3px_0px_#141518]">
             {personalInfo.fullName.substring(0, 2).toUpperCase()}
           </div>
           <div className="space-y-0.5">
             <div className="flex items-center gap-2">
-              <h2 className="text-base font-black text-neutral-900 font-heading">{personalInfo.fullName}</h2>
-              <span className="text-[9px] font-mono font-bold uppercase px-1.5 py-0.2 rounded bg-emerald-50 text-emerald-700 border border-emerald-200">
-                Verified
+              <h2 className="text-base font-heading font-black text-[#141518] uppercase tracking-wider">
+                {personalInfo.fullName}
+              </h2>
+              <span className="text-[9px] font-mono font-black uppercase px-2 py-0.5 bg-[#D7F04A] text-[#141518] border border-[#141518]">
+                VERIFIED
               </span>
             </div>
-            <span className="text-xs font-mono font-bold text-[#e35205] block">
-              {personalInfo.riderCode} • ★ 4.92 Rating
+            <span className="text-xs font-mono font-bold text-[#141518] block">
+              {personalInfo.riderCode} • ★ 4.92 SLA
             </span>
-            <span className="text-[11px] text-neutral-500 block font-mono">{personalInfo.phone}</span>
+            <span className="text-[11px] text-[#55565B] block font-mono">{personalInfo.phone}</span>
           </div>
         </div>
 
         {/* Readiness Progress Ring */}
         <div className="text-right">
-          <span className="text-2xl font-black font-mono text-emerald-700 block leading-none">
+          <span className="text-2xl font-black font-mono text-[#141518] block leading-none px-2 py-1 bg-[#D7F04A] border border-[#141518]">
             {readinessPct}%
           </span>
-          <span className="text-[9px] font-bold uppercase text-neutral-400 font-heading block mt-1">
-            Readiness SLA
+          <span className="text-[9px] font-bold uppercase text-[#55565B] font-mono block mt-1">
+            READINESS SLA
           </span>
         </div>
       </div>
@@ -71,31 +73,31 @@ export const ProfileHeader: React.FC<{
 // ─── ProfileSubNavTabBar ─────────────────────────────────────────────────────
 export const ProfileSubNavTabBar: React.FC = () => {
   const tabs = [
-    { label: 'Hub', path: '/rider/profile' },
-    { label: 'Edit Info', path: '/rider/profile/edit' },
-    { label: 'Contact', path: '/rider/profile/contact' },
-    { label: 'Vehicle', path: '/rider/profile/vehicle' },
-    { label: 'Documents', path: '/rider/profile/documents' },
-    { label: 'Availability', path: '/rider/profile/availability' },
-    { label: 'Service Area', path: '/rider/profile/service-area' },
-    { label: 'Preferences', path: '/rider/profile/preferences' },
-    { label: 'Payout', path: '/rider/profile/payout' },
-    { label: 'Readiness Audit', path: '/rider/profile/readiness' },
+    { label: 'HUB', path: '/rider/profile' },
+    { label: 'EDIT DOSSIER', path: '/rider/profile/edit' },
+    { label: 'CONTACT', path: '/rider/profile/contact' },
+    { label: 'VEHICLE RC', path: '/rider/profile/vehicle' },
+    { label: 'DOCUMENTS', path: '/rider/profile/documents' },
+    { label: 'SHIFTS', path: '/rider/profile/availability' },
+    { label: 'ZONE RADIUS', path: '/rider/profile/service-area' },
+    { label: 'PREFERENCES', path: '/rider/profile/preferences' },
+    { label: 'BANK PAYOUT', path: '/rider/profile/payout' },
+    { label: 'READINESS SLA', path: '/rider/profile/readiness' },
   ];
 
   return (
-    <div className="w-full bg-white border-y border-neutral-200/80 px-2 py-2 overflow-x-auto scrollbar-none text-left select-none">
-      <div className="flex items-center gap-1 min-w-max">
+    <div className="w-full bg-[#FAF8F5] border-y border-[#141518] px-2 py-2 overflow-x-auto scrollbar-none text-left select-none font-mono">
+      <div className="flex items-center gap-1.5 min-w-max">
         {tabs.map((tab) => (
           <NavLink
             key={tab.path}
             to={tab.path}
             end={tab.path === '/rider/profile'}
             className={({ isActive }) =>
-              `px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+              `px-3.5 py-1.5 text-xs font-mono font-bold uppercase tracking-wider border transition-all ${
                 isActive
-                  ? 'bg-neutral-900 text-white shadow-3xs'
-                  : 'text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100'
+                  ? 'bg-[#D7F04A] text-[#141518] border-[#141518] shadow-[2px_2px_0px_#141518]'
+                  : 'bg-[#FAF8F5] border-transparent text-[#55565B] hover:text-[#141518] hover:bg-[#F3F0E8] hover:border-[#141518]/20'
               }`
             }
           >
@@ -110,30 +112,32 @@ export const ProfileSubNavTabBar: React.FC = () => {
 // ─── VehicleCard ─────────────────────────────────────────────────────────────
 export const VehicleCard: React.FC<{ vehicle: RiderVehicleSetup }> = ({ vehicle }) => {
   return (
-    <div className="p-4 rounded-2xl bg-white border border-neutral-200/90 shadow-2xs space-y-3 text-left">
-      <div className="flex items-center justify-between border-b border-neutral-100 pb-3">
+    <div className="p-4 bg-[#FAF8F5] border border-[#141518] shadow-[4px_4px_0px_#141518] space-y-3 text-left font-mono">
+      <div className="flex items-center justify-between border-b border-[#141518]/15 pb-3">
         <div className="flex items-center gap-2.5">
-          <div className="p-2 rounded-xl bg-[#e35205]/10 text-[#e35205]">
+          <div className="p-2 bg-[#D7F04A] text-[#141518] border border-[#141518]">
             <Bike size={18} />
           </div>
           <div>
-            <h4 className="text-xs font-black text-neutral-900 font-heading">{vehicle.brandModel}</h4>
-            <span className="text-[11px] text-neutral-500 font-mono">{vehicle.plateNumber}</span>
+            <h4 className="text-xs font-heading font-black text-[#141518] uppercase tracking-wider">
+              {vehicle.brandModel}
+            </h4>
+            <span className="text-[11px] text-[#55565B] font-mono">{vehicle.plateNumber}</span>
           </div>
         </div>
-        <span className="text-[9px] font-bold uppercase px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
-          ● Active Vehicle
+        <span className="text-[9px] font-mono font-black uppercase px-2 py-0.5 bg-[#D7F04A] text-[#141518] border border-[#141518]">
+          ● ACTIVE FLEET
         </span>
       </div>
 
       <div className="grid grid-cols-2 gap-2 text-xs font-mono">
-        <div className="p-2.5 rounded-xl bg-neutral-50 border border-neutral-150">
-          <span className="text-[10px] text-neutral-400 font-bold uppercase block">Fuel / EV Type</span>
-          <span className="font-bold text-neutral-900">EV Battery Pack</span>
+        <div className="p-2.5 bg-[#F3F0E8] border border-[#141518]">
+          <span className="text-[10px] text-[#55565B] font-bold uppercase block">FLEET CLASS</span>
+          <span className="font-bold text-[#141518]">EV BATTERY PROPULSION (+GREEN BONUS)</span>
         </div>
-        <div className="p-2.5 rounded-xl bg-neutral-50 border border-neutral-150">
-          <span className="text-[10px] text-neutral-400 font-bold uppercase block">Insurance Valid Till</span>
-          <span className="font-bold text-neutral-900">{vehicle.insuranceExpiryDate}</span>
+        <div className="p-2.5 bg-[#F3F0E8] border border-[#141518]">
+          <span className="text-[10px] text-[#55565B] font-bold uppercase block">INSURANCE VALID</span>
+          <span className="font-bold text-[#141518]">{vehicle.insuranceExpiryDate}</span>
         </div>
       </div>
     </div>
@@ -143,22 +147,26 @@ export const VehicleCard: React.FC<{ vehicle: RiderVehicleSetup }> = ({ vehicle 
 // ─── DocumentCard ────────────────────────────────────────────────────────────
 export const DocumentCard: React.FC<{ doc: RiderDocumentAuditItem }> = ({ doc }) => {
   const statusStyles = {
-    approved: 'bg-emerald-50 text-emerald-700 border-emerald-200',
-    under_review: 'bg-amber-50 text-amber-700 border-amber-200',
-    submitted: 'bg-blue-50 text-blue-700 border-blue-200',
-    action_needed: 'bg-red-50 text-red-700 border-red-200',
-    expired: 'bg-purple-50 text-purple-700 border-purple-200',
+    approved: 'bg-[#D7F04A] text-[#141518] border-[#141518]',
+    under_review: 'bg-[#FEF08A] text-[#141518] border-[#141518]',
+    submitted: 'bg-[#BFDBFE] text-[#141518] border-[#141518]',
+    action_needed: 'bg-[#FEE2E2] text-[#991B1B] border-[#141518]',
+    expired: 'bg-[#E9D5FF] text-[#581C87] border-[#141518]',
   };
 
   return (
-    <div className="p-4 rounded-2xl bg-white border border-neutral-200/90 shadow-2xs flex items-center justify-between text-left text-xs">
+    <div className="p-4 bg-[#FAF8F5] border border-[#141518] shadow-[3px_3px_0px_#141518] flex items-center justify-between text-left text-xs font-mono">
       <div className="space-y-0.5">
-        <strong className="text-neutral-900 font-bold block">{doc.title}</strong>
-        <span className="text-[11px] text-neutral-500 font-mono block">
-          No: {doc.docNumber} {doc.expiryDate ? `• Expires: ${doc.expiryDate}` : ''}
+        <strong className="text-[#141518] font-bold block uppercase">{doc.title}</strong>
+        <span className="text-[11px] text-[#55565B] font-mono block">
+          NO: {doc.docNumber} {doc.expiryDate ? `• EXP: ${doc.expiryDate}` : ''}
         </span>
       </div>
-      <span className={`text-[9px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full border ${statusStyles[doc.status]}`}>
+      <span
+        className={`text-[9px] font-mono font-black uppercase tracking-wider px-2 py-0.5 border shadow-[1px_1px_0px_#141518] ${
+          statusStyles[doc.status]
+        }`}
+      >
         {doc.status.replace('_', ' ')}
       </span>
     </div>
@@ -168,17 +176,17 @@ export const DocumentCard: React.FC<{ doc: RiderDocumentAuditItem }> = ({ doc })
 // ─── SaveChangesBar ──────────────────────────────────────────────────────────
 export const SaveChangesBar: React.FC<{ onSave: () => void }> = ({ onSave }) => {
   return (
-    <div className="fixed bottom-16 left-0 right-0 max-w-lg mx-auto p-3 z-[300]">
-      <div className="p-3 bg-neutral-900 text-white rounded-2xl shadow-modal flex items-center justify-between gap-3 text-xs">
+    <div className="fixed bottom-16 left-0 right-0 max-w-lg mx-auto p-3 z-[300] font-mono">
+      <div className="p-3 bg-[#141518] text-[#FAF8F5] border border-[#141518] shadow-[4px_4px_0px_#141518] flex items-center justify-between gap-3 text-xs">
         <div className="flex items-center gap-2">
-          <Sparkles size={16} className="text-[#e35205]" />
-          <span>You have unsaved profile changes.</span>
+          <Sparkles size={16} className="text-[#D7F04A]" />
+          <span>Unsaved courier modifications pending.</span>
         </div>
         <button
           onClick={onSave}
-          className="px-4 py-2 bg-[#e35205] hover:bg-[#c94804] text-white font-bold rounded-xl transition-colors cursor-pointer"
+          className="px-4 py-2 bg-[#D7F04A] hover:bg-[#cbf130] text-[#141518] font-mono font-black uppercase tracking-wider border border-[#141518] transition-colors cursor-pointer shadow-[2px_2px_0px_#141518]"
         >
-          Save Changes
+          SAVE CHANGES
         </button>
       </div>
     </div>

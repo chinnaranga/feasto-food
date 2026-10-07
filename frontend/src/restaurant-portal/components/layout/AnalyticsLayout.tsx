@@ -28,8 +28,7 @@ export const AnalyticsLayout: React.FC = () => {
   };
 
   return (
-    <PageContainer className="pb-16 text-left">
-      
+    <PageContainer className="pb-16 text-left font-mono">
       {/* Primary page header */}
       <PortalPageHeader
         title="Business Intelligence & Analytics"
@@ -38,7 +37,7 @@ export const AnalyticsLayout: React.FC = () => {
           <div className="flex items-center gap-2">
             <button
               onClick={handleExport}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 border border-neutral-200 hover:bg-neutral-50 rounded-xl text-xs font-black uppercase tracking-wider text-neutral-600 transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 border border-[#141518] hover:bg-[#D7F04A] bg-[#FAF8F5] text-xs font-bold uppercase tracking-wider text-[#141518] transition-colors cursor-pointer shadow-[2px_2px_0px_#141518]"
             >
               <Download size={13} />
               <span>Export Report</span>
@@ -48,14 +47,14 @@ export const AnalyticsLayout: React.FC = () => {
       />
 
       {/* Roster Filter Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-neutral-100 pb-4 mt-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#141518]/15 pb-4 mt-6">
         {/* Branch Selector */}
         <div className="flex items-center gap-2">
-          <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider">Branch Filter:</span>
+          <span className="text-[10px] font-bold text-[#52555F] uppercase tracking-wider">Branch Filter:</span>
           <select
             value={branch}
             onChange={(e) => setBranch(e.target.value as any)}
-            className="px-3 py-1.5 bg-white border border-neutral-200 focus:border-[#e35205] focus:outline-none rounded-xl text-xs font-bold text-neutral-700 cursor-pointer"
+            className="px-3 py-1.5 bg-[#FAF8F5] border border-[#141518]/20 focus:border-[#141518] focus:outline-none text-xs font-bold text-[#141518] cursor-pointer"
           >
             <option value="all">All Branches</option>
             <option value="Downtown Flagship">Downtown Flagship</option>
@@ -66,15 +65,15 @@ export const AnalyticsLayout: React.FC = () => {
         {/* Date Filters & WoW Comparisons */}
         <div className="flex items-center gap-2 flex-wrap">
           {/* Time presets */}
-          <div className="bg-neutral-100 p-0.5 rounded-xl flex items-center border border-neutral-200/40">
+          <div className="bg-[#FAF8F5] p-0.5 flex items-center border border-[#141518]/20">
             {(['today', '7d', '30d'] as const).map((preset) => (
               <button
                 key={preset}
                 onClick={() => setDateRangePreset(preset)}
-                className={`px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-wider transition-all cursor-pointer ${
+                className={`px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider transition-all cursor-pointer ${
                   dateRangePreset === preset
-                    ? 'bg-white text-neutral-800 shadow-sm'
-                    : 'text-neutral-400 hover:text-neutral-600'
+                    ? 'bg-[#141518] text-[#D7F04A]'
+                    : 'text-[#52555F] hover:text-[#141518]'
                 }`}
               >
                 {preset}
@@ -85,10 +84,10 @@ export const AnalyticsLayout: React.FC = () => {
           {/* Compare WoW */}
           <button
             onClick={toggleComparisonMode}
-            className={`px-3 py-2 border rounded-xl text-[9px] font-black uppercase tracking-wider transition-all cursor-pointer ${
+            className={`px-3 py-1.5 border text-[10px] font-bold uppercase tracking-wider transition-all cursor-pointer ${
               comparisonMode
-                ? 'bg-[#e35205] text-white border-transparent shadow-xs'
-                : 'bg-white text-neutral-400 border-neutral-200 hover:border-neutral-300'
+                ? 'bg-[#141518] text-[#D7F04A] border-[#141518] shadow-[2px_2px_0px_#141518]'
+                : 'bg-[#FAF8F5] text-[#52555F] border-[#141518]/20 hover:border-[#141518]'
             }`}
           >
             Compare WoW
@@ -98,23 +97,22 @@ export const AnalyticsLayout: React.FC = () => {
 
       {/* Main layout contents */}
       <div className="flex flex-col lg:flex-row gap-6 mt-6 items-start">
-        
         {/* Sidebar sub-nav list */}
-        <aside className="w-full lg:w-60 shrink-0 space-y-1.5 select-none bg-white border border-neutral-200/80 rounded-2xl p-3 shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
-          <span className="text-[9px] font-bold text-neutral-400 uppercase tracking-widest px-3.5 block mb-2">
+        <aside className="w-full lg:w-64 shrink-0 space-y-1.5 select-none bg-[#FAF8F5] border border-[#141518]/15 p-3 shadow-[4px_4px_0px_#141518]">
+          <span className="text-[9px] font-bold text-[#52555F] uppercase tracking-widest px-3 block mb-2">
             Intelligence Categories
           </span>
-          <nav className="space-y-0.5">
+          <nav className="space-y-1">
             {sideNav.map((node) => (
               <NavLink
                 key={node.path}
                 to={node.path}
                 end={node.end}
                 className={({ isActive }) =>
-                  `flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer justify-between ${
+                  `flex items-center gap-2.5 px-3 py-2 text-xs font-mono transition-colors cursor-pointer justify-between ${
                     isActive
-                      ? 'bg-neutral-50 text-[#e35205] border border-neutral-200/50 shadow-3xs'
-                      : 'text-neutral-500 hover:text-neutral-800 hover:bg-neutral-50/50'
+                      ? 'bg-[#141518] text-[#FAF8F5] font-bold border-l-2 border-[#D7F04A]'
+                      : 'text-[#52555F] hover:bg-[#EBE7DD] hover:text-[#141518]'
                   }`
                 }
               >
@@ -122,21 +120,19 @@ export const AnalyticsLayout: React.FC = () => {
                   {node.icon}
                   <span>{node.label}</span>
                 </div>
-                <ChevronRight size={10} className="text-neutral-300" />
+                <ChevronRight size={10} className="text-[#52555F]" />
               </NavLink>
             ))}
           </nav>
         </aside>
 
         {/* Dynamic Analytics content workspace panel */}
-        <div className="flex-1 w-full bg-white border border-neutral-200/80 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.02)] p-6 min-h-[500px]">
+        <div className="flex-1 w-full bg-[#FAF8F5] border border-[#141518]/15 shadow-[4px_4px_0px_#141518] p-6 min-h-[500px]">
           <Suspense fallback={<PortalLoader />}>
             <Outlet />
           </Suspense>
         </div>
-
       </div>
-
     </PageContainer>
   );
 };
